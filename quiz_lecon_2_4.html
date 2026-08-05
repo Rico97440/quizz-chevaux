@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Leçon 2.4</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+.app {
+  background: #fdfaf5;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+/* HEADER */
+.header {
+  background: #1c1410;
+  padding: 20px 20px 16px;
+  text-align: center;
+}
+.header-brand { color: #d97a3a; font-size: 11px; font-weight: 800; letter-spacing: 3px; margin-bottom: 5px; }
+.header-lesson { color: #c9b89a; font-size: 13px; margin-bottom: 5px; }
+.header-title { color: #f5ede0; font-size: 18px; font-weight: 800; }
+
+/* PROGRESS */
+.progress-wrap { background: #1c1410; padding: 0 20px 16px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #8a7560; margin-bottom: 6px; font-weight: 600; }
+.progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+.progress-fill { height: 100%; background: linear-gradient(to right, #d97a3a, #e9a05a); border-radius: 3px; transition: width 0.4s ease; }
+
+/* SCREENS */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* INTRO */
+.intro { padding: 24px 20px; }
+.intro-icon { font-size: 52px; text-align: center; margin-bottom: 14px; }
+.intro-title { font-size: 20px; font-weight: 800; color: #1c1410; text-align: center; margin-bottom: 10px; }
+.intro-desc { font-size: 14px; color: #4a3a2a; line-height: 1.6; margin-bottom: 8px; }
+.intro-goals { background: #fff; border: 1px solid #e8d8c0; border-radius: 12px; padding: 14px 16px; margin: 14px 0 20px; }
+.intro-goals-title { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 8px; }
+.intro-goal { font-size: 13px; color: #2a1f17; margin-bottom: 5px; display: flex; gap: 8px; }
+.btn-start { width: 100%; padding: 15px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-start:hover { background: #c96a2a; transform: translateY(-1px); }
+
+/* QUESTION */
+.q-wrap { padding: 20px; }
+.q-num { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 6px; }
+.q-text { font-size: 17px; font-weight: 700; color: #1c1410; line-height: 1.4; margin-bottom: 6px; }
+.q-context { font-size: 13px; color: #6b4a2b; font-style: italic; margin-bottom: 18px; background: #fdf4e8; border-left: 3px solid #d97a3a; padding: 10px 12px; border-radius: 0 8px 8px 0; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option {
+  background: #fff; border: 2px solid #e8d8c0; border-radius: 12px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.option:hover:not(.disabled) { border-color: #d97a3a; background: #fdf4e8; }
+.option.correct { border-color: #3a8a3a; background: #f0fff0; }
+.option.wrong { border-color: #b83030; background: #fff0f0; }
+.option.disabled { cursor: default; }
+.option-letter {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #e8d8c0; color: #6b4a2b;
+  font-size: 13px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option.correct .option-letter { background: #3a8a3a; color: white; }
+.option.wrong .option-letter { background: #b83030; color: white; }
+.option-text { font-size: 14px; font-weight: 600; color: #1c1410; flex: 1; line-height: 1.4; }
+
+/* FEEDBACK */
+.feedback {
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+  font-size: 13px; line-height: 1.5; display: none;
+}
+.feedback.correct { background: #f0fff0; border: 2px solid #3a8a3a; color: #1a4a1a; }
+.feedback.wrong { background: #fff0f0; border: 2px solid #b83030; color: #4a1a1a; }
+.feedback.show { display: block; }
+.feedback-title { font-size: 14px; font-weight: 800; margin-bottom: 5px; }
+
+.btn-next { width: 100%; padding: 14px; background: #1c1410; color: #f5ede0; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; }
+.btn-next.show { display: block; }
+.btn-next:hover { background: #2a1d14; }
+
+/* RÉSULTAT */
+.result-wrap { padding: 24px 20px; }
+.result-score-card {
+  text-align: center; border-radius: 16px; padding: 28px 20px; margin-bottom: 20px;
+}
+.result-emoji { font-size: 56px; margin-bottom: 12px; }
+.result-score { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.result-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.result-msg { font-size: 13px; line-height: 1.5; }
+
+.score-excellent { background: linear-gradient(135deg, #f0fff0, #e0ffe0); border: 3px solid #3a8a3a; }
+.score-excellent .result-score { color: #3a8a3a; }
+.score-bien { background: linear-gradient(135deg, #fff8f0, #fff0e0); border: 3px solid #d97a3a; }
+.score-bien .result-score { color: #d97a3a; }
+.score-revoir { background: linear-gradient(135deg, #fff0f0, #ffe8e8); border: 3px solid #b83030; }
+.score-revoir .result-score { color: #b83030; }
+
+.recap { margin-bottom: 20px; }
+.recap-title { font-size: 12px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 10px; }
+.recap-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; padding: 10px 12px; background: #fff; border: 1px solid #e8d8c0; border-radius: 10px; }
+.recap-icon { font-size: 16px; flex-shrink: 0; }
+.recap-q { font-size: 12px; color: #4a3a2a; line-height: 1.4; }
+.recap-status { font-size: 18px; flex-shrink: 0; }
+
+.btn-restart { width: 100%; padding: 14px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-restart:hover { background: #c96a2a; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-brand">SOS MARÉCHAL-FERRANT · FORMATION</div>
+    <div class="header-lesson">Leçon 2.4</div>
+    <div class="header-title">🔍 Observer sans diagnostiquer</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="prog-label">Question 0 / 6</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="s-intro" class="screen active">
+    <div class="intro">
+      <div class="intro-icon">👁️</div>
+      <div class="intro-title">Quiz de validation</div>
+      <div class="intro-desc">Ce quiz vérifie que vous maîtrisez les compétences clés de la leçon 2.4 : observer, décrire et transmettre des informations utiles sans poser de diagnostic.</div>
+      <div class="intro-goals">
+        <div class="intro-goals-title">OBJECTIFS DE LA LEÇON</div>
+        <div class="intro-goal"><span>✏️</span><span>Décrire ce que vous voyez sans nommer une maladie</span></div>
+        <div class="intro-goal"><span>🕐</span><span>Noter l'heure et l'évolution</span></div>
+        <div class="intro-goal"><span>📸</span><span>Prendre des photos nettes avec un repère d'échelle</span></div>
+        <div class="intro-goal"><span>📞</span><span>Contacter le bon professionnel en cas de doute</span></div>
+      </div>
+      <div class="intro-desc" style="font-size:13px;color:#8a7560;">6 questions · Résultat immédiat · Feedback détaillé</div>
+      <div style="margin-top:14px;">
+        <button class="btn-start" onclick="startQuiz()">Commencer le quiz →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="s-quiz" class="screen">
+    <div class="q-wrap">
+      <div class="q-num" id="q-num">QUESTION 1 / 6</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-context" id="q-context" style="display:none"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <div class="feedback-title" id="fb-title"></div>
+        <div id="fb-text"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">Question suivante →</button>
+    </div>
+  </div>
+
+  <!-- RÉSULTAT -->
+  <div id="s-result" class="screen">
+    <div class="result-wrap">
+      <div class="result-score-card" id="score-card">
+        <div class="result-emoji" id="res-emoji"></div>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-msg" id="res-msg"></div>
+      </div>
+      <div class="recap">
+        <div class="recap-title">RÉCAPITULATIF</div>
+        <div id="recap-list"></div>
+      </div>
+      <button class="btn-restart" onclick="restart()">🔄 Recommencer le quiz</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "Vous remarquez que votre cheval a une zone sombre et irrégulière sur la fourchette. Quelle est la description la plus utile à transmettre à votre maréchal-ferrant ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Mon cheval a une pourriture de fourchette." },
+      { letter: "B", text: "Il y a une zone noire et molle d'environ 2 cm dans la lacune centrale de la fourchette de l'antérieur gauche, apparue depuis hier." },
+      { letter: "C", text: "Le pied de mon cheval semble bizarre." },
+      { letter: "D", text: "Je pense que c'est un crapaud, il faudrait le traiter." },
+    ],
+    correct: 1,
+    feedback_correct: "✅ Parfait ! C'est exactement ce que signifie observer sans diagnostiquer. Vous décrivez : la localisation précise (lacune centrale, antérieur gauche), l'aspect (noir et mou), la taille (2 cm) et le moment d'apparition (depuis hier). Ces informations permettent au professionnel de prioriser son intervention.",
+    feedback_wrong: "❌ Attention à la distinction essentielle : nommer une maladie (pourriture, crapaud) n'est pas votre rôle. Seul un professionnel peut diagnostiquer. Votre rôle est de décrire précisément ce que vous voyez : localisation, aspect, taille et évolution dans le temps.",
+  },
+  {
+    text: "Pourquoi est-il important de noter l'heure précise lorsque vous observez un problème sur le pied de votre cheval ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Pour compléter le carnet de santé obligatoire." },
+      { letter: "B", text: "Pour que le vétérinaire puisse facturer correctement sa consultation." },
+      { letter: "C", text: "Pour permettre au professionnel d'évaluer la vitesse d'évolution du problème et sa gravité." },
+      { letter: "D", text: "C'est une formalité inutile si le cheval ne boite pas encore." },
+    ],
+    correct: 2,
+    feedback_correct: "✅ Exact ! La chronologie est une information médicale précieuse. \"Pied chaud depuis ce matin\" et \"pied chaud depuis 3 jours\" ne décrivent pas la même urgence. La vitesse d'évolution aide le professionnel à évaluer la gravité et à prioriser son intervention.",
+    feedback_wrong: "❌ La notation de l'heure est une information médicale, pas administrative. Elle permet d'évaluer la cinétique du problème : un symptôme qui apparaît et s'aggrave rapidement en quelques heures est traité très différemment d'un symptôme stable depuis plusieurs jours.",
+  },
+  {
+    text: "Vous prenez une photo du sabot de votre cheval pour la transmettre à votre maréchal. Laquelle de ces pratiques améliore le plus la qualité de l'information transmise ?",
+    context: "Votre cheval présente une fissure sur la paroi du sabot antérieur droit.",
+    options: [
+      { letter: "A", text: "Prendre la photo de loin pour montrer le cheval entier dans son box." },
+      { letter: "B", text: "Prendre la photo en gros plan, avec un stylo ou une pièce de monnaie posée à côté de la fissure." },
+      { letter: "C", text: "Filtrer la photo pour qu'elle soit plus lumineuse avant de l'envoyer." },
+      { letter: "D", text: "Envoyer plusieurs selfies du cheval sous différents angles de face." },
+    ],
+    correct: 1,
+    feedback_correct: "✅ Très bien ! Le repère d'échelle (stylo, pièce, règle) est essentiel : il permet au professionnel d'évaluer la taille réelle de la lésion sans être présent. Une fissure de 3 mm et une fissure de 3 cm n'appellent pas du tout la même réponse.",
+    feedback_wrong: "❌ Le repère d'échelle est l'élément le plus important d'une photo médicale du pied. Sans lui, le professionnel ne peut pas évaluer la taille réelle de la lésion. Un stylo, une pièce de monnaie ou une règle posés à côté de la zone à observer donnent immédiatement une référence de taille.",
+  },
+  {
+    text: "Votre cheval présente un pied visiblement chaud et boite légèrement. Parmi ces descriptions, laquelle est la PLUS utile à transmettre ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Il a un abcès, il faut le drainer d'urgence." },
+      { letter: "B", text: "Il boite sur l'antérieur droit depuis ce matin 8h. Le pied est nettement plus chaud que les trois autres quand je pose le dos de la main dessus. Je n'ai pas pris le pouls digité." },
+      { letter: "C", text: "Mon cheval ne va pas bien, je suis inquiet." },
+      { letter: "D", text: "Il a mal, probablement une fourbure au vu de la chaleur." },
+    ],
+    correct: 1,
+    feedback_correct: "✅ Excellent ! Cette description contient tout ce qu'il faut : le membre atteint (antérieur droit), l'heure d'apparition (8h ce matin), le signe observé (chaleur comparée aux autres pieds), la méthode utilisée (dos de la main) et l'honnêteté sur ce qui n'a pas été vérifié (pouls non pris). C'est observer sans diagnostiquer.",
+    feedback_wrong: "❌ Nommer une maladie (abcès, fourbure) sans examen clinique, c'est diagnostiquer — ce qui n'est pas votre rôle. Décrivez les signes observés : quel membre, depuis quand, quelle chaleur comparée aux autres pieds, et ce que vous avez ou n'avez pas vérifié.",
+  },
+  {
+    text: "Vous complétez la grille d'observation des quatre pieds. Pour l'antérieur gauche, vous notez : chaleur normale, fourchette propre, sole saine, pas de boiterie. Que faites-vous pour le postérieur droit où vous remarquez une zone blanche élargie à la jonction sole/paroi ?",
+    context: "La ligne blanche est la jonction entre la paroi du sabot et la sole.",
+    options: [
+      { letter: "A", text: "Vous ne notez rien car le cheval ne boite pas." },
+      { letter: "B", text: "Vous écrivez directement \"décollement lamelaire\" dans la grille." },
+      { letter: "C", text: "Vous notez : \"ligne blanche visible et plus large qu'habituellement, postérieur droit\" avec la date et l'heure, et vous le mentionnez à votre maréchal." },
+      { letter: "D", text: "Vous tentez de nettoyer et réparer vous-même la zone avec un produit." },
+    ],
+    correct: 2,
+    feedback_correct: "✅ Parfait ! Vous décrivez ce que vous voyez (ligne blanche plus large), vous localisez précisément (postérieur droit), vous notez la date/heure, et vous transmettez l'information au professionnel. Vous ne diagnostiquez pas, vous n'intervenez pas, vous observez et signalez.",
+    feedback_wrong: "❌ La règle fondamentale : toute anomalie observée mérite d'être notée, même sans boiterie. La grille d'observation sert précisément à suivre l'évolution. Et décrire une anomalie n'est pas la même chose que la nommer médicalement — c'est observer sans diagnostiquer.",
+  },
+  {
+    text: "Vous observez un signe inquiétant sur le pied de votre cheval. Dans quel ordre devriez-vous agir ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Chercher sur internet, traiter soi-même, puis appeler si ça n'améliore pas." },
+      { letter: "B", text: "Observer précisément (aspect, localisation, évolution), noter avec l'heure, prendre une photo avec un repère d'échelle, puis contacter le professionnel adapté." },
+      { letter: "C", text: "Attendre 48h pour voir si ça passe, puis appeler le vétérinaire uniquement si le cheval boite fort." },
+      { letter: "D", text: "Appeler immédiatement le vétérinaire sans observer ni noter quoi que ce soit." },
+    ],
+    correct: 1,
+    feedback_correct: "✅ Bravo ! C'est exactement la séquence de la leçon 2.4 : Observer → Décrire → Noter l'heure et l'évolution → Photographier avec repère d'échelle → Contacter le bon professionnel. Cette approche vous permet de transmettre des informations utiles qui accélèrent la prise en charge.",
+    feedback_wrong: "❌ La bonne séquence est : Observer précisément → Décrire sans diagnostiquer → Noter l'heure → Photographier avec repère d'échelle → Contacter le bon professionnel. Observer avant d'appeler permet de transmettre des informations utiles. Traiter soi-même sans diagnostic peut aggraver la situation.",
+  },
+];
+
+let current = 0;
+let score = 0;
+let answered = [];
+let results = [];
+
+function startQuiz() {
+  document.getElementById('s-intro').classList.remove('active');
+  document.getElementById('s-quiz').classList.add('active');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const pct = Math.round(((current) / questions.length) * 100);
+  document.getElementById('prog-label').textContent = `Question ${current + 1} / ${questions.length}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `QUESTION ${current + 1} / ${questions.length}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const ctx = document.getElementById('q-context');
+  if (q.context) { ctx.textContent = '📋 ' + q.context; ctx.style.display = 'block'; }
+  else { ctx.style.display = 'none'; }
+
+  const wrap = document.getElementById('q-options');
+  wrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.id = 'opt-' + i;
+    div.onclick = () => selectAnswer(i);
+    div.innerHTML = `<div class="option-letter">${opt.letter}</div><div class="option-text">${opt.text}</div>`;
+    wrap.appendChild(div);
+  });
+
+  document.getElementById('q-feedback').className = 'feedback';
+  document.getElementById('btn-next').className = 'btn-next';
+  document.getElementById('btn-next').textContent = current === questions.length - 1 ? 'Voir mes résultats →' : 'Question suivante →';
+}
+
+function selectAnswer(i) {
+  if (answered.includes(current)) return;
+  answered.push(current);
+  const q = questions[current];
+  const isCorrect = i === q.correct;
+  if (isCorrect) score++;
+  results.push({ correct: isCorrect, qText: q.text.substring(0, 60) + '...' });
+
+  // Style options
+  document.querySelectorAll('.option').forEach((el, idx) => {
+    el.classList.add('disabled');
+    if (idx === q.correct) el.classList.add('correct');
+    else if (idx === i && !isCorrect) el.classList.add('wrong');
+  });
+
+  // Feedback
+  const fb = document.getElementById('q-feedback');
+  const fbTitle = document.getElementById('fb-title');
+  const fbText = document.getElementById('fb-text');
+  fbTitle.textContent = isCorrect ? '✅ Bonne réponse !' : '❌ Pas tout à fait...';
+  fbText.textContent = isCorrect ? q.feedback_correct.replace('✅ ', '') : q.feedback_wrong.replace('❌ ', '');
+  fb.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong') + ' show';
+  document.getElementById('btn-next').className = 'btn-next show';
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    renderQ();
+  }
+}
+
+function showResult() {
+  document.getElementById('s-quiz').classList.remove('active');
+  document.getElementById('s-result').classList.add('active');
+
+  document.getElementById('prog-label').textContent = `Terminé !`;
+  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('prog-fill').style.width = '100%';
+
+  const pct = Math.round((score / questions.length) * 100);
+  const card = document.getElementById('score-card');
+
+  let cls, emoji, label, msg;
+  if (score >= 5) {
+    cls = 'score-excellent'; emoji = '🏆'; label = 'Excellent !';
+    msg = 'Vous maîtrisez parfaitement l\'art d\'observer sans diagnostiquer. Vous êtes prêt(e) à transmettre des informations vraiment utiles à votre maréchal-ferrant ou vétérinaire.';
+  } else if (score >= 3) {
+    cls = 'score-bien'; emoji = '👍'; label = 'Bien !';
+    msg = 'Vous avez bien compris l\'essentiel. Relisez les questions incorrectes et pratiquez la grille d\'observation régulièrement.';
+  } else {
+    cls = 'score-revoir'; emoji = '📖'; label = 'À retravailler';
+    msg = 'Relisez attentivement la leçon 2.4, en particulier la distinction entre décrire et diagnostiquer. La pratique régulière de la grille d\'observation vous aidera.';
+  }
+
+  card.className = 'result-score-card ' + cls;
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-score').textContent = score + ' / ' + questions.length;
+  document.getElementById('res-label').textContent = label;
+  document.getElementById('res-msg').textContent = msg;
+
+  const recap = document.getElementById('recap-list');
+  recap.innerHTML = results.map((r, i) => `
+    <div class="recap-item">
+      <div class="recap-status">${r.correct ? '✅' : '❌'}</div>
+      <div class="recap-q"><strong>Q${i+1}</strong> — ${questions[i].text.substring(0, 70)}...</div>
+    </div>
+  `).join('');
+}
+
+function restart() {
+  current = 0; score = 0; answered = []; results = [];
+  document.getElementById('s-result').classList.remove('active');
+  document.getElementById('s-intro').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Question 0 / 6';
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('prog-fill').style.width = '0%';
+}
+</script>
+</body>
+</html>
