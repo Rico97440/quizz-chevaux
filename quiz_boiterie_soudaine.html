@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Boiterie soudaine</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+.app {
+  background: #0d0907;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  min-height: 600px;
+  position: relative;
+}
+
+/* HEADER */
+.header {
+  background: #1c1410;
+  padding: 18px 20px 14px;
+  text-align: center;
+  border-bottom: 1px solid rgba(217,122,58,0.3);
+}
+.header-brand { color: #d97a3a; font-size: 10px; font-weight: 800; letter-spacing: 3px; margin-bottom: 4px; }
+.header-title { color: #f5ede0; font-size: 16px; font-weight: 800; }
+
+/* SCREENS */
+.screen { display: none; padding: 24px 20px; }
+.screen.active { display: block; }
+
+/* SCREEN 1 — INTRO */
+.mascotte { font-size: 72px; text-align: center; margin-bottom: 16px; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.intro-title { font-family: Georgia, serif; font-size: 22px; font-weight: 900; color: #f5ede0; text-align: center; margin-bottom: 8px; line-height: 1.3; }
+.intro-title .accent { color: #d97a3a; }
+.intro-situation {
+  background: rgba(217,122,58,0.12);
+  border: 2px solid rgba(217,122,58,0.4);
+  border-radius: 14px; padding: 16px 18px;
+  margin: 16px 0; text-align: center;
+}
+.intro-situation p { font-size: 15px; color: #f5ede0; line-height: 1.6; }
+.intro-situation strong { color: #d97a3a; }
+.intro-question { font-size: 16px; font-weight: 800; color: #f5ede0; text-align: center; margin-bottom: 20px; }
+
+/* CARTES A/B/C */
+.cards-wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.card-abc {
+  border-radius: 14px; padding: 16px 10px 14px;
+  text-align: center; cursor: pointer;
+  transition: all 0.25s; border: 2px solid transparent;
+  position: relative; overflow: hidden;
+}
+.card-abc:hover { transform: translateY(-3px); }
+.card-A { background: rgba(90,130,217,0.15); border-color: rgba(90,130,217,0.5); }
+.card-B { background: rgba(217,130,58,0.15); border-color: rgba(217,130,58,0.5); }
+.card-C { background: rgba(58,138,90,0.15); border-color: rgba(58,138,90,0.5); }
+.card-A:hover { background: rgba(90,130,217,0.3); border-color: #5a82d9; }
+.card-B:hover { background: rgba(217,130,58,0.3); border-color: #d97a3a; }
+.card-C:hover { background: rgba(58,138,90,0.3); border-color: #3a8a5a; }
+.card-letter { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+.card-A .card-letter { color: #7a9ae9; }
+.card-B .card-letter { color: #d97a3a; }
+.card-C .card-letter { color: #5aaa7a; }
+.card-text { font-size: 12px; color: #c9b89a; line-height: 1.4; font-weight: 600; }
+
+/* COUNTDOWN SCREEN */
+.countdown-wrap { text-align: center; padding: 20px 0; }
+.countdown-question {
+  background: rgba(217,122,58,0.1); border: 2px solid #d97a3a;
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 24px;
+  font-size: 14px; color: #f5ede0; line-height: 1.6;
+}
+.countdown-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.ccard {
+  border-radius: 14px; padding: 16px 10px;
+  text-align: center; border: 2px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  transition: all 0.3s;
+}
+.ccard .cl { font-size: 28px; font-weight: 900; color: #8a7560; margin-bottom: 6px; }
+.ccard .ct { font-size: 11px; color: #6a5040; line-height: 1.3; font-weight: 600; }
+.ccard.selected { border-color: #d97a3a; background: rgba(217,122,58,0.2); }
+.ccard.selected .cl { color: #d97a3a; }
+.ccard.selected .ct { color: #c9b89a; }
+.ccard.pulse { animation: pulse 0.5s ease; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+.countdown-num {
+  font-size: 80px; font-weight: 900; color: #d97a3a;
+  line-height: 1; margin: 10px 0;
+  animation: tick 1s ease infinite;
+}
+@keyframes tick { 0%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(0.95)} 100%{opacity:1;transform:scale(1)} }
+
+.urgent-band {
+  background: #b83030; border-radius: 12px;
+  padding: 12px 16px; margin-top: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.urgent-band-text { font-size: 13px; color: white; font-weight: 700; line-height: 1.4; }
+
+/* REPONSE SCREEN */
+.response-header { text-align: center; margin-bottom: 20px; }
+.response-badge {
+  display: inline-block; background: #3a8a5a;
+  color: white; font-size: 11px; font-weight: 800;
+  letter-spacing: 2px; padding: 6px 16px;
+  border-radius: 20px; margin-bottom: 12px;
+}
+.response-title { font-family: Georgia, serif; font-size: 20px; font-weight: 900; color: #f5ede0; margin-bottom: 8px; }
+.response-sub { font-size: 14px; color: #c9b89a; font-style: italic; }
+
+.answer-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.acard { border-radius: 14px; padding: 14px 10px; text-align: center; position: relative; }
+.acard-correct { background: rgba(58,138,90,0.2); border: 2px solid #3a8a5a; }
+.acard-wrong { background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.1); opacity: 0.5; }
+.acard .al { font-size: 26px; font-weight: 900; margin-bottom: 6px; }
+.acard-correct .al { color: #5aaa7a; }
+.acard-wrong .al { color: #4a3a2a; }
+.acard .at { font-size: 11px; line-height: 1.3; font-weight: 600; }
+.acard-correct .at { color: #a0d0b0; }
+.acard-wrong .at { color: #4a3a2a; }
+.stamp {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotate(-15deg);
+  font-size: 11px; font-weight: 900; color: #5aaa7a;
+  border: 3px solid #5aaa7a; padding: 4px 10px;
+  border-radius: 4px; background: rgba(58,138,90,0.15);
+  letter-spacing: 1px; white-space: nowrap;
+}
+.non-confirme {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotate(-15deg);
+  font-size: 10px; font-weight: 900; color: #b83030;
+  border: 2px solid #b83030; padding: 3px 8px;
+  border-radius: 4px; background: rgba(184,48,48,0.1);
+  letter-spacing: 1px; white-space: nowrap;
+}
+
+.explanation-box {
+  background: rgba(245,237,224,0.05);
+  border: 1px solid rgba(217,122,58,0.3);
+  border-radius: 14px; padding: 16px 18px;
+  margin-bottom: 16px; font-size: 14px;
+  color: #c9b89a; line-height: 1.6;
+}
+.explanation-box strong { color: #d97a3a; }
+
+/* FEU ROUGE */
+.feu-rouge { background: rgba(184,48,48,0.15); border: 2px solid #b83030; border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+.feu-rouge-title { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.feu { font-size: 32px; }
+.feu-title-text { font-size: 15px; font-weight: 900; color: #e07070; }
+.feu-list { list-style: none; padding: 0; }
+.feu-list li { font-size: 13px; color: #f5ede0; padding: 4px 0 4px 20px; position: relative; line-height: 1.4; }
+.feu-list li::before { content: "•"; color: #b83030; position: absolute; left: 6px; font-weight: 900; }
+
+.principe { background: rgba(217,122,58,0.1); border: 2px solid #d97a3a; border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; font-size: 14px; color: #c9b89a; line-height: 1.6; }
+.principe strong { color: #d97a3a; }
+
+.deux-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.branche { border-radius: 12px; padding: 14px; text-align: center; }
+.branche-abces { background: rgba(90,130,217,0.12); border: 2px solid rgba(90,130,217,0.4); }
+.branche-fourbure { background: rgba(184,48,48,0.12); border: 2px solid rgba(184,48,48,0.4); }
+.branche-icon { font-size: 28px; margin-bottom: 6px; }
+.branche-title { font-size: 13px; font-weight: 800; color: #f5ede0; margin-bottom: 4px; }
+.branche-desc { font-size: 11px; color: #8a7560; line-height: 1.4; }
+.branche-arrow { text-align: center; font-size: 22px; color: #d97a3a; margin: 8px 0; }
+.equipe { background: rgba(217,122,58,0.15); border: 2px solid #d97a3a; border-radius: 10px; padding: 12px; text-align: center; font-size: 13px; font-weight: 800; color: #d97a3a; }
+
+/* PHRASE FINALE */
+.finale-wrap { text-align: center; padding: 20px 0; }
+.loupe { font-size: 64px; margin-bottom: 16px; animation: zoom 3s ease infinite; }
+@keyframes zoom { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+.finale-phrase {
+  background: rgba(217,122,58,0.15); border: 2px solid #d97a3a;
+  border-radius: 16px; padding: 20px 18px; margin-bottom: 20px;
+  font-family: Georgia, serif; font-size: 18px; font-style: italic;
+  color: #f5ede0; line-height: 1.5;
+}
+.finale-phrase .accent { color: #d97a3a; font-weight: 900; }
+.share-btn {
+  width: 100%; padding: 14px; background: #d97a3a; color: white;
+  border: none; border-radius: 12px; font-size: 14px; font-weight: 800;
+  cursor: pointer; box-shadow: 0 4px 0 #b8541e; margin-bottom: 14px;
+  transition: all 0.2s;
+}
+.share-btn:hover { background: #c96a2a; transform: translateY(-1px); }
+.disclaimer-final {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 14px; font-size: 12px;
+  color: #6a5040; line-height: 1.5; text-align: center; margin-bottom: 14px;
+}
+.btn-restart {
+  width: 100%; padding: 12px; background: rgba(255,255,255,0.08);
+  color: #c9b89a; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-restart:hover { background: rgba(255,255,255,0.12); }
+
+/* NAV */
+.nav-btn {
+  width: 100%; padding: 14px; background: #d97a3a; color: white;
+  border: none; border-radius: 12px; font-size: 15px; font-weight: 800;
+  cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s;
+  margin-top: 4px;
+}
+.nav-btn:hover { background: #c96a2a; transform: translateY(-1px); }
+.nav-btn-secondary {
+  width: 100%; padding: 12px; background: rgba(245,237,224,0.08);
+  color: #c9b89a; border: 1px solid rgba(245,237,224,0.15);
+  border-radius: 12px; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-brand">SOS MARÉCHAL-FERRANT · FORMATION</div>
+    <div class="header-title">🐴 Mini-quiz : Boiterie soudaine</div>
+  </div>
+
+  <!-- S1 — INTRO / QUESTION -->
+  <div id="s1" class="screen active">
+    <div class="mascotte">🐴</div>
+    <div class="intro-title">Un cheval boite <span class="accent">brutalement.</span></div>
+
+    <div class="intro-situation">
+      <p>Un sabot est <strong>chaud</strong>.<br>Le pouls digité est <strong>fort</strong>.<br><br>Quelle conclusion est sûre ?</p>
+    </div>
+
+    <div class="intro-question">A, B ou C ?</div>
+
+    <div class="cards-wrap">
+      <div class="card-abc card-A" onclick="chooseAnswer('A')">
+        <div class="card-letter">A</div>
+        <div class="card-text">C'est forcément un abcès</div>
+      </div>
+      <div class="card-abc card-B" onclick="chooseAnswer('B')">
+        <div class="card-letter">B</div>
+        <div class="card-text">C'est forcément une fourbure</div>
+      </div>
+      <div class="card-abc card-C" onclick="chooseAnswer('C')">
+        <div class="card-letter">C</div>
+        <div class="card-text">Ces signes justifient une évaluation, mais ne suffisent pas à trancher</div>
+      </div>
+    </div>
+
+    <div class="urgent-band">
+      <div style="font-size:24px;">🔴</div>
+      <div class="urgent-band-text">Si cheval douloureux : appelez le vétérinaire</div>
+    </div>
+  </div>
+
+  <!-- S2 — COUNTDOWN -->
+  <div id="s2" class="screen">
+    <div class="countdown-wrap">
+      <div class="countdown-question">
+        <strong style="color:#d97a3a;">Votre réponse :</strong> <span id="chosen-answer" style="font-size:16px;font-weight:900;color:#f5ede0;"></span><br><br>
+        A : C'est forcément un abcès.<br>
+        B : C'est forcément une fourbure.<br>
+        C : Ces signes justifient une évaluation, mais ne suffisent pas à trancher.
+      </div>
+
+      <div class="countdown-cards" id="cc-cards">
+        <div class="ccard" id="cc-A">
+          <div class="cl">A</div>
+          <div class="ct">C'est forcément un abcès</div>
+        </div>
+        <div class="ccard" id="cc-B">
+          <div class="cl">B</div>
+          <div class="ct">C'est forcément une fourbure</div>
+        </div>
+        <div class="ccard" id="cc-C">
+          <div class="cl">C</div>
+          <div class="ct">Ces signes justifient une évaluation</div>
+        </div>
+      </div>
+
+      <div style="color:#8a7560;font-size:13px;font-weight:700;margin-bottom:6px;">Réponse dans</div>
+      <div class="countdown-num" id="countdown-num">3</div>
+
+      <div class="urgent-band">
+        <div style="font-size:24px;">🔴</div>
+        <div class="urgent-band-text">Si cheval douloureux : appelez le vétérinaire</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3 — RÉPONSE RÉVÉLÉE -->
+  <div id="s3" class="screen">
+    <div class="response-header">
+      <div class="response-badge">✅ RÉPONSE C</div>
+      <div class="response-title">Les signes se chevauchent</div>
+      <div class="response-sub">L'abcès et la fourbure peuvent partager les mêmes signes</div>
+    </div>
+
+    <div class="answer-cards">
+      <div class="acard acard-wrong" style="position:relative;">
+        <div class="al">A</div>
+        <div class="at">Forcément un abcès</div>
+        <div class="non-confirme">NON CONFIRMÉ</div>
+      </div>
+      <div class="acard acard-wrong" style="position:relative;">
+        <div class="al">B</div>
+        <div class="at">Forcément une fourbure</div>
+        <div class="non-confirme">NON CONFIRMÉ</div>
+      </div>
+      <div class="acard acard-correct" style="position:relative;">
+        <div class="al">C</div>
+        <div class="at">Évaluation nécessaire</div>
+        <div class="stamp">VÉRIFIÉ ✓</div>
+      </div>
+    </div>
+
+    <div class="explanation-box">
+      L'abcès et la fourbure peuvent <strong>partager chaleur et pouls augmenté</strong>. Et d'autres causes existent. Le bon réflexe n'est pas de choisir le mot le plus rassurant : c'est de <strong>transmettre les observations et faire examiner le cheval</strong>.
+    </div>
+
+    <button class="nav-btn" onclick="showScreen('s4')">Feu rouge — À connaître →</button>
+  </div>
+
+  <!-- S4 — FEU ROUGE -->
+  <div id="s4" class="screen">
+    <div class="feu-rouge">
+      <div class="feu-rouge-title">
+        <div class="feu">🔴</div>
+        <div class="feu-title-text">VÉTÉRINAIRE IMMÉDIATEMENT si...</div>
+      </div>
+      <ul class="feu-list">
+        <li>Vous suspectez une fourbure</li>
+        <li>Plusieurs pieds semblent douloureux</li>
+        <li>Le cheval hésite à bouger ou reporte son poids</li>
+        <li>Il reste couché et ne prend pas appui</li>
+        <li>Déformation, instabilité, plaie profonde visible</li>
+        <li>Objet pénétrant dans le pied</li>
+        <li>Son état général vous inquiète</li>
+      </ul>
+    </div>
+
+    <div class="principe">
+      <strong>Pas de feu vert "attendez et voyez".</strong> Une boiterie soudaine ou marquée mérite au minimum un appel professionnel. Le degré d'urgence sera décidé selon <strong>ce cheval, ce jour-là.</strong>
+    </div>
+
+    <button class="nav-btn" onclick="showScreen('s5')">Que se passe-t-il ensuite ? →</button>
+  </div>
+
+  <!-- S5 — DEUX BRANCHES -->
+  <div id="s5" class="screen">
+    <div style="text-align:center;margin-bottom:18px;">
+      <div style="font-size:11px;font-weight:800;color:#d97a3a;letter-spacing:3px;margin-bottom:8px;">DIAGNOSTIC D'ABORD</div>
+      <div style="font-family:Georgia,serif;font-size:18px;color:#f5ede0;font-weight:900;">Prise en charge ensuite</div>
+    </div>
+
+    <div class="deux-branches">
+      <div class="branche branche-abces">
+        <div class="branche-icon">🦠</div>
+        <div class="branche-title">Si abcès confirmé</div>
+        <div class="branche-desc">Localiser, préserver la corne saine, organiser le drainage et la protection du pied</div>
+      </div>
+      <div class="branche branche-fourbure">
+        <div class="branche-icon">🔥</div>
+        <div class="branche-title">Si fourbure confirmée</div>
+        <div class="branche-desc">Prise en charge rapide et coordonnée pour limiter l'aggravation et soutenir le pied</div>
+      </div>
+    </div>
+
+    <div class="branche-arrow">↓ ↓</div>
+
+    <div class="equipe">
+      👨‍⚕️ Même équipe — Vétérinaire + Maréchal-ferrant 🐴
+    </div>
+
+    <div style="margin-top:16px;" class="explanation-box">
+      Dans les deux cas, la première étape est <strong>l'examen professionnel</strong>. Le traitement découle du diagnostic — pas l'inverse.
+    </div>
+
+    <button class="nav-btn" onclick="showScreen('s6')">La phrase à retenir →</button>
+  </div>
+
+  <!-- S6 — FINALE -->
+  <div id="s6" class="screen">
+    <div class="finale-wrap">
+      <div class="loupe">🔍</div>
+      <div class="finale-phrase">
+        "Un sabot chaud et un pouls fort <span class="accent">ouvrent l'enquête</span> — ils ne la ferment pas."
+      </div>
+
+      <button class="share-btn" onclick="alert('Partagez cette vidéo à un propriétaire qui pourrait confondre un indice et un diagnostic !')">
+        📤 Partager cette leçon
+      </button>
+
+      <div class="disclaimer-final">
+        ⚠️ <strong style="color:#c9b89a;">Contenu éducatif — pas de diagnostic à distance.</strong><br>
+        En cas de boiterie aiguë, de douleur marquée ou de doute, contactez votre vétérinaire.
+      </div>
+
+      <button class="btn-restart" onclick="restart()">🔄 Recommencer le quiz</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let userAnswer = '';
+let countdownTimer = null;
+
+function chooseAnswer(letter) {
+  userAnswer = letter;
+  document.getElementById('chosen-answer').textContent = letter;
+
+  // Marquer la carte choisie
+  ['A','B','C'].forEach(l => {
+    const el = document.getElementById('cc-' + l);
+    el.classList.remove('selected', 'pulse');
+    if (l === letter) {
+      el.classList.add('selected', 'pulse');
+    }
+  });
+
+  showScreen('s2');
+  startCountdown();
+}
+
+function startCountdown() {
+  let n = 3;
+  document.getElementById('countdown-num').textContent = n;
+
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    n--;
+    if (n <= 0) {
+      clearInterval(countdownTimer);
+      showScreen('s3');
+    } else {
+      document.getElementById('countdown-num').textContent = n;
+    }
+  }, 1000);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function restart() {
+  userAnswer = '';
+  if (countdownTimer) clearInterval(countdownTimer);
+  showScreen('s1');
+}
+</script>
+</body>
+</html>
