@@ -1,0 +1,56 @@
+titre: "Sais-tu observer un sabot sans diagnostiquer ?"
+serie: "Vrai, faux ou incomplet ?"
+statut: "medias-a-controler"
+cta: "Écrivez A, B ou C en commentaire."
+avertissement: "Observer aide le professionnel. Cela ne remplace jamais son examen."
+validation_globale_eric: "requise avant publication"
+sources:
+  - id: SRC-001
+    organisme: "Merck Veterinary Manual"
+    titre: "Overview of Lameness in Horses"
+    url: "https://www.merckvetmanual.com/musculoskeletal-system/lameness-in-horses-overview-and-examination/overview-of-lameness-in-horses"
+    niveau: 4
+    limite: "Soutient la prudence en cas de boiterie aiguë sévère et de fracture suspectée."
+    consulte_le: "2026-08-07"
+  - id: SRC-002
+    organisme: "IFCE équipédia"
+    titre: "Abcès de pied"
+    url: "https://equipedia.ifce.fr/sante-et-bien-etre-animal/maladies/appareil-locomoteur/labces-de-pied"
+    niveau: 4
+    limite: "Décrit les causes possibles d'un abcès ; ne permet pas de diagnostiquer une zone sombre à distance."
+    consulte_le: "2026-08-07"
+questions:
+  - id: Q1
+    question: "Quelle phrase transmet l'observation la plus utile ?"
+    choix:
+      - "Mon cheval a une pourriture de fourchette."
+      - "Zone sombre et souple, environ 2 cm, lacune centrale de l'antérieur gauche, remarquée hier."
+      - "Son pied est bizarre."
+    bonne_reponse: 2
+    explication: "B décrit l'aspect, la taille, l'endroit et le moment observé. Le diagnostic médical relève du vétérinaire."
+    action_urgente: ""
+    source_ids: [SRC-002]
+    validation_eric: "requise"
+  - id: Q2
+    question: "Quelle photo est la plus utile au professionnel ?"
+    choix:
+      - "Une photo filtrée du cheval entier."
+      - "Un gros plan net avec une règle, plus une vue générale du pied."
+      - "Une seule photo prise de loin."
+    bonne_reponse: 2
+    explication: "B donne une échelle et situe la zone. La photo reste un complément : elle ne remplace pas l'examen."
+    action_urgente: ""
+    source_ids: []
+    validation_eric: "requise"
+  - id: Q3
+    question: "Le cheval se met brutalement à boiter et refuse presque l'appui. Que faire ?"
+    choix:
+      - "Attendre le lendemain pour comparer."
+      - "Demander l'avis majoritaire d'un groupe en ligne."
+      - "Contacter immédiatement le vétérinaire et ne pas faire marcher le cheval pour le tester."
+    bonne_reponse: 3
+    explication: "C : une boiterie brutale et marquée ne doit pas attendre la fin d'un quiz. Le maréchal intervient en complément selon le cas."
+    action_urgente: "Contactez immédiatement votre vétérinaire."
+    source_ids: [SRC-001]
+    validation_eric: "requise"
+
