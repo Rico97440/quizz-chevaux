@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+exports/*
+!exports/2026-08-07_observer-sans-diagnostiquer/
+

@@ -1,0 +1,19 @@
+titre: "Titre du quiz"
+serie: "Vrai, faux ou incomplet ?"
+statut: "quiz-a-valider"
+cta: "Écrivez A, B ou C en commentaire."
+avertissement: "Ce contenu aide à observer. Il ne remplace pas l'examen d'un vétérinaire."
+sources: []
+questions:
+  - id: Q1
+    question: "Votre question ?"
+    choix:
+      - "Choix A"
+      - "Choix B"
+      - "Choix C"
+    bonne_reponse: 1
+    explication: "Une explication courte et prudente."
+    action_urgente: ""
+    source_ids: []
+    validation_eric: "requise"
+

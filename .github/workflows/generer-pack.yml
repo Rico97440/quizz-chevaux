@@ -1,0 +1,35 @@
+name: Générer le pack quiz
+
+on:
+  workflow_dispatch:
+    inputs:
+      quiz:
+        description: "Chemin du fichier YAML"
+        required: true
+        default: "contenus/2026-08-07_observer-sans-diagnostiquer.yaml"
+  push:
+    paths:
+      - "atelier-quiz-reseaux/contenus/*.yaml"
+      - "atelier-quiz-reseaux/scripts/**"
+      - ".github/workflows/generer-pack.yml"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: atelier-quiz-reseaux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: python -m pip install -r requirements.txt
+      - run: python scripts/validate_quiz.py "${{ inputs.quiz || 'contenus/2026-08-07_observer-sans-diagnostiquer.yaml' }}"
+      - run: python scripts/render_quiz.py "${{ inputs.quiz || 'contenus/2026-08-07_observer-sans-diagnostiquer.yaml' }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pack-quiz-reseaux
+          path: atelier-quiz-reseaux/exports/
+          retention-days: 30
