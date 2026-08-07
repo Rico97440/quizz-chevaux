@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1c1410">
+  <meta name="description" content="Quiz interactif SOS Maréchal-Ferrant : les bons gestes pour refroidir un cheval après un effort par temps chaud.">
+  <title>Quiz — Refroidir un cheval chaud</title>
+  <style>
+    :root{--ink:#1c1410;--paper:#fdfaf5;--orange:#d86f2e;--sand:#eadbc5;--muted:#795f49;--green:#277a45;--red:#b52f36;--white:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;padding:18px;background:linear-gradient(145deg,#1c1410,#3a261b);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+    button,a{font:inherit}
+    .app{width:min(100%,560px);margin:auto;background:var(--paper);border-radius:20px;overflow:hidden;box-shadow:0 18px 60px #0008}
+    header{padding:20px 20px 16px;text-align:center;background:var(--ink);color:#f8eee0}
+    .brand{font-size:.72rem;font-weight:900;letter-spacing:.18em;color:#ee914f;text-transform:uppercase}
+    .eyebrow{margin:.35rem 0;font-size:.82rem;color:#cdbba4}
+    h1{margin:.25rem 0 0;font-size:1.15rem;line-height:1.3}
+    .progress{padding:0 20px 16px;background:var(--ink);color:#bba58e}
+    .progress-info{display:flex;justify-content:space-between;margin-bottom:6px;font-size:.76rem;font-weight:700}
+    .track{height:6px;border-radius:999px;background:#ffffff1a;overflow:hidden}
+    .fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),#f3aa64);transition:width .3s}
+    main{padding:22px 20px}
+    .screen[hidden]{display:none}
+    .hero{text-align:center;font-size:3rem;margin:.1rem 0 .65rem}
+    h2{font-size:1.28rem;line-height:1.3;text-align:center;margin:.25rem 0 1rem}
+    .context,.safety,.source-box{border-radius:12px;padding:14px 15px;font-size:.88rem;line-height:1.55;margin:14px 0}
+    .context{background:#fff2df;border:2px solid var(--orange)}
+    .safety{background:#fff0f1;border:2px solid var(--red);color:#68161b}
+    .goals{padding:14px 16px;border:1px solid var(--sand);border-radius:12px;background:var(--white);font-size:.87rem;line-height:1.6}
+    .goals strong,.kicker{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+    .goals ul{padding-left:1.2rem;margin:.5rem 0 0}
+    .primary,.secondary{width:100%;border:0;border-radius:12px;padding:14px 16px;font-weight:850;cursor:pointer}
+    .primary{margin-top:16px;background:var(--orange);color:#fff;box-shadow:0 4px 0 #a84818}
+    .secondary{display:none;margin-top:14px;background:var(--ink);color:#fff}
+    .secondary.visible{display:block}
+    .question-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+    .theme{padding:4px 9px;border-radius:999px;background:#f4eadc;font-size:.72rem;font-weight:800;color:var(--muted)}
+    .question{font-size:1.08rem;line-height:1.42;margin:.55rem 0 1rem}
+    .question-note{margin:-.35rem 0 1rem;padding:10px 12px;border-left:3px solid var(--orange);background:#fff4e7;color:#69482d;font-size:.82rem;font-style:italic}
+    .options{display:grid;gap:10px}
+    .option{display:flex;align-items:flex-start;gap:12px;width:100%;padding:13px 14px;text-align:left;border:2px solid var(--sand);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer}
+    .option:hover:not(:disabled),.option:focus-visible:not(:disabled){border-color:var(--orange);background:#fff7ed;outline:none}
+    .letter{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:50%;background:var(--sand);font-size:.78rem;font-weight:900}
+    .option-text{font-size:.88rem;font-weight:650;line-height:1.4}
+    .option.correct{border-color:var(--green);background:#effbf2}.option.correct .letter{background:var(--green);color:#fff}
+    .option.wrong{border-color:var(--red);background:#fff0f1}.option.wrong .letter{background:var(--red);color:#fff}
+    .feedback{display:none;margin-top:14px;padding:14px;border-radius:12px;font-size:.86rem;line-height:1.55}
+    .feedback.visible{display:block}.feedback.good{border:2px solid var(--green);background:#effbf2;color:#164829}.feedback.bad{border:2px solid var(--red);background:#fff0f1;color:#68161b}
+    .feedback strong{display:block;margin-bottom:4px}
+    .score-card{text-align:center;padding:24px 18px;border-radius:15px;background:#effbf2;border:3px solid var(--green)}
+    .score-emoji{font-size:3rem}.score{font-size:3rem;font-weight:950;color:var(--green)}
+    .recap{display:grid;gap:8px;margin:16px 0}.recap-item{display:flex;gap:9px;padding:10px;border:1px solid var(--sand);border-radius:10px;background:#fff;font-size:.8rem;line-height:1.35}
+    .source-box{background:#f5eee4;border:1px solid var(--sand);color:#4b3828}
+    .source-box a{color:#8f3e13;font-weight:750}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions .primary{margin:0}.actions .secondary{display:block;margin:0}
+    footer{padding:0 20px 20px;text-align:center;color:#7b6653;font-size:.72rem;line-height:1.45}
+    @media(max-width:400px){body{padding:0}.app{border-radius:0;min-height:100vh}.actions{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">SOS Maréchal-Ferrant · Chaleur</div>
+    <div class="eyebrow">Quiz pratique · La Réunion</div>
+    <h1>🌡️ Refroidir un cheval chaud :<br>racler ou continuer l’eau ?</h1>
+  </header>
+  <div class="progress" aria-label="Progression du quiz">
+    <div class="progress-info"><span id="progressLabel">Avant de commencer</span><span id="progressPercent">0 %</span></div>
+    <div class="track"><div class="fill" id="progressFill"></div></div>
+  </div>
+
+  <main>
+    <section id="intro" class="screen">
+      <div class="hero">🐴💧</div>
+      <h2>Les bons réflexes, sans opposer les méthodes</h2>
+      <div class="context">La douche continue refroidit rapidement et ne nécessite pas de racler entre chaque passage. Si l’eau est limitée ou en ambiance très humide, évacuer l’eau réchauffée peut toutefois être utile. Le contexte compte.</div>
+      <div class="safety"><strong>Urgence :</strong> si le cheval titube, paraît confus, s’effondre, respire anormalement ou présente une température rectale autour de 40&nbsp;°C ou plus, appelez immédiatement un vétérinaire et poursuivez le refroidissement pendant l’appel.</div>
+      <div class="goals"><strong>7 questions pour vérifier</strong><ul><li>eau continue ou raclage ;</li><li>froid, humidité et ventilation ;</li><li>ordre des gestes et signes d’urgence.</li></ul></div>
+      <button class="primary" id="startButton" type="button">Commencer le quiz →</button>
+    </section>
+
+    <section id="quiz" class="screen" hidden>
+      <div class="question-head"><span class="kicker" id="questionNumber"></span><span class="theme" id="questionTheme"></span></div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="question-note" id="questionNote" hidden></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback" role="status" aria-live="polite"><strong id="feedbackTitle"></strong><span id="feedbackText"></span></div>
+      <button class="secondary" id="nextButton" type="button">Question suivante →</button>
+    </section>
+
+    <section id="result" class="screen" hidden>
+      <div class="score-card"><div class="score-emoji" id="scoreEmoji">🏆</div><div class="score" id="scoreValue"></div><strong id="scoreTitle"></strong><p id="scoreMessage"></p></div>
+      <div class="safety"><strong>À retenir :</strong> arrêter l’effort, mettre à l’ombre et dans l’air, refroidir sans délai, surveiller. En présence de signes graves, le vétérinaire doit être appelé immédiatement.</div>
+      <div class="recap" id="recap"></div>
+      <div class="source-box"><strong>Sources vérifiées</strong><br><a href="https://pubmed.ncbi.nlm.nih.gov/32684268/" target="_blank" rel="noopener">Takahashi et al., 2020</a> — comparaison expérimentale de cinq méthodes · <a href="https://equipedia.ifce.fr/sante-et-bien-etre-animal/maladies/autres-maladies/coup-de-chaleur" target="_blank" rel="noopener">IFCE — Le coup de chaleur</a> · <a href="https://www.ifce.fr/wp-content/uploads/2026/03/DIR-WBC-rafraichir-apres-leffort.pdf" target="_blank" rel="noopener">IFCE/EnvA, mars 2026</a>.</div>
+      <div class="actions"><button class="primary" id="restartButton" type="button">↻ Recommencer</button><button class="secondary" id="shareButton" type="button">Partager</button></div>
+    </section>
+  </main>
+  <footer>Contenu pédagogique général — ne remplace ni un examen ni un avis vétérinaire.</footer>
+</div>
+
+<script>
+const questions = [
+  {
+    theme:"💧 Méthode",
+    text:"Avec un tuyau fournissant de l’eau en continu, faut-il interrompre l’arrosage pour racler ?",
+    options:["Oui, après chaque passage","Non : renouveler l’eau sans interrompre la douche","Seulement au-dessus de 40 °C","Le raclage est toujours plus rapide"],
+    correct:1,
+    feedback:"La douche continue à l’eau du réseau a été la méthode la plus efficace dans l’étude comparative. Racler entre les passages l’interrompt inutilement."
+  },
+  {
+    theme:"🧽 Nuance",
+    text:"Le couteau de chaleur est-il toujours inutile ?",
+    options:["Oui, dans toutes les situations","Non : il peut aider si l’eau est limitée ou en air très humide","Il est obligatoire avant de mouiller","Il ne sert que par temps froid"],
+    correct:1,
+    feedback:"La recommandation 2026 de l’IFCE est nuancée : commencer sans couteau ; l’utiliser ensuite peut économiser l’eau et évacuer l’eau réchauffée, notamment en ambiance humide."
+  },
+  {
+    theme:"❄️ Température",
+    text:"Un cheval très chaud après l’effort peut-il être refroidi avec de l’eau froide ?",
+    options:["Non, il faut attendre qu’il refroidisse seul","Oui : l’eau froide est utilisée pour extraire rapidement la chaleur","Seulement sur les sabots","Seulement selon sa race"],
+    correct:1,
+    feedback:"Oui. Les travaux et recommandations étudiés utilisent de l’eau froide ou l’eau du réseau. La priorité est de faire baisser la température sans délai."
+  },
+  {
+    theme:"🌴 Humidité",
+    text:"Pourquoi la chaleur humide de La Réunion augmente-t-elle la vigilance ?",
+    options:["Elle accélère toujours l’évaporation","Elle réduit l’efficacité de l’évaporation de la sueur","Elle empêche le cheval de transpirer dans tous les cas","Elle rend l’ombre inutile"],
+    correct:1,
+    feedback:"Quand l’air est humide, la sueur s’évapore moins efficacement. Ombre, circulation d’air, eau et surveillance deviennent particulièrement importants."
+  },
+  {
+    theme:"⏱️ Premiers gestes",
+    text:"Après un effort, le cheval paraît anormalement chaud et épuisé. Que faire d’abord ?",
+    options:["Attendre dix minutes","Arrêter l’effort, mettre à l’ombre et refroidir immédiatement","Donner des électrolytes avant toute eau","Le forcer à marcher"],
+    correct:1,
+    feedback:"Arrêtez l’effort et commencez le refroidissement sans délai, dans un endroit ombragé et ventilé. Ne forcez pas un cheval faible à marcher."
+  },
+  {
+    theme:"🔴 Urgence",
+    text:"Quel signe justifie un appel vétérinaire immédiat ?",
+    note:"N’attendez pas la fin du quiz si cette situation est réelle.",
+    options:["Il cherche l’ombre","Il veut boire","Il titube, paraît confus ou s’effondre","Son poil est mouillé"],
+    correct:2,
+    feedback:"Les troubles neurologiques, l’effondrement et une température autour de 40 °C ou plus signalent un danger. Appelez immédiatement le vétérinaire et continuez à refroidir pendant l’appel."
+  },
+  {
+    theme:"✅ Synthèse",
+    text:"Quel résumé est le plus sûr ?",
+    options:["Attendre, puis utiliser uniquement de l’eau tiède","Racler obligatoirement après chaque seau","Refroidir sans délai, adapter le raclage au débit et à l’humidité, surveiller et appeler en urgence si signes graves","Commencer par les électrolytes"],
+    correct:2,
+    feedback:"C’est la bonne synthèse : agir immédiatement, utiliser l’eau disponible efficacement, tenir compte des conditions et ne jamais retarder l’appel vétérinaire en cas de signes graves."
+  }
+];
+
+const $ = id => document.getElementById(id);
+let current = 0;
+let score = 0;
+let answers = [];
+
+function show(name){["intro","quiz","result"].forEach(id => $(id).hidden = id !== name)}
+function updateProgress(done){const pct=Math.round(done/questions.length*100);$("progressLabel").textContent=done?`Question ${Math.min(done+1,questions.length)} sur ${questions.length}`:"Avant de commencer";$("progressPercent").textContent=`${pct} %`;$("progressFill").style.width=`${pct}%`}
+function renderQuestion(){
+  const q=questions[current];
+  updateProgress(current);
+  $("questionNumber").textContent=`Question ${current+1} / ${questions.length}`;
+  $("questionTheme").textContent=q.theme;
+  $("questionText").textContent=q.text;
+  $("questionNote").hidden=!q.note;
+  $("questionNote").textContent=q.note||"";
+  $("feedback").className="feedback";
+  $("nextButton").className="secondary";
+  $("nextButton").textContent=current===questions.length-1?"Voir mon résultat →":"Question suivante →";
+  $("options").replaceChildren(...q.options.map((text,index)=>{
+    const b=document.createElement("button");
+    b.type="button";b.className="option";b.dataset.index=index;
+    b.innerHTML=`<span class="letter">${String.fromCharCode(65+index)}</span><span class="option-text"></span>`;
+    b.querySelector(".option-text").textContent=text;
+    b.addEventListener("click",()=>selectAnswer(index));
+    return b;
+  }));
+}
+function selectAnswer(index){
+  if(answers[current]!==undefined)return;
+  const q=questions[current],good=index===q.correct;
+  answers[current]=good;if(good)score++;
+  document.querySelectorAll(".option").forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");else if(i===index)b.classList.add("wrong")});
+  $("feedbackTitle").textContent=good?"✅ Bonne réponse":"❌ Pas tout à fait";
+  $("feedbackText").textContent=q.feedback;
+  $("feedback").className=`feedback visible ${good?"good":"bad"}`;
+  $("nextButton").className="secondary visible";
+}
+function finish(){
+  show("result");updateProgress(questions.length);$("progressLabel").textContent="Terminé";
+  $("scoreValue").textContent=`${score} / ${questions.length}`;
+  const excellent=score>=6,medium=score>=4;
+  $("scoreEmoji").textContent=excellent?"🏆":medium?"👍":"📖";
+  $("scoreTitle").textContent=excellent?"Excellents réflexes":medium?"Bonnes bases":"À revoir tranquillement";
+  $("scoreMessage").textContent=excellent?"Vous avez identifié les gestes essentiels.":"Relisez les corrections : en situation réelle, la rapidité et la nuance comptent.";
+  $("recap").replaceChildren(...questions.map((q,i)=>{const d=document.createElement("div");d.className="recap-item";d.textContent=`${answers[i]?"✅":"❌"} Q${i+1} — ${q.theme.replace(/^\S+\s/,"")}`;return d}));
+}
+$("startButton").addEventListener("click",()=>{show("quiz");renderQuestion()});
+$("nextButton").addEventListener("click",()=>{current++;current<questions.length?renderQuestion():finish()});
+$("restartButton").addEventListener("click",()=>{current=0;score=0;answers=[];show("intro");updateProgress(0)});
+$("shareButton").addEventListener("click",async()=>{const data={title:document.title,text:"Testez vos réflexes pour refroidir un cheval après l’effort.",url:location.href};if(navigator.share){await navigator.share(data)}else{await navigator.clipboard.writeText(location.href);$("shareButton").textContent="Lien copié ✓"}});
+</script>
+</body>
+</html>
