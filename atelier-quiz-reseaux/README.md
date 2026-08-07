@@ -2,12 +2,29 @@
 
 Ce dépôt transforme un seul fichier de quiz en contenus directement publiables :
 
+- quiz interactif GitHub Pages avec choix cliquables, corrections et score ;
 - carrousel Facebook/Instagram en PNG 1080 × 1350 ;
 - Reel Facebook, Reel Instagram et YouTube Short en MP4 1080 × 1920 ;
 - compilation YouTube en MP4 1920 × 1080 ;
 - textes de publication et sous-titres.
 
 Le HTML interactif reste réservé à EquiCare, Systeme.io ou une page web. Facebook, Instagram et YouTube n'exécutent pas les boutons, le score ou le JavaScript d'un quiz HTML.
+
+## Quiz interactif GitHub Pages
+
+Le modèle `templates/quiz-interactif.html` fonctionne sans serveur et sans abonnement. Pour créer un nouveau quiz, copier ce fichier dans un dossier au nom du sujet et le renommer `index.html` :
+
+```text
+nom-du-quiz/index.html
+```
+
+Avec GitHub Pages publié depuis `main` et `/(root)`, son adresse devient :
+
+```text
+https://rico97440.github.io/quizz-chevaux/nom-du-quiz/
+```
+
+Ce lien peut être partagé sur Facebook. Le quiz s'ouvre alors comme une page web et conserve les choix cliquables, la correction, la navigation et le score final.
 
 ## Fonctionnement simple
 
@@ -47,4 +64,3 @@ La génération demande Python 3.10+, Pillow, PyYAML et FFmpeg.
 `idee` → `recherche` → `sources-a-valider` → `quiz-a-valider` → `validation-eric` → `securite-droits-ok` → `pret-a-generer` → `medias-a-controler` → `pret-a-publier` → `publie`
 
 Le dépôt ne publie jamais automatiquement sur un réseau social. Le dernier geste reste volontaire.
-
