@@ -164,6 +164,7 @@ function updateProgress(done){const pct=Math.round(done/questions.length*100);$(
 function renderQuestion(){
   const q=questions[current];
   updateProgress(current);
+  $("progressLabel").textContent=`Question ${current+1} sur ${questions.length}`;
   $("questionNumber").textContent=`Question ${current+1} / ${questions.length}`;
   $("questionTheme").textContent=q.theme;
   $("questionText").textContent=q.text;
