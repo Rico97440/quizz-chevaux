@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évaluation — Comprendre et observer le sabot</title>
+<meta name="description" content="Quiz interactif du module 2 : observer, comparer et décrire le sabot sans poser de diagnostic.">
+<meta name="theme-color" content="#1c1410">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Quiz — Comprendre et observer le sabot">
+<meta property="og:description" content="8 questions pour vérifier les repères essentiels du module 2.">
+<meta property="og:image" content="vignette-facebook.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+.app {
+  background: #fdfaf5;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.header {
+  background: #1c1410;
+  padding: 20px 20px 16px;
+  text-align: center;
+}
+.header-brand { color: #d97a3a; font-size: 11px; font-weight: 800; letter-spacing: 3px; margin-bottom: 5px; }
+.header-lesson { color: #c9b89a; font-size: 13px; margin-bottom: 5px; }
+.header-title { color: #f5ede0; font-size: 17px; font-weight: 800; line-height: 1.3; }
+.progress-wrap { background: #1c1410; padding: 0 20px 16px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #8a7560; margin-bottom: 6px; font-weight: 600; }
+.progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+.progress-fill { height: 100%; background: linear-gradient(to right, #d97a3a, #e9a05a); border-radius: 3px; transition: width 0.4s ease; }
+.screen { display: none; }
+.screen.active { display: block; }
+
+.intro { padding: 24px 20px; }
+.intro-icon { font-size: 52px; text-align: center; margin-bottom: 14px; }
+.intro-title { font-size: 20px; font-weight: 800; color: #1c1410; text-align: center; margin-bottom: 10px; line-height: 1.3; }
+.intro-context { background: #fff3e0; border: 2px solid #d97a3a; border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: 13px; color: #4a3a2a; line-height: 1.6; }
+.intro-goals { background: #fff; border: 1px solid #e8d8c0; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+.intro-goals-title { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 8px; }
+.intro-goal { font-size: 13px; color: #2a1f17; margin-bottom: 6px; display: flex; gap: 8px; line-height: 1.4; }
+.btn-start { width: 100%; padding: 15px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-start:hover { background: #c96a2a; transform: translateY(-1px); }
+
+.q-wrap { padding: 20px; }
+.q-num { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 5px; }
+.q-theme { font-size: 11px; font-weight: 700; color: #8a7560; background: #f5ede0; display: inline-block; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+.q-text { font-size: 17px; font-weight: 700; color: #1c1410; line-height: 1.4; margin-bottom: 8px; }
+.q-context { font-size: 13px; color: #6b4a2b; font-style: italic; margin-bottom: 18px; background: #fdf4e8; border-left: 3px solid #d97a3a; padding: 10px 12px; border-radius: 0 8px 8px 0; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option {
+  background: #fff; border: 2px solid #e8d8c0; border-radius: 12px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.option:hover:not(.disabled) { border-color: #d97a3a; background: #fdf4e8; }
+.option.correct { border-color: #3a8a3a; background: #f0fff0; }
+.option.wrong { border-color: #b83030; background: #fff0f0; }
+.option.disabled { cursor: default; }
+.option-letter {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #e8d8c0; color: #6b4a2b;
+  font-size: 13px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option.correct .option-letter { background: #3a8a3a; color: white; }
+.option.wrong .option-letter { background: #b83030; color: white; }
+.option-text { font-size: 14px; font-weight: 600; color: #1c1410; flex: 1; line-height: 1.4; }
+.feedback { border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; font-size: 13px; line-height: 1.55; display: none; }
+.feedback.correct { background: #f0fff0; border: 2px solid #3a8a3a; color: #1a4a1a; }
+.feedback.wrong { background: #fff0f0; border: 2px solid #b83030; color: #4a1a1a; }
+.feedback.show { display: block; }
+.feedback-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.btn-next { width: 100%; padding: 14px; background: #1c1410; color: #f5ede0; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; }
+.btn-next.show { display: block; }
+.btn-next:hover { background: #2a1d14; }
+
+.result-wrap { padding: 24px 20px; }
+.result-score-card { text-align: center; border-radius: 16px; padding: 28px 20px; margin-bottom: 20px; }
+.result-emoji { font-size: 56px; margin-bottom: 12px; }
+.result-score { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.result-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.result-msg { font-size: 13px; line-height: 1.55; }
+.score-excellent { background: linear-gradient(135deg, #f0fff0, #e0ffe0); border: 3px solid #3a8a3a; }
+.score-excellent .result-score { color: #3a8a3a; }
+.score-bien { background: linear-gradient(135deg, #fff8f0, #fff0e0); border: 3px solid #d97a3a; }
+.score-bien .result-score { color: #d97a3a; }
+.score-revoir { background: linear-gradient(135deg, #fff0f0, #ffe8e8); border: 3px solid #b83030; }
+.score-revoir .result-score { color: #b83030; }
+.recap { margin-bottom: 20px; }
+.recap-title { font-size: 12px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 10px; }
+.recap-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; padding: 10px 12px; background: #fff; border: 1px solid #e8d8c0; border-radius: 10px; }
+.recap-q { font-size: 12px; color: #4a3a2a; line-height: 1.4; flex: 1; }
+.urgence-box { background: #fff0f0; border: 2px solid #b83030; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.urgence-title { font-size: 13px; font-weight: 800; color: #b83030; margin-bottom: 8px; }
+.urgence-list { font-size: 12px; color: #2a1f17; line-height: 1.8; }
+.btn-restart { width: 100%; padding: 14px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-restart:hover { background: #c96a2a; transform: translateY(-1px); }
+.disclaimer { font-size: 11px; line-height: 1.5; color: #8a7560; text-align: center; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-brand">SOS MARÉCHAL-FERRANT · ÉVALUATION</div>
+    <div class="header-lesson">Comprendre et observer le sabot · Module 2</div>
+    <div class="header-title">👁️ Observation du sabot :<br>Évaluation de la leçon</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="prog-label">Question 0 / 8</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="s-intro" class="screen active">
+    <div class="intro">
+      <div class="intro-icon">👁️🐴🦶</div>
+      <div class="intro-title">Avez-vous compris la leçon ?</div>
+
+      <div class="intro-context">
+        Cette évaluation vérifie votre compréhension de la leçon « Comprendre et observer le sabot ». Huit questions portent sur les repères anatomiques, la méthode d'observation et la distinction essentielle entre décrire et diagnostiquer.
+      </div>
+
+      <div class="intro-goals">
+        <div class="intro-goals-title">CONTENU DE L'ÉVALUATION</div>
+        <div class="intro-goal"><span>🔍</span><span>Vocabulaire des parties du sabot</span></div>
+        <div class="intro-goal"><span>📖</span><span>Structures externes et internes</span></div>
+        <div class="intro-goal"><span>👀</span><span>Protocole d'observation correcte</span></div>
+        <div class="intro-goal"><span>✍️</span><span>Décrire vs diagnostiquer</span></div>
+        <div class="intro-goal"><span>🚨</span><span>Limites de l'observation personnelle</span></div>
+      </div>
+
+      <div style="font-size:13px;color:#8a7560;margin-bottom:14px;text-align:center;">8 questions · Évaluation directe · Notation stricte</div>
+      <button class="btn-start" onclick="startQuiz()">Commencer l'évaluation →</button>
+    </div>
+  </div>
+
+  <div id="s-quiz" class="screen">
+    <div class="q-wrap">
+      <div class="q-num" id="q-num">QUESTION 1 / 8</div>
+      <div class="q-theme" id="q-theme"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-context" id="q-context" style="display:none"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <div class="feedback-title" id="fb-title"></div>
+        <div id="fb-text"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">Question suivante →</button>
+    </div>
+  </div>
+
+  <div id="s-result" class="screen">
+    <div class="result-wrap">
+      <div class="result-score-card" id="score-card">
+        <div class="result-emoji" id="res-emoji"></div>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-msg" id="res-msg"></div>
+      </div>
+
+      <div class="urgence-box">
+        <div class="urgence-title">🔴 RÈGLE FONDAMENTALE À JAMAIS OUBLIER</div>
+        <div class="urgence-list">
+          <strong>J'observe, je compare, je note et je transmets.<br>Je ne diagnostique pas et je n'interviens pas au-delà des gestes appris et validés.</strong><br><br>
+          ✗ Tirer une conclusion d'une seule photo<br>
+          ✗ Creuser le pied moi-même<br>
+          ✗ Retirer un objet planté<br>
+          ✗ Utiliser l'anatomie pour poser diagnostic<br>
+          ✗ Intervenir au-delà des gestes validés<br><br>
+          ✓ Décrire précisément ce que je VOIS<br>
+          ✓ Comparer les 4 pieds entre eux<br>
+          ✓ Photographier avec repère d'échelle<br>
+          ✓ Transmettre aux professionnels
+        </div>
+      </div>
+
+      <div class="recap">
+        <div class="recap-title">RÉCAPITULATIF DE VOS RÉPONSES</div>
+        <div id="recap-list"></div>
+      </div>
+      <button class="btn-restart" onclick="restart()">🔄 Recommencer l'évaluation</button>
+      <div class="disclaimer">Cette évaluation complète la leçon. Elle ne remplace ni l'examen du cheval ni l'avis du vétérinaire ou du maréchal-ferrant.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    theme: "🔍 VOCABULAIRE",
+    text: "Quels sont les principaux repères EXTERNES du sabot que vous devez pouvoir nommer avec précision ?",
+    context: "Vocabulaire anatomique de base pour communiquer avec un professionnel.",
+    options: [
+      { letter: "A", text: "Couronne, paroi, talons, pince." },
+      { letter: "B", text: "Paroi, couronne, quartiers, talons, glomes." },
+      { letter: "C", text: "Sabot antérieur, postérieur, droit, gauche." },
+      { letter: "D", text: "Haut du pied, bas du pied, côtés." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! La paroi, la couronne, les quartiers, les talons et les glomes font partie des principaux repères externes. Ce vocabulaire permet de transmettre une observation précise au professionnel.",
+    feedback_wrong: "La bonne réponse est : paroi, couronne, quartiers, talons et glomes. Ces termes servent à localiser précisément ce que vous observez, sans poser de diagnostic.",
+  },
+  {
+    theme: "📖 STRUCTURES INTERNES",
+    text: "Qu'est-ce que P3 et où se trouve-t-elle ?",
+    context: null,
+    options: [
+      { letter: "A", text: "C'est une maladie — P3 est infectée." },
+      { letter: "B", text: "C'est la troisième phalange, située à l'INTÉRIEUR de la boîte cornée. Comprendre sa position aide à respecter les zones sensibles." },
+      { letter: "C", text: "C'est une partie visible de la sole." },
+      { letter: "D", text: "Je ne dois pas le savoir — c'est pour les vétérinaires." },
+    ],
+    correct: 1,
+    feedback_correct: "Oui ! P3 est la troisième phalange. Elle se trouve dans la boîte cornée et est reliée aux structures sensibles du pied. La situer aide à comprendre pourquoi certaines zones ne doivent jamais être creusées.",
+    feedback_wrong: "P3 n'est pas une maladie : c'est la troisième phalange, située dans la boîte cornée. Connaître ce repère sert à comprendre et à protéger le pied, pas à établir un diagnostic.",
+  },
+  {
+    theme: "👀 OBSERVATION CORRECTE",
+    text: "Avant d'examiner le pied qui vous inquiète, quelle est la première étape OBLIGATOIRE ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Directement examiner le pied en question." },
+      { letter: "B", text: "OBSERVER LES 4 PIEDS AVANT de manipuler celui-ci. Cela permet de comparer et de ne pas confondre une variation normale avec une anormalité." },
+      { letter: "C", text: "Appeler le maréchal-ferrant immédiatement." },
+      { letter: "D", text: "Prendre une photo sans rien d'autre." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! Commencez par observer les quatre pieds. La comparaison permet de repérer une différence réelle de chaleur, de forme, d'humidité ou d'appui et de la décrire précisément au professionnel.",
+    feedback_wrong: "Se focaliser immédiatement sur un pied isolé peut fausser l'observation. Regardez d'abord les quatre pieds, puis examinez plus précisément celui qui vous inquiète si cela peut être fait en sécurité.",
+  },
+  {
+    theme: "✍️ DÉCRIRE vs DIAGNOSTIQUER",
+    text: "Vous observez que la sole du pied avant gauche est plus molle et humide que les autres. Comment le TRANSMETTRE correctement ?",
+    context: null,
+    options: [
+      { letter: "A", text: "« Mon cheval a un abcès au pied avant gauche »." },
+      { letter: "B", text: "« La sole du pied avant gauche est plus molle et plus humide que les autres pieds »." },
+      { letter: "C", text: "« Je pense que c'est une fourbure »." },
+      { letter: "D", text: "« Ça a l'air grave, viens voir »." },
+    ],
+    correct: 1,
+    feedback_correct: "Parfait ! Vous décrivez uniquement des faits observables : la localisation, la consistance, l'humidité et la comparaison avec les autres pieds. Le professionnel recherchera ensuite l'origine de cette différence.",
+    feedback_wrong: "Les réponses A et C posent un diagnostic (abcès, fourbure) — vous n'êtes pas formé pour ça. Vous êtes le témoin oculaire, pas le diagnosticien. Décrire ce que vous voyez, pas ce que vous croyez que c'est.",
+  },
+  {
+    theme: "📸 PHOTOGRAPHIER LE PIED",
+    text: "Quel élément rend une photo du pied plus précise et plus utile au professionnel ?",
+    context: "Une photo complète l'observation, mais ne permet pas à elle seule de poser un diagnostic.",
+    options: [
+      { letter: "A", text: "Juste le pied, net, c'est suffisant." },
+      { letter: "B", text: "Le pied + une règle ou objet de taille connue (repère d'échelle) pour voir les dimensions réelles." },
+      { letter: "C", text: "Une photo floue du pied entier." },
+      { letter: "D", text: "Juste une photo du dessous du sabot." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! Un repère d'échelle (règle, pièce de monnaie) permet au professionnel de juger les dimensions réelles. Sans ça, une fissure peut paraître énorme ou minuscule selon l'angle.",
+    feedback_wrong: "Une photo nette reste utile, mais un repère d'échelle la rend beaucoup plus informative. Ajoutez si possible une règle ou un objet de taille connue, sans manipuler une zone douloureuse.",
+  },
+  {
+    theme: "🚨 LIMITES D'INTERVENTION",
+    text: "Lors du nettoyage, un petit caillou superficiel se dégage sans résistance. Que faire ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Le retirer vous-même avec un cure-pied." },
+      { letter: "B", text: "Le retirer doucement avec le cure-pied, sans creuser ni forcer, puis observer la zone. S'il résiste ou si le cheval réagit, arrêter et appeler." },
+      { letter: "C", text: "Ignorer — c'est un détail." },
+      { letter: "D", text: "Forcer avec un outil pour le faire sortir." },
+    ],
+    correct: 1,
+    feedback_correct: "Bon jugement. Un débris superficiel peut être retiré doucement pendant le nettoyage s'il se dégage sans résistance. S'il faut creuser ou forcer, arrêtez et contactez le professionnel.",
+    feedback_wrong: "Ne forcez jamais et ne creusez pas le pied. Si un élément résiste, semble planté ou provoque une douleur, laissez-le en place et contactez rapidement le professionnel adapté.",
+  },
+  {
+    theme: "⚠️ ZONES DANGEREUSES",
+    text: "Parmi ces observations, laquelle exige un APPEL IMMÉDIAT au vétérinaire, sans attendre le maréchal-ferrant ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Une légère fissure sur la paroi." },
+      { letter: "B", text: "Un pied très chaud associé à une douleur ou une forte boiterie, un saignement, ou un objet planté dans le pied SANS l'enlever." },
+      { letter: "C", text: "Une sole un peu sèche." },
+      { letter: "D", text: "Une légère usure." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! Un pied très chaud avec douleur ou forte boiterie, un saignement ou un objet planté nécessitent un appel vétérinaire rapide. Ne retirez jamais vous-même un objet planté.",
+    feedback_wrong: "Une légère fissure ou une usure sans douleur relève généralement du maréchal-ferrant. En revanche, douleur importante, forte boiterie, saignement, pied très chaud ou objet planté exigent d'arrêter la manipulation et d'appeler rapidement le vétérinaire.",
+  },
+  {
+    theme: "✅ SYNTHÈSE",
+    text: "Quel est le principe CENTRAL de l'observation du sabot en tant que propriétaire ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Identifier la maladie et la traiter moi-même." },
+      { letter: "B", text: "OBSERVER RÉGULIÈREMENT, COMPARER LES 4 PIEDS, DÉCRIRE PRÉCISÉMENT et TRANSMETTRE aux professionnels. Je suis l'observateur quotidien de mon cheval, pas le diagnosticien." },
+      { letter: "C", text: "Ignorer les pieds — c'est la responsabilité du maréchal-ferrant." },
+      { letter: "D", text: "Utiliser mes connaissances anatomiques pour poser un diagnostic." },
+    ],
+    correct: 1,
+    feedback_correct: "Parfait ! Vous êtes l'observateur quotidien du cheval. Une observation régulière, factuelle et bien transmise aide le maréchal-ferrant ou le vétérinaire. Le diagnostic reste du ressort du professionnel compétent.",
+    feedback_wrong: "Vous aviez les briques : observation, comparaison, description. Mais vous avez tiré une mauvaise conclusion sur votre rôle. Vous n'êtes pas diagnosticien — vous êtes observateur vigilant. C'est votre force.",
+  },
+];
+
+let current = 0, score = 0, answered = [], results = [];
+
+function startQuiz() {
+  document.getElementById('s-intro').classList.remove('active');
+  document.getElementById('s-quiz').classList.add('active');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const pct = Math.round((current / questions.length) * 100);
+  document.getElementById('prog-label').textContent = `Question ${current + 1} / ${questions.length}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `QUESTION ${current + 1} / ${questions.length}`;
+  document.getElementById('q-theme').textContent = q.theme;
+  document.getElementById('q-text').textContent = q.text;
+  const ctx = document.getElementById('q-context');
+  if (q.context) { ctx.textContent = '📋 ' + q.context; ctx.style.display = 'block'; }
+  else { ctx.style.display = 'none'; }
+  const wrap = document.getElementById('q-options');
+  wrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.onclick = () => selectAnswer(i);
+    div.innerHTML = `<div class="option-letter">${opt.letter}</div><div class="option-text">${opt.text}</div>`;
+    wrap.appendChild(div);
+  });
+  document.getElementById('q-feedback').className = 'feedback';
+  document.getElementById('btn-next').className = 'btn-next';
+  document.getElementById('btn-next').textContent = current === questions.length - 1 ? 'Voir résultat d\'évaluation →' : 'Question suivante →';
+}
+
+function selectAnswer(i) {
+  if (answered.includes(current)) return;
+  answered.push(current);
+  const q = questions[current];
+  const isCorrect = i === q.correct;
+  if (isCorrect) score++;
+  results.push({ correct: isCorrect });
+  document.querySelectorAll('.option').forEach((el, idx) => {
+    el.classList.add('disabled');
+    if (idx === q.correct) el.classList.add('correct');
+    else if (idx === i && !isCorrect) el.classList.add('wrong');
+  });
+  const fb = document.getElementById('q-feedback');
+  document.getElementById('fb-title').textContent = isCorrect ? '✅ Correct !' : '❌ Incorrect';
+  document.getElementById('fb-text').textContent = isCorrect ? q.feedback_correct : q.feedback_wrong;
+  fb.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong') + ' show';
+  document.getElementById('btn-next').className = 'btn-next show';
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) showResult();
+  else renderQ();
+}
+
+function showResult() {
+  document.getElementById('s-quiz').classList.remove('active');
+  document.getElementById('s-result').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Évaluation terminée';
+  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('prog-fill').style.width = '100%';
+  const card = document.getElementById('score-card');
+  let cls, emoji, label, msg;
+  
+  if (score === 8) {
+    cls = 'score-excellent'; emoji = '🎯'; label = 'MAÎTRISE COMPLÈTE';
+    msg = 'Parfait ! Vous avez validé cette évaluation. Vous comprenez votre rôle : observer, comparer et transmettre sans diagnostiquer. La pratique encadrée et l’avis des professionnels restent indispensables.';
+  } else if (score === 7) {
+    cls = 'score-bien'; emoji = '✅'; label = 'Très bien';
+    msg = 'Excellent ! Une seule question manquée. Relisez celle-ci pour clarifier le concept.';
+  } else if (score >= 5) {
+    cls = 'score-bien'; emoji = '👍'; label = 'Acceptable';
+    msg = 'Vous avez les bases. Relisez les questions manquées — elles testent la distinction cruciale entre observation et diagnostic.';
+  } else {
+    cls = 'score-revoir'; emoji = '⚠️'; label = 'À retravailler';
+    msg = 'La distinction entre observer et diagnostiquer doit encore être consolidée. Relisez la leçon avant de poursuivre les gestes pratiques.';
+  }
+  
+  card.className = 'result-score-card ' + cls;
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-score').textContent = score + ' / 8';
+  document.getElementById('res-label').textContent = label;
+  document.getElementById('res-msg').textContent = msg;
+  document.getElementById('recap-list').innerHTML = results.map((r, i) => `
+    <div class="recap-item">
+      <div>${r.correct ? '✅' : '❌'}</div>
+      <div class="recap-q"><strong>Q${i+1} ${questions[i].theme}</strong></div>
+    </div>
+  `).join('');
+}
+
+function restart() {
+  current = 0; score = 0; answered = []; results = [];
+  document.getElementById('s-result').classList.remove('active');
+  document.getElementById('s-intro').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Question 0 / 8';
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('prog-fill').style.width = '0%';
+}
+</script>
+</body>
+</html>
