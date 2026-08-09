@@ -1,0 +1,26 @@
+QUIZ EQUICARE — OUTILS DE DÉFERRAGE
+
+Contenu du dossier
+------------------
+- index.html : quiz interactif autonome
+- vignette-facebook-youtube.jpg : couverture 16:9
+
+Installation sur GitHub Pages
+-----------------------------
+1. Ouvrez le dépôt GitHub « quizz-chevaux ».
+2. Cliquez sur Add file, puis Upload files.
+3. Déposez le dossier « outils-de-deferrage » avec ses deux fichiers.
+4. Validez avec Commit changes.
+5. Le quiz sera accessible à l'adresse :
+   https://rico97440.github.io/quizz-chevaux/outils-de-deferrage/
+
+Utilisation
+-----------
+- Le quiz fonctionne sur téléphone et ordinateur.
+- Le participant clique sur une réponse, lit la correction, puis passe à la question suivante.
+- Le score final est calculé automatiquement.
+- Le bouton « Recommencer » relance l'évaluation.
+
+Sécurité pédagogique
+--------------------
+Ce quiz vérifie la compréhension de la leçon 4.1. Il ne remplace pas la démonstration vidéo, l'apprentissage pratique encadré, le maréchal-ferrant ou le vétérinaire.
