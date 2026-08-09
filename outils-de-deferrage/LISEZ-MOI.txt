@@ -3,7 +3,7 @@ QUIZ EQUICARE — OUTILS DE DÉFERRAGE
 Contenu du dossier
 ------------------
 - index.html : quiz interactif autonome
-- vignette-facebook-youtube.png : couverture 16:9
+- vignette-facebook-youtube.jpg : couverture 16:9
 
 Installation sur GitHub Pages
 -----------------------------
@@ -24,4 +24,3 @@ Utilisation
 Sécurité pédagogique
 --------------------
 Ce quiz vérifie la compréhension de la leçon 4.1. Il ne remplace pas la démonstration vidéo, l'apprentissage pratique encadré, le maréchal-ferrant ou le vétérinaire.
-
