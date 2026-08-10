@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquiCare - Bonus 3 : Application Terrain</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #8B4513;
+            --secondary: #D4AF37;
+            --dark: #2C2C2C;
+            --light: #F5F1E8;
+            --accent: #C41E3A;
+            --text: #1A1A1A;
+            --border: #D4B896;
+            --bg-alt: #FAF8F3;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f9f5ed 100%);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            padding: 40px 30px;
+            color: white;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 1em;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 25px;
+        }
+        .section-title {
+            font-size: 1.6em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .subsection {
+            background: var(--bg-alt);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 3px solid var(--secondary);
+        }
+        .subsection-title {
+            font-size: 1.1em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .subsection p {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+        .subsection ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .subsection li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .case-box {
+            background: #F0F8FF;
+            border: 2px solid #B0D8E8;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .case-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .case-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 0.95em;
+        }
+        .case-column h4 {
+            color: var(--primary);
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .case-column ul {
+            margin-left: 15px;
+            list-style: none;
+        }
+        .case-column li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+            padding-left: 18px;
+            position: relative;
+        }
+        .case-column li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        .case-action {
+            background: #FFFACD;
+            padding: 12px;
+            border-left: 3px solid var(--accent);
+            margin-top: 12px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        .alert {
+            border-radius: 6px;
+            padding: 18px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        .alert-info {
+            background: #D1ECF1;
+            border-left-color: #0c5460;
+            color: #0c5460;
+        }
+        .alert-warning {
+            background: #FFF3CD;
+            border-left-color: #856404;
+            color: #856404;
+        }
+        .alert strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .key-points {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 2px solid var(--secondary);
+        }
+        .key-points h3 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .key-points ol {
+            margin-left: 20px;
+        }
+        .key-points li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .cta-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border: 2px solid var(--secondary);
+            text-align: center;
+        }
+        .cta-box h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+        }
+        .cta-box a {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: transform 0.3s ease;
+        }
+        .cta-box a:hover {
+            transform: scale(1.05);
+        }
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--dark);
+            border-color: var(--dark);
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-secondary:hover {
+            background: var(--bg-alt);
+        }
+        @media (max-width: 768px) {
+            .header { padding: 30px 20px; }
+            .header h1 { font-size: 1.5em; }
+            .content { padding: 25px 20px; }
+            .section-title { font-size: 1.3em; }
+            .case-content { grid-template-columns: 1fr; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ BONUS 3 - Application Terrain</h1>
+            <p>Cas concrets, conseil d'Éric et prévention avancée</p>
+            <span class="badge">Module Bonus</span>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">Leçon 1 : Cas Concrets Approfondis</h2>
+
+                <div class="case-box">
+                    <div class="case-title">Cas 1 : Foulée Raccourcie + Tête qui Bouge</div>
+                    <div class="case-content">
+                        <div class="case-column">
+                            <h4>Signes Observés</h4>
+                            <ul>
+                                <li>Foulée courte d'un côté</li>
+                                <li>Tête qui se relève à chaque pas</li>
+                                <li>Pied chaud au toucher</li>
+                                <li>Pouls digité augmenté</li>
+                                <li>Fer en place</li>
+                            </ul>
+                        </div>
+                        <div class="case-column">
+                            <h4>Diagnostic & Action</h4>
+                            <ul>
+                                <li><strong>Probable :</strong> Pied douloureux (abcès, clou, bleime)</li>
+                                <li><strong>Action :</strong> Appel MF dans la journée</li>
+                                <li><strong>Timing :</strong> URGENT</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="case-action">
+                        → Message MF : "Depuis ce matin, foulée raccourcie antérieur gauche, tête se relève à chaque pas, pied chaud, pouls digité fort, fer en place."
+                    </div>
+                </div>
+
+                <div class="case-box">
+                    <div class="case-title">Cas 2 : Hanche qui Remonte + Postérieur qui N'Engage Pas</div>
+                    <div class="case-content">
+                        <div class="case-column">
+                            <h4>Signes Observés</h4>
+                            <ul>
+                                <li>Foulée courte du postérieur</li>
+                                <li>Hanche qui bascule</li>
+                                <li>Tête normale</li>
+                                <li>Sabots normaux</li>
+                                <li>Pas de chaleur</li>
+                            </ul>
+                        </div>
+                        <div class="case-column">
+                            <h4>Diagnostic & Action</h4>
+                            <ul>
+                                <li><strong>Probable :</strong> Problème articulaire (jarret, grasset)</li>
+                                <li><strong>Action :</strong> Appel VÉTÉRINAIRE</li>
+                                <li><strong>Timing :</strong> Cette semaine</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="case-action">
+                        → Message Véto : "Postérieur droit n'engage plus depuis 3 jours. Hanche remonte. Pieds normaux."
+                    </div>
+                </div>
+
+                <div class="case-box">
+                    <div class="case-title">Cas 3 : Changement Après Ferrure Récente</div>
+                    <div class="case-content">
+                        <div class="case-column">
+                            <h4>Signes Observés</h4>
+                            <ul>
+                                <li>Ferrure faite 2-3 jours ago</li>
+                                <li>Boiterie légère depuis</li>
+                                <li>Pas de chaleur anormale</li>
+                                <li>Pas de gonflement</li>
+                                <li>Pouls digité normal</li>
+                            </ul>
+                        </div>
+                        <div class="case-column">
+                            <h4>Diagnostic & Action</h4>
+                            <ul>
+                                <li><strong>Probable :</strong> Clou trop serré ou aplomb brutal</li>
+                                <li><strong>Action :</strong> Appel MF rapidement</li>
+                                <li><strong>Timing :</strong> URGENT</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="case-action">
+                        → Message MF : "Depuis ferrure de mardi, boiterie légère antérieur droit. Pas de blessure visible. Pouvez-vous vérifier les clous ?"
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Leçon 2 : Le Conseil d'Éric</h2>
+                <p>J'ai ferrure 46 ans. Voici ce qui marche vraiment :</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">1. Observer C'est Vos Yeux, Pas Vos Émotions</div>
+                    <p>Quand vous voyez votre cheval boiter, la panique arrive. Mais c'est là que l'observation objective devient cruciale.</p>
+                    <p>Notez : date, heure, état exact. Pas "il boite beaucoup", mais "foulée 30% plus courte, tête se relève à droite".</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">2. Les Changements Progressifs Sont Plus Traîtres</div>
+                    <p>Une boiterie soudaine, c'est facile à voir. Mais une foulée qui devient progressivement plus courte sur 2-3 semaines ? Les propriétaires la ratent souvent.</p>
+                    <p>C'est votre rôle de le voir AVANT qu'il ne devienne un problème.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">3. Le Pied Règne. Point Final.</div>
+                    <p><strong>80% des problèmes viennent du pied.</strong> Commencez TOUJOURS par l'examen du sabot avant d'imaginer autre chose.</p>
+                    <p>Sabot chaud ? Pouls fort ? Douleur à la pression ? C'est du pied.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">4. La Ferrure N'est Pas un Calendrier</div>
+                    <p>Trop de propriétaires disent : "C'est mardi, donc ferrure." Non. La ferrure dépend de l'usure réelle du fer.</p>
+                    <p>Regardez le fer. Quand il s'use, vous ferrarez. Pas avant.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">5. La Communication Avec Le MF/Véto Est Clé</div>
+                    <p>Dire "mon cheval boite" → inutile.<br>Dire "foulée raccourcie antérieur droit depuis 2 jours, tête se relève à chaque pas droit, pied chaud" → utile.</p>
+                    <p>Décrivez, ne diagnostiquez pas.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">6. Prévention > Traitement</div>
+                    <p>Une fourbure détectée à temps = quelques semaines.<br>Une fourbure détectée tard = 6 mois ou récurrence chronique.</p>
+                    <p>L'observation régulière, c'est 90% du travail.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Leçon 3 : Correction Progressive d'Aplomb</h2>
+
+                <div class="subsection">
+                    <div class="subsection-title">Timeline Typique</div>
+                </div>
+
+                <div class="key-points">
+                    <h3>Mois 1-2 : Correction Légère (2-3 mm)</h3>
+                    <p>Le cheval s'adapte. Les tissus mous commencent à changer. La foulée s'améliore légèrement.</p>
+                </div>
+
+                <div class="key-points">
+                    <h3>Mois 3-4 : Correction Moyenne (5 mm total)</h3>
+                    <p>Les changements osseux commencent. La foulée s'améliore visiblement. L'amplitude augmente.</p>
+                </div>
+
+                <div class="key-points">
+                    <h3>Mois 5-6 : Correction Finale</h3>
+                    <p>L'aplomb est rétabli. La foulée est normale. Le cheval travaille sans douleur.</p>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>IMPORTANT :</strong> 3-6 mois minimum pour une correction d'aplomb. Ne pas accélérer. Le corps du cheval ne peut pas changer plus vite.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Leçon 4 : Suivi & Prévention</h2>
+
+                <div class="subsection">
+                    <div class="subsection-title">Gestes Quotidiens</div>
+                    <ul>
+                        <li>☐ Curer les pieds tous les jours (même si pas travail)</li>
+                        <li>☐ Vérifier chaleur des 4 sabots</li>
+                        <li>☐ Regarder fer et clous rapidement</li>
+                        <li>☐ Observer le mouvement au pas 1 × par semaine minimum</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Protocole Mensuel</div>
+                    <ul>
+                        <li>☐ Examen complet du sabot</li>
+                        <li>☐ Vérifier usure du fer</li>
+                        <li>☐ Prendre photos de profil</li>
+                        <li>☐ Comparer avec le mois dernier</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">L'Outil le Plus Important</div>
+                    <p><strong>Un simple carnet :</strong></p>
+                    <p>"15 août ferrure - fers 750g - sabot bon état - cheval + ample après"<br>
+                    "22 août - observe pas plus court encore, peut-être à raccourcir les fers"<br>
+                    "29 août ferrure - fers 700g - résultat : foulée revenue normal"</p>
+                    <p>C'est ça qui permet au MF de suivre la progression.</p>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h3>Vous Maîtrisez Maintenant !</h3>
+                <p>Vous avez appris les fondamentaux, la biomécanque, et l'application terrain. Vous êtes maintenant capable d'observer votre cheval avec expertise et de communiquer efficacement avec les professionnels.</p>
+                <a href="/quizz-chevaux/quiz-bonus/">Faites le Quiz Bonus →</a>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="/quizz-chevaux/bonus-2/" class="btn btn-secondary">← Bonus 2</a>
+                <a href="/quizz-chevaux/" class="btn btn-primary">Retour Accueil</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>EquiCare</strong> — Comprendre pour Mieux Agir</p>
+            <p>Contenu par Eric Fontaine, Maréchal-Ferrant depuis 1980</p>
+            <p>SOS Maréchal-Ferrant © 2026</p>
+        </div>
+    </div>
+</body>
+</html>
