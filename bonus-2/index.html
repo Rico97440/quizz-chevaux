@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquiCare - Bonus 2 : Biomécanque & Allures</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #8B4513;
+            --secondary: #D4AF37;
+            --dark: #2C2C2C;
+            --light: #F5F1E8;
+            --accent: #C41E3A;
+            --text: #1A1A1A;
+            --border: #D4B896;
+            --bg-alt: #FAF8F3;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f9f5ed 100%);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            padding: 40px 30px;
+            color: white;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 1em;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 25px;
+        }
+        .section-title {
+            font-size: 1.6em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .subsection {
+            background: var(--bg-alt);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 3px solid var(--secondary);
+        }
+        .subsection-title {
+            font-size: 1.1em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .subsection p {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+        .subsection ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .subsection li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .comparison-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 18px;
+        }
+        .comparison-card h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 1em;
+        }
+        .comparison-card p {
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+        .alert {
+            border-radius: 6px;
+            padding: 18px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        .alert-info {
+            background: #D1ECF1;
+            border-left-color: #0c5460;
+            color: #0c5460;
+        }
+        .alert-warning {
+            background: #FFF3CD;
+            border-left-color: #856404;
+            color: #856404;
+        }
+        .alert strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .key-points {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 2px solid var(--secondary);
+        }
+        .key-points h3 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .key-points ol {
+            margin-left: 20px;
+        }
+        .key-points li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .cta-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border: 2px solid var(--secondary);
+            text-align: center;
+        }
+        .cta-box h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+        }
+        .cta-box a {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: transform 0.3s ease;
+        }
+        .cta-box a:hover {
+            transform: scale(1.05);
+        }
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: var(--dark);
+            border-color: var(--dark);
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-secondary:hover {
+            background: var(--bg-alt);
+        }
+        @media (max-width: 768px) {
+            .header { padding: 30px 20px; }
+            .header h1 { font-size: 1.5em; }
+            .content { padding: 25px 20px; }
+            .section-title { font-size: 1.3em; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ BONUS 2 - Biomécanque & Allures</h1>
+            <p>Comprendre les forces et les phases du mouvement de votre cheval</p>
+            <span class="badge">Module Bonus</span>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">Leçon 1 : Les Allures & Les Forces</h2>
+                <p>Votre cheval bouge en 3 allures : pas, trot, galop. Chaque allure impose des forces différentes sur ses pieds.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Forces Selon L'Allure</div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>Au PAS</h4>
+                        <p><strong>1.5 × le poids</strong></p>
+                        <p>Mouvement lent et contrôlé. Toujours un pied sur le sol. Forces modérées.</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Au TROT</h4>
+                        <p><strong>2 × le poids</strong></p>
+                        <p>Mouvement plus rapide. Deux diagonales se posent simultanément. Secousses plus fortes.</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Au GALOP</h4>
+                        <p><strong>3 × le poids</strong></p>
+                        <p>Mouvement rapide. Phase de suspension. Forces très importantes.</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>AU SAUT</h4>
+                        <p><strong>4 × le poids</strong></p>
+                        <p>L'impact à la réception est énorme. L'allure la plus exigeante pour les pieds.</p>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Ce Que Cela Signifie Pour Votre Cheval</div>
+                    <p>Un cheval qui pèse <strong>500 kg</strong> subit :</p>
+                    <ul>
+                        <li><strong>750 kg</strong> de force par pied au pas</li>
+                        <li><strong>1000 kg</strong> de force par pied au trot</li>
+                        <li><strong>1500 kg</strong> de force par pied au galop</li>
+                    </ul>
+                    <p>Imaginez : c'est comme si on ajoutait 1 tonne supplémentaire sur chaque pied à chaque foulée au galop ! D'où l'importance de pieds sains et bien ferrés.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Leçon 2 : Les Phases du Mouvement</h2>
+                <p>Chaque foulée se compose de deux phases :</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Phase d'Appui (60% de la foulée)</div>
+                    <p>Le pied touche le sol et supporte le poids du cheval. Elle se décompose en 3 sous-phases :</p>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Contact :</strong> le pied touche d'abord le sabot (sole et talons)</li>
+                        <li><strong>Amortissement :</strong> le cheval "absorbe" l'impact, les articulations se fléchissent</li>
+                        <li><strong>Propulsion :</strong> le cheval "pousse" avec ce pied pour avancer</li>
+                    </ol>
+                    <p style="margin-top: 15px;">Si une de ces sous-phases est douloureuse, le cheval compense.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Phase de Suspension (40% de la foulée)</div>
+                    <p>Le pied quitte le sol et le cheval se propulse vers l'avant. C'est le moment où le cheval "flotte" dans l'air. Une douleur pendant cette phase change aussi la dynamique.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Leçon 3 : Les Articulations & L'Aplomb</h2>
+
+                <div class="subsection">
+                    <div class="subsection-title">Articulations Principales du Membre Postérieur</div>
+                    <ul>
+                        <li><strong>Hanche :</strong> 80-100° d'extension (permet le mouvement vers l'arrière)</li>
+                        <li><strong>Grasset :</strong> 120-140° de flexion (engagement du postérieur)</li>
+                        <li><strong>Jarret :</strong> 130-150° de flexion (puissance et stabilité)</li>
+                    </ul>
+                    <p style="margin-top: 15px;">Si une articulation est raide ou douloureuse, les angles changent. Résultat : le cheval ne peut plus engager le postérieur correctement. Vous voyez : foulée raccourcie, hanche qui bascule.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Aplomb Vertical</div>
+                    <p>L'aplomb vertical est l'alignement du membre de haut en bas.</p>
+                    <p><strong>Normal :</strong> une ligne droite du poitrail jusqu'au pied</p>
+                    <p><strong>Défauts courants :</strong></p>
+                    <ul>
+                        <li>Varus (pied tourné vers l'intérieur)</li>
+                        <li>Valgus (pied tourné vers l'extérieur)</li>
+                        <li>Antérioversion (pied trop en avant)</li>
+                    </ul>
+                    <p style="margin-top: 12px;">Un mauvais aplomb = distribution de poids inégale sur le sabot = usure anormale = boiterie progressive.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">L'Effet "Squeeze" du Sabot</div>
+                    <p>Quand le pied se pose, le sabot s'élargit légèrement (0.5-1 mm). Quand il se lève, il rétrécit.</p>
+                    <p>Cette contraction/expansion est essentielle pour :</p>
+                    <ul>
+                        <li>Amortir les chocs</li>
+                        <li>Maintenir la circulation sanguine au pied</li>
+                        <li>Aider le retour veineux</li>
+                    </ul>
+                    <p style="margin-top: 12px;">Si le sabot ne peut pas se dilater (problème de structure, ferrure trop serrée), vous avez une boiterie mécanique.</p>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h3>À Retenir</h3>
+                <ol>
+                    <li>Plus l'allure est rapide, plus les forces sont importantes</li>
+                    <li>Chaque foulée a une phase d'appui (60%) et de suspension (40%)</li>
+                    <li>Les défauts d'aplomb s'aggravent avec le temps</li>
+                    <li>Le sabot doit pouvoir se dilater/contracter normalement</li>
+                    <li>Une douleur articulaire change visiblement la foulée</li>
+                </ol>
+            </div>
+
+            <div class="cta-box">
+                <h3>Passez à l'Application !</h3>
+                <p>Vous comprenez maintenant la biomécanque. Découvrez comment appliquer ces connaissances sur le terrain avec des cas concrets.</p>
+                <a href="/quizz-chevaux/bonus-3/">Module Application Terrain →</a>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="/quizz-chevaux/bonus-1/" class="btn btn-secondary">← Bonus 1</a>
+                <a href="/quizz-chevaux/bonus-3/" class="btn btn-primary">Bonus 3 →</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>EquiCare</strong> — Comprendre pour Mieux Agir</p>
+            <p>Contenu par Eric Fontaine, Maréchal-Ferrant depuis 1980</p>
+            <p>SOS Maréchal-Ferrant © 2026</p>
+        </div>
+    </div>
+</body>
+</html>
