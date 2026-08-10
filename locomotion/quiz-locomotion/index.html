@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - La Locomotion du Cheval</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #8B4513;
+            --secondary: #D4AF37;
+            --dark: #2C2C2C;
+            --light: #F5F1E8;
+            --accent: #C41E3A;
+            --text: #1A1A1A;
+            --border: #D4B896;
+            --bg-alt: #FAF8F3;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f9f5ed 100%);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 30px;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+        .content { padding: 30px; }
+        .progress-bar {
+            background: var(--bg-alt);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--secondary);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .question-container {
+            display: none;
+        }
+        .question-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .question-title {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            background: var(--bg-alt);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .option:hover {
+            border-color: var(--secondary);
+            background: #FFF8E7;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .option label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .option.correct {
+            background: #D4EDDA;
+            border-color: var(--success);
+        }
+        .option.incorrect {
+            background: #F8D7DA;
+            border-color: var(--danger);
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #D4EDDA;
+            border-left-color: var(--success);
+            color: #155724;
+        }
+        .feedback.incorrect {
+            background: #F8D7DA;
+            border-left-color: var(--danger);
+            color: #721c24;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--dark);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: var(--bg-alt);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background: white;
+        }
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+        .results-screen.show {
+            display: block;
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: var(--dark);
+            font-size: 2.5em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .results-message {
+            font-size: 1.8em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .results-text {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .results-details {
+            background: var(--bg-alt);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        .detail-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .detail-line:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .detail-value {
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+        .cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .cta h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        .cta p {
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+        .cta a {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .cta a:hover {
+            transform: scale(1.05);
+        }
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+        @media (max-width: 768px) {
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.4em; }
+            .content { padding: 20px; }
+            .buttons { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Quiz - La Locomotion du Cheval</h1>
+            <p>Testez vos connaissances (10 questions)</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="progress-text">
+                Question <span id="current-question">1</span> / 10
+            </div>
+
+            <div id="quiz-content">
+                <div class="question-container active">
+                    <div class="question-title">1. Qu'est-ce que la locomotion du cheval ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="a">
+                            Un défaut de démarche
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="b">
+                            La succession ordonnée de mouvements des 4 membres
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="c">
+                            La capacité à trotter rapidement
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">2. Quand la tête se relève, que signifie-t-elle ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="a">
+                            Un pied douloureux touche le sol
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="b">
+                            Le cheval regarde autour
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="c">
+                            C'est normal, rien de spécial
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">3. Que faire si vous remarquez une boiterie ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="a">
+                            Faire trotter le cheval pour vérifier
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="b">
+                            Observer, noter, appeler le professionnel
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="c">
+                            Attendre que ça passe
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">4. Quel est le rôle de la tête dans le mouvement ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="a">
+                            Équilibre uniquement
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="b">
+                            Contre-poids pour allèger un membre douloureux
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="c">
+                            Aucun rôle particulier
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback4"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">5. Que signifie une hanche qui remonte d'un côté ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="a">
+                            Rien, c'est une allure normale
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="b">
+                            Un problème du postérieur (jarret, grasset)
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="c">
+                            Une faiblesse musculaire temporaire
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">6. Quelle est la bonne fréquence de ferrure ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q6" value="a">
+                            Tous les 6 semaines fixes
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="b">
+                            Tous les 8-9 semaines selon l'usure réelle
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="c">
+                            Tous les 12 semaines minimum
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback6"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">7. Quel est le rôle principal de la fourchette ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q7" value="a">
+                            Protéger la sole
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="b">
+                            Amortir les chocs, freiner, circulation de retour
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="c">
+                            C'est un vestige du passé
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback7"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">8. Une foulée progressivement plus courte sur 2-3 semaines signifie ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q8" value="a">
+                            Rien, c'est normal
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="b">
+                            Un problème qui s'aggrave et nécessite une visite
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="c">
+                            Que le cheval vieillit
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback8"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">9. Combien de cas concrets la fiche décrit-elle ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q9" value="a">
+                            2 cas
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q9" value="b">
+                            4 cas
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q9" value="c">
+                            10 cas
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback9"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-title">10. Quel est le rôle principal du propriétaire ?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q10" value="a">
+                            Diagnostiquer et corriger seul
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="b">
+                            Observer, décrire, appeler le professionnel
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="c">
+                            Attendre et voir si ça s'arrange
+                        </label>
+                    </div>
+                    <div class="feedback" id="feedback10"></div>
+                </div>
+            </div>
+
+            <div id="results-screen" class="results-screen">
+                <div class="score-circle" id="score-circle">0/10</div>
+                <div class="results-message" id="results-message">Bon travail !</div>
+                <div class="results-text" id="results-text"></div>
+                <div class="results-details">
+                    <div class="detail-line">
+                        <span class="detail-label">Bonnes réponses :</span>
+                        <span class="detail-value"><span id="correct-count">0</span>/10</span>
+                    </div>
+                    <div class="detail-line">
+                        <span class="detail-label">Score :</span>
+                        <span class="detail-value"><span id="score-percent">0</span>%</span>
+                    </div>
+                </div>
+                <div class="cta">
+                    <h3>Envie d'en savoir plus ?</h3>
+                    <p>Relisez la fiche complète sur la locomotion ou explorez les autres ressources EquiCare.</p>
+                    <a href="../">Retour aux ressources</a>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-secondary" id="btn-prev" style="display:none;" onclick="prevQuestion()">← Précédent</button>
+                <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Suivant →</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Quiz © SOS Maréchal-Ferrant - EquiCare</p>
+            <p>Basé sur la fiche "Comprendre la Locomotion de Votre Cheval"</p>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { correct: 'b', explanation: 'La locomotion est la succession ordonnée de mouvements des 4 membres.' },
+            { correct: 'a', explanation: 'La tête se relève quand le pied douloureux touche le sol (contre-poids involontaire).' },
+            { correct: 'b', explanation: 'Ne jamais faire trotter un cheval qui a mal. Observer, noter, appeler le professionnel.' },
+            { correct: 'b', explanation: 'Le cheval utilise sa tête comme contre-poids pour allèger un membre douloureux.' },
+            { correct: 'b', explanation: 'Une hanche qui remonte indique un problème de postérieur (jarret, grasset, etc.).' },
+            { correct: 'b', explanation: 'La ferrure dépend de l\'usure réelle, pas d\'un calendrier fixe.' },
+            { correct: 'b', explanation: 'La fourchette amortit, freine et maintient la circulation de retour.' },
+            { correct: 'b', explanation: 'Une foulée progressivement plus courte signale un problème qui s\'aggrave.' },
+            { correct: 'b', explanation: 'La fiche décrit 4 cas concrets pour orienter votre décision.' },
+            { correct: 'b', explanation: 'Votre rôle est d\'observer et décrire, pas de diagnostiquer.' }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(10).fill(null);
+        let answered = new Array(10).fill(false);
+
+        function showQuestion(n) {
+            const containers = document.querySelectorAll('.question-container');
+            containers.forEach(c => c.classList.remove('active'));
+            containers[n].classList.add('active');
+            document.getElementById('current-question').textContent = n + 1;
+            const progress = ((n + 1) / 10) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('btn-prev').style.display = n > 0 ? 'block' : 'none';
+            document.getElementById('btn-next').textContent = n === 9 ? 'Voir les résultats' : 'Suivant →';
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector(`input[name="q${currentQuestion + 1}"]:checked`);
+            if (!selected) {
+                alert('Veuillez sélectionner une réponse');
+                return;
+            }
+            answers[currentQuestion] = selected.value;
+            answered[currentQuestion] = true;
+            if (currentQuestion < 9) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function showResults() {
+            const quizContent = document.getElementById('quiz-content');
+            const resultsScreen = document.getElementById('results-screen');
+            const buttons = document.querySelector('.buttons');
+            quizContent.style.display = 'none';
+            buttons.style.display = 'none';
+            resultsScreen.classList.add('show');
+            let correct = 0;
+            answers.forEach((answer, index) => {
+                if (answer === quizData[index].correct) correct++;
+            });
+            const percent = Math.round((correct / 10) * 100);
+            document.getElementById('score-circle').textContent = correct + '/10';
+            document.getElementById('correct-count').textContent = correct;
+            document.getElementById('score-percent').textContent = percent;
+            let message, text;
+            if (percent === 100) {
+                message = '🎉 Parfait !';
+                text = 'Vous maîtrisez complètement la locomotion du cheval.';
+            } else if (percent >= 80) {
+                message = '✅ Excellent !';
+                text = 'Vous avez une très bonne compréhension. Quelques points à revoir.';
+            } else if (percent >= 60) {
+                message = '👍 Bien !';
+                text = 'Vous comprenez les concepts clés. Relisez la fiche pour consolider.';
+            } else {
+                message = '📚 Recommencez';
+                text = 'Relisez la fiche et retentez le quiz. Vous apprendrez à chaque passage.';
+            }
+            document.getElementById('results-message').textContent = message;
+            document.getElementById('results-text').textContent = text;
+        }
+
+        showQuestion(0);
+    </script>
+</body>
+</html>
