@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquiCare - La Locomotion de Votre Cheval</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #8B4513;
+            --secondary: #D4AF37;
+            --dark: #2C2C2C;
+            --light: #F5F1E8;
+            --accent: #C41E3A;
+            --text: #1A1A1A;
+            --border: #D4B896;
+            --bg-alt: #FAF8F3;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f9f5ed 100%);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            padding: 30px 25px;
+            color: white;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.95;
+            margin-bottom: 12px;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .content { padding: 30px 25px; }
+        .section {
+            margin-bottom: 35px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 20px;
+        }
+        .section-title {
+            font-size: 1.4em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .subsection {
+            background: var(--bg-alt);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 3px solid var(--secondary);
+        }
+        .subsection-title {
+            font-size: 1em;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .alert {
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        .alert-info {
+            background: #D1ECF1;
+            border-left-color: #0c5460;
+            color: #0c5460;
+        }
+        .alert-warning {
+            background: #FFF3CD;
+            border-left-color: #856404;
+            color: #856404;
+        }
+        .alert strong { display: block; margin-bottom: 5px; }
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        .checklist li::before {
+            content: '□';
+            position: absolute;
+            left: 0;
+            font-size: 1.1em;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .comparison-card {
+            background: var(--bg-alt);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+        }
+        .comparison-card h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .comparison-card p {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        .case-box {
+            background: #F0F8FF;
+            border: 2px solid #B0D8E8;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .case-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .case-sign {
+            background: white;
+            padding: 10px;
+            border-left: 3px solid var(--secondary);
+            margin: 10px 0;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .case-action {
+            background: #FFFACD;
+            padding: 10px;
+            border-left: 3px solid var(--accent);
+            margin: 10px 0;
+            border-radius: 3px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .table-errors {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border: 1px solid var(--border);
+            font-size: 0.9em;
+        }
+        .table-errors th {
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .table-errors td {
+            padding: 10px;
+            border: 1px solid var(--border);
+        }
+        .table-errors tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .cta-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+            border: 2px solid var(--secondary);
+        }
+        .cta-box h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        .cta-box p {
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 20px 25px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+        @media (max-width: 768px) {
+            .header { padding: 20px 15px; }
+            .header h1 { font-size: 1.4em; }
+            .content { padding: 20px 15px; }
+            .section { margin-bottom: 25px; padding-left: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃 La Locomotion de Votre Cheval</h1>
+            <p>Comprendre les mouvements, reconnaître les anomalies, savoir réagir</p>
+            <span class="badge">EquiCare © 2026</span>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">Introduction</h2>
+                <p>La locomotion est la façon dont votre cheval se déplace. Chaque jour, vous la voyez, sans toujours la comprendre. Pourtant, c'est un indicateur majeur de sa santé et de son bien-être.</p>
+                <p>Cette fiche vous apprend à <strong>observer précisément</strong> les mouvements, à <strong>reconnaître les changements</strong>, et surtout, à <strong>savoir quand appeler un professionnel</strong>.</p>
+                <div class="alert alert-info">
+                    <strong>Vous êtes l'expert quotidien de votre cheval.</strong> Vous le voyez tous les jours. Vous remarquez les changements avant quiconque. Votre observation est précieuse.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Mouvement Normal vs Anomalies</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✓ Normal</h4>
+                        <p>Foulée régulière</p>
+                        <p>Tête stable</p>
+                        <p>Amplitude égale</p>
+                        <p>Démarche fluide</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>⚠ Léger Change</h4>
+                        <p>Foulée moins ample</p>
+                        <p>Tête bouge plus</p>
+                        <p>Raideur au départ</p>
+                        <p>Un côté moins engagé</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>✗ Changement Clair</h4>
+                        <p>Foulée raccourcie</p>
+                        <p>Tête qui se relève</p>
+                        <p>Hanche qui bascule</p>
+                        <p>Refus d'appui apparent</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Votre Checklist d'Observation</h2>
+                <p>Vous avez remarqué quelque chose. Voici ce qu'il faut faire, dans l'ordre :</p>
+                <ul class="checklist">
+                    <li>Regardez le cheval au repos : posture, appui des 4 pieds</li>
+                    <li>Menez-le au pas en ligne droite, puis en courbe</li>
+                    <li><strong>Ne le faites pas trotter.</strong> Juste observer le pas.</li>
+                    <li>Notez depuis quand vous avez remarqué ce changement</li>
+                    <li>Comparez la chaleur des 4 sabots (dos de la main)</li>
+                    <li>Regardez le fer : en place ? Tordu ? Usé ?</li>
+                    <li>Inspectez sole et fourchette : état ? Propreté ?</li>
+                    <li>Prenez des photos : profil, sabots, le sabot douteux</li>
+                    <li>Appelez le maréchal-ferrant ou le vétérinaire</li>
+                </ul>
+                <div class="alert alert-warning">
+                    <strong>Erreur courante :</strong> Faire trotter le cheval pour « vérifier ». Non. Un cheval qui a mal ne doit pas bouger. Vous aggravez seulement.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Comprendre les Mouvements de Tête</h2>
+                <div class="subsection">
+                    <div class="subsection-title">Antérieur Douloureux</div>
+                    <p>La tête <span class="highlight">se relève</span> quand le pied douloureux touche le sol. Elle s'abaisse quand le pied sain se pose.</p>
+                    <p style="font-size: 0.9em; margin-top: 5px;"><em>Le cheval utilise sa tête comme contre-poids pour allèger le membre douloureux.</em></p>
+                </div>
+                <div class="subsection">
+                    <div class="subsection-title">Postérieur Douloureux</div>
+                    <p>Plus subtil. Vous voyez plutôt une <span class="highlight">hanche qui remonte</span> d'un côté, une foulée raccourcie, ou un report de poids vers l'avant.</p>
+                    <p style="font-size: 0.9em; margin-top: 5px;"><em>Le cheval refuse de charger le postérieur.</em></p>
+                </div>
+                <div class="alert alert-info">
+                    <strong>À retenir :</strong> Ces signes vous disent quel membre pose problème, mais pas pourquoi. D'où l'importance de combiner observation ET palpation du sabot.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Cas Courants : Quand Appeler Qui</h2>
+                <div class="case-box">
+                    <div class="case-title">Cas 1 : Foulée Raccourcie + Tête qui Bouge</div>
+                    <div class="case-sign">
+                        • Foulée courte d'un côté<br>
+                        • Tête qui se relève à chaque pas<br>
+                        • Pied chaud, pouls digité augmenté<br>
+                        • Fer en place
+                    </div>
+                    <div class="case-action">
+                        → Appel MARÉCHAL-FERRANT dans la journée<br>
+                        <strong>Raison :</strong> Pied douloureux (abcès, clou, bleime)
+                    </div>
+                </div>
+                <div class="case-box">
+                    <div class="case-title">Cas 2 : Hanche qui Remonte + Postérieur qui N'Engage Pas</div>
+                    <div class="case-sign">
+                        • Foulée courte du postérieur<br>
+                        • Hanche qui bascule<br>
+                        • Tête normale<br>
+                        • Sabots chauds normalement
+                    </div>
+                    <div class="case-action">
+                        → Appel VÉTÉRINAIRE ou demande avis maréchal-ferrant<br>
+                        <strong>Raison :</strong> Peut être articulaire (jarret, grasset) ou musculaire
+                    </div>
+                </div>
+                <div class="case-box">
+                    <div class="case-title">Cas 3 : Changement Après Ferrure Récente</div>
+                    <div class="case-sign">
+                        • Ferrure faite il y a 2-3 jours<br>
+                        • Depuis, le cheval boite légèrement<br>
+                        • Pas de chaleur anormale
+                    </div>
+                    <div class="case-action">
+                        → Appel MARÉCHAL-FERRANT rapidement<br>
+                        <strong>Raison :</strong> Clou trop serré ou changement d'aplomb trop brutal
+                    </div>
+                </div>
+                <div class="case-box">
+                    <div class="case-title">Cas 4 : Défaut Progressif Sans Urgence</div>
+                    <div class="case-sign">
+                        • Depuis 2-3 semaines, foulée plus courte<br>
+                        • Amplitude réduite<br>
+                        • Pas de chaleur ni plaie<br>
+                        • Cheval mange bien
+                    </div>
+                    <div class="case-action">
+                        → Rendez-vous MARÉCHAL-FERRANT dans la semaine<br>
+                        <strong>Raison :</strong> Défaut d'aplomb qui s'aggrave ou parage en retard
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Erreurs à Éviter Absolument</h2>
+                <table class="table-errors">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Erreur</th>
+                            <th>Pourquoi c'est un problème</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Faire trotter le cheval</strong></td>
+                            <td>Vous aggravez la lésion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Attendre « ça va passer »</strong></td>
+                            <td>Une compensation s'installe</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oublier d'observer en mouvement</strong></td>
+                            <td>Au repos ≠ au mouvement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Négliger la fourchette</strong></td>
+                            <td>C'est l'amortissement du sabot</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Retirer un objet planté</strong></td>
+                            <td>Appelez le vétérinaire. Jamais retirer.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Ce Qui Protège Votre Cheval</h2>
+                <ul class="checklist">
+                    <li>Curez les pieds <strong>tous les jours</strong></li>
+                    <li>Ferrure régulière (tous les 8-9 semaines, pas au calendrier)</li>
+                    <li>Parage suivi, tous les 2 ferrages</li>
+                    <li>Sol de travail adapté, pas trop dur</li>
+                    <li>Débridement régulier de la fourchette</li>
+                    <li>Observation mensuelle du mouvement</li>
+                    <li>Photos régulières pour comparer</li>
+                    <li>Carnet de suivi : notez chaque ferrure et changement</li>
+                </ul>
+            </div>
+
+            <div class="cta-box">
+                <h3>Envie d'aller plus loin ?</h3>
+                <p>Découvrez la formation complète « Propriétaire Autonome » pour approfondir vos connaissances et savoir corriger les défauts d'aplomb progressivement.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">À Retenir</h2>
+                <div class="alert alert-info">
+                    <strong>Vous êtes expert de votre cheval.</strong> Vous le voyez chaque jour. Décrivez ce que vous observez au professionnel — ce qui a changé, quand, comment. Ne diagnostiquez pas vous-même.
+                </div>
+                <div class="alert alert-warning">
+                    <strong>Les changements sont rarement soudains.</strong> Une foulée devient plus courte, puis plus courte, puis le cheval boite. Réagir tôt = corriger plus facilement.
+                </div>
+                <div class="alert alert-info">
+                    <strong>Le pied est la racine.</strong> 80% des défauts de locomotion partent du pied. Commencez toujours par l'examen du sabot.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>EquiCare</strong> — Comprendre pour Mieux Agir</p>
+            <p>Contenu par Eric Fontaine, Maréchal-Ferrant depuis 1980</p>
+            <p>Cette fiche est un guide d'observation. Elle ne remplace jamais un diagnostic professionnel.</p>
+        </div>
+    </div>
+</body>
+</html>
