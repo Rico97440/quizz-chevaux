@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Compléments & Suppléments</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #8B4513;
+            --secondary: #D4AF37;
+            --dark: #2C2C2C;
+            --light: #F5F1E8;
+            --text: #1A1A1A;
+            --danger: #C41E3A;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, var(--dark) 100%);
+            padding: 40px 30px;
+            color: white;
+            text-align: center;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; font-weight: 700; }
+        .header p { font-size: 0.95em; opacity: 0.9; margin-bottom: 15px; }
+        .badge { display: inline-block; background: var(--secondary); color: var(--dark); padding: 6px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
+        .content { padding: 40px 30px; min-height: 400px; }
+        .intro { text-align: center; margin-bottom: 30px; }
+        .intro h2 { color: var(--primary); font-size: 1.4em; margin-bottom: 15px; }
+        .intro p { color: #555; line-height: 1.8; margin-bottom: 10px; }
+        .progress-bar { width: 100%; height: 8px; background: #e0e0e0; border-radius: 10px; margin: 30px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: width 0.3s ease; }
+        .question-container { display: none; }
+        .question-container.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .question-number { color: var(--secondary); font-weight: 700; font-size: 0.9em; margin-bottom: 10px; }
+        .question-text { font-size: 1.2em; color: var(--text); margin-bottom: 25px; font-weight: 600; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { display: flex; align-items: center; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
+        .option:hover { border-color: var(--secondary); background: #faf8f3; }
+        .option input[type="radio"] { margin-right: 15px; cursor: pointer; width: 18px; height: 18px; }
+        .option.selected { border-color: var(--primary); background: #f5f1e8; }
+        .option.correct { border-color: #27ae60; background: #d5f4e6; }
+        .option.incorrect { border-color: var(--danger); background: #fadbd8; }
+        .feedback { margin-top: 20px; padding: 15px; border-left: 4px solid var(--secondary); background: #faf8f3; display: none; font-size: 0.95em; line-height: 1.6; }
+        .feedback.show { display: block; }
+        .btn-container { display: flex; gap: 15px; margin-top: 30px; justify-content: center; }
+        button { padding: 12px 28px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.95em; }
+        .btn-next { background: var(--primary); color: white; }
+        .btn-next:hover { background: var(--dark); transform: translateY(-2px); }
+        .btn-next:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-restart { background: var(--secondary); color: var(--dark); }
+        .btn-restart:hover { background: #c9a835; transform: translateY(-2px); }
+        .result-container { display: none; text-align: center; }
+        .result-container.active { display: block; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary) 0%, #c9a835 100%); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 30px; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3); }
+        .score-number { font-size: 3em; font-weight: 700; }
+        .score-text { font-size: 0.9em; opacity: 0.95; }
+        .result-title { font-size: 1.8em; color: var(--primary); margin-bottom: 20px; font-weight: 700; }
+        .result-message { font-size: 1.1em; color: #555; margin-bottom: 30px; line-height: 1.8; }
+        .rules-box { background: white; border: 3px solid var(--danger); border-radius: 8px; padding: 20px; margin: 30px 0; text-align: left; }
+        .rules-title { color: var(--danger); font-weight: 700; font-size: 1.1em; margin-bottom: 12px; }
+        .rules-content { color: var(--text); font-size: 0.95em; line-height: 1.7; }
+        .rules-content strong { color: var(--primary); }
+        .footer { background: var(--dark); color: white; padding: 20px 30px; text-align: center; font-size: 0.85em; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💊 COMPLÉMENTS & SUPPLÉMENTS</h1>
+            <p>Alimentation - Quand et Comment Complémenter</p>
+            <span class="badge">8 QUESTIONS</span>
+        </div>
+
+        <div class="content">
+            <div class="intro" id="intro">
+                <h2>Maîtrisez les Compléments Nutritionnels</h2>
+                <p>Biotite, levures, minéraux... savez-vous comment les utiliser efficacement ?</p>
+                <button class="btn-restart" onclick="startQuiz()">Commencer le Quiz</button>
+            </div>
+
+            <div class="progress-bar" id="progressBar" style="display:none;">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div id="questionContent"></div>
+
+            <div class="result-container" id="results">
+                <div class="score-circle">
+                    <div class="score-number" id="scoreNumber">0</div>
+                    <div class="score-text">/ 8</div>
+                </div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-message" id="resultMessage"></div>
+                
+                <div class="rules-box">
+                    <div class="rules-title">✅ RÈGLES DES COMPLÉMENTS</div>
+                    <div class="rules-content">
+                        <strong>Biotite :</strong> 3-6 mois minimum avant d'évaluer<br>
+                        <strong>Levures :</strong> Quotidien, action rapide (2-3 semaines)<br>
+                        <strong>Minéraux :</strong> Jamais seul, toujours avec protéines<br>
+                        <strong>Golden Rule :</strong> Compléter ne remplace pas une ration équilibrée de base
+                    </div>
+                </div>
+
+                <button class="btn-restart" onclick="location.reload()">Recommencer</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>SOS Maréchal-Ferrant</strong> — EquiCare Alimentation</p>
+            <p>© 2026 Eric Fontaine</p>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "La biotite (vitamine B8) aide les sabots et la corne. Combien de temps avant de voir des résultats ?",
+                options: [
+                    "1-2 semaines",
+                    "3 semaines",
+                    "3-6 mois minimum (cycle de croissance corne)",
+                    "Immédiat"
+                ],
+                correct: 2,
+                feedback: "✓ Correct. Biotite agit sur la corne qui pousse ~10mm/mois, résultat visible après 3 mois."
+            },
+            {
+                question: "Pourquoi ajouter des levures vivantes à la ration ?",
+                options: [
+                    "Pour augmenter le goût seulement",
+                    "Améliorer digestion et système immunitaire",
+                    "Remplacer le foin",
+                    "Aucun intérêt"
+                ],
+                correct: 1,
+                feedback: "✓ Correct. Levures vivantes = support digestion et immunité, effet 2-3 semaines."
+            },
+            {
+                question: "Un complément minéral seul (calcium, phosphore) suffira-t-il ?",
+                options: [
+                    "Oui, c'est suffisant",
+                    "Non, doit être accompagné de protéines pour être assimilé",
+                    "Ça dépend de la race",
+                    "Jamais utile"
+                ],
+                correct: 1,
+                feedback: "✓ Correct. Minéraux + protéines = nécessaire pour absorption et utilisation correct."
+            },
+            {
+                question: "Votre cheval a des sabots cassants. Quelle approche complète faut-il ?",
+                options: [
+                    "Juste biotite",
+                    "Juste minéraux",
+                    "Biotite + minéraux + foin qualité + protéines suffisantes",
+                    "Aucun complément, c'est inutile"
+                ],
+                correct: 2,
+                feedback: "✓ Correct. Sabots = approche globale (base ration + compléments) sur 3-6 mois."
+            },
+            {
+                question: "Quelle est la dose quotidienne habituelle de biotite pour un cheval ?",
+                options: [
+                    "500mg",
+                    "15mg environ (2-3 comprimés standard)",
+                    "100mg",
+                    "Dose libre"
+                ],
+                correct: 1,
+                feedback: "✓ Correct. 15mg/jour = dose usuelle (comprimés standard 5-7mg chacun)."
+            },
+            {
+                question: "Les oméga-3 (lin, algues) aident :",
+                options: [
+                    "Seulement l'énergie",
+                    "Pelage brillant, sabots, anti-inflammation",
+                    "Rien",
+                    "Uniquement les chevaux seniors"
+                ],
+                correct: 1,
+                feedback: "✓ Correct. Oméga-3 = pelage brillant, sabots, effet anti-inflammatoire."
+            },
+            {
+                question: "Un complément à base de probiotiques doit être :",
+                options: [
+                    "Donné une fois par mois",
+                    "Quotidien pour maintenir équilibre flore intestinale",
+                    "Juste en cas de diarrhée",
+                    "Jamais"
+                ],
+                correct: 1,
+                feedback: "✓ Correct. Probiotiques = quotidien pour équilibre flore, effet cumulatif."
+            },
+            {
+                question: "Je donne biotite + minéraux + levures + lin. Combien de temps pour évaluer vraiment ?",
+                options: [
+                    "1-2 semaines",
+                    "4 semaines",
+                    "3-6 mois (biotite + corne = temps long)",
+                    "1 mois maximum"
+                ],
+                correct: 2,
+                feedback: "✓ Correct. Évaluation honnête = 3-6 mois (biotite est le facteur limitant)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function startQuiz() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'block';
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            let html = `
+                <div class="question-container active">
+                    <div class="question-number">Question ${currentQuestion + 1}/8</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+            `;
+            q.options.forEach((option, index) => {
+                html += `
+                    <label class="option" onclick="selectOption(${index})">
+                        <input type="radio" name="answer" value="${index}" />
+                        <span>${option}</span>
+                    </label>
+                `;
+            });
+            html += `
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                    <div class="btn-container">
+                        <button class="btn-next" id="nextBtn" onclick="checkAnswer()" disabled>Valider</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('questionContent').innerHTML = html;
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            document.querySelector('input[value="' + index + '"]').checked = true;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+            const answer = parseInt(selected.value);
+            const correct = questions[currentQuestion].correct;
+            document.querySelectorAll('.option').forEach((opt, index) => {
+                opt.style.pointerEvents = 'none';
+                if (index === correct) opt.classList.add('correct');
+                else if (index === answer && answer !== correct) opt.classList.add('incorrect');
+            });
+            if (answer === correct) score++;
+            document.getElementById('feedback').textContent = questions[currentQuestion].feedback;
+            document.getElementById('feedback').classList.add('show');
+            document.getElementById('nextBtn').textContent = currentQuestion === 7 ? 'Voir Résultats' : 'Suivant';
+            document.getElementById('nextBtn').onclick = nextQuestion;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) showQuestion();
+            else showResults();
+        }
+
+        function updateProgress() {
+            document.getElementById('progressFill').style.width = ((currentQuestion + 1) / 8 * 100) + '%';
+        }
+
+        function showResults() {
+            document.getElementById('questionContent').innerHTML = '';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+            document.getElementById('scoreNumber').textContent = score;
+            let title, message;
+            if (score === 8) {
+                title = "🎉 Parfait !";
+                message = "Vous maîtrisez complémentation et timing. Vous saurez gérer les sabots et pelage.";
+            } else if (score >= 7) {
+                title = "✅ Excellent !";
+                message = "Très bonne compréhension des compléments.";
+            } else if (score >= 5) {
+                title = "👍 Bien !";
+                message = "Les concepts clés sont là. Pratiquez sur 3-6 mois.";
+            } else {
+                title = "📚 À approfondir";
+                message = "Revoyez biotite et timing avant de commencer.";
+            }
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>
