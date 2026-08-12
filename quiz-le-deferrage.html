@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz — Le Déferrage | EquiCare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f1e8 0%, #e8e0d5 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #d4844f 0%, #c76c3f 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            width: 100%;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            transition: width 0.3s ease;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .question-block {
+            display: none;
+        }
+        
+        .question-block.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .question-number {
+            font-size: 12px;
+            color: #d4844f;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .question-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            border: 2px solid #e0d5c8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafaf8;
+        }
+        
+        .option:hover {
+            border-color: #d4844f;
+            background: #fff9f5;
+        }
+        
+        .option input[type="radio"] {
+            margin-top: 2px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #d4844f;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 15px;
+        }
+        
+        .option.selected {
+            border-color: #d4844f;
+            background: #fff9f5;
+        }
+        
+        .option.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background: #fef5f5;
+        }
+        
+        .feedback {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct-answer {
+            background: #f1f8f4;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        
+        .feedback.incorrect-answer {
+            background: #fef5f5;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+        }
+        
+        .feedback strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .source {
+            font-size: 13px;
+            color: #999;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        
+        .btn-previous {
+            background: #e0d5c8;
+            color: #333;
+        }
+        
+        .btn-previous:hover:not(:disabled) {
+            background: #d4c8ba;
+        }
+        
+        .btn-next, .btn-submit {
+            background: #d4844f;
+            color: white;
+        }
+        
+        .btn-next:hover:not(:disabled), .btn-submit:hover:not(:disabled) {
+            background: #c76c3f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 132, 79, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+        
+        .results-screen.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #d4844f;
+            margin: 20px 0;
+        }
+        
+        .score-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .score-message {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .result-detail {
+            background: #f5f1e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .result-detail h3 {
+            font-size: 14px;
+            color: #d4844f;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .result-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0d5c8;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-icon {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .result-icon.correct {
+            color: #4caf50;
+        }
+        
+        .result-icon.incorrect {
+            color: #f44336;
+        }
+        
+        .btn-restart {
+            background: #d4844f;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .btn-restart:hover {
+            background: #c76c3f;
+        }
+        
+        .quiz-info {
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐴 Le Déferrage</h1>
+            <p>Quiz EquiCare — 8 questions</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Question 1 -->
+            <div class="question-block active" data-question="0">
+                <div class="question-number">Question 1 / 8</div>
+                <div class="question-title">L'environnement de déferrage</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Vous préparez le lieu de déferrage. Quel critère est le PLUS important ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" value="A" id="q1_A">
+                        <label for="q1_A">Une surface bien éclairée par le soleil</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="B" id="q1_B">
+                        <label for="q1_B">Un espace plat, stable, non-glissant, sans objets dangereux</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="C" id="q1_C">
+                        <label for="q1_C">Un box fermé pour contenir le cheval</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="D" id="q1_D">
+                        <label for="q1_D">Une surface en sable pour amortir si chute</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback0">
+                    <strong>✅ Bonne réponse : B</strong>
+                    <p>Un environnement plat, stable et non-glissant permet au cheval de rester naturellement immobile et au maréchal de travailler en sécurité. L'absence d'objets dangereux élimine les pièges.</p>
+                    <div class="source">Source : Bloc 1 — Préparation de l'environnement</div>
+                </div>
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question-block" data-question="1">
+                <div class="question-number">Question 2 / 8</div>
+                <div class="question-title">Préparation du matériel</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">À quelle étape doit être prêt tout votre matériel ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" value="A" id="q2_A">
+                        <label for="q2_A">Pendant que vous prenez le pied du cheval</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="B" id="q2_B">
+                        <label for="q2_B">Pendant que vous enlevez les clous</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="C" id="q2_C">
+                        <label for="q2_C">Avant de demander le pied au cheval</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="D" id="q2_D">
+                        <label for="q2_D">Après avoir enlevé le fer, si vous en avez besoin</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback1">
+                    <strong>✅ Bonne réponse : C</strong>
+                    <p>Une fois le pied levé, le cheval attend et se fatigue. Tous les outils doivent être à portée de main AVANT de commencer.</p>
+                    <div class="source">Source : Bloc 2 — Préparation du matériel</div>
+                </div>
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question-block" data-question="2">
+                <div class="question-number">Question 3 / 8</div>
+                <div class="question-title">L'approche du cheval</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Avant de demander le pied, vous devez passer votre main le long du membre. Pourquoi ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" value="A" id="q3_A">
+                        <label for="q3_A">Pour vérifier que le cheval accepte le toucher et relâcher son anxiété</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="B" id="q3_B">
+                        <label for="q3_B">Pour vérifier s'il y a une blessure ou une chaleur anormale</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="C" id="q3_C">
+                        <label for="q3_C">Pour détendre les muscles du pied</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="D" id="q3_D">
+                        <label for="q3_D">Pour montrer au cheval que vous êtes en contrôle</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback2">
+                    <strong>✅ Bonne réponse : A et B</strong>
+                    <p>Passer la main signale "Je vais prendre ton pied", ce qui prépare le cheval psychologiquement. Cela permet aussi de détecter chaleur, gonflement ou sensibilité anormale.</p>
+                    <div class="source">Source : Bloc 3 — Approche et position</div>
+                </div>
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question-block" data-question="3">
+                <div class="question-number">Question 4 / 8</div>
+                <div class="question-title">Le conseil d'Éric</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Pendant le déferrage, le cheval devient agité et retire son pied. Que faut-il faire ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" value="A" id="q4_A">
+                        <label for="q4_A">Forcer le pied en le tenant plus fermement</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="B" id="q4_B">
+                        <label for="q4_B">Frapper le cheval pour qu'il obéisse</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="C" id="q4_C">
+                        <label for="q4_C">Reposer le pied, reconforter le cheval et recommencer plus tard</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="D" id="q4_D">
+                        <label for="q4_D">Appeler immédiatement le vétérinaire</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback3">
+                    <strong>✅ Bonne réponse : C</strong>
+                    <p>Un cheval en conflit se crispe, ce qui rend le travail plus difficile et risqué. Reposer, caresser et attendre permet au cheval de reprendre confiance.</p>
+                    <p style="margin-top: 12px;"><strong>Conseil d'Eric :</strong> "Ne vous mettez jamais en conflit avec le cheval pour garder son pied."</p>
+                    <div class="source">Source : Bloc 4 — Le conseil d'Eric</div>
+                </div>
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question-block" data-question="4">
+                <div class="question-number">Question 5 / 8</div>
+                <div class="question-title">Sécurité du maréchal</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Quelle est la position DANGEREUSE pour le maréchal lors du déferrage d'un postérieur ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" value="A" id="q5_A">
+                        <label for="q5_A">À 45° du postérieur du cheval, un pied en avant pour se dégager</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="B" id="q5_B">
+                        <label for="q5_B">Directement derrière le cheval, face à la queue</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="C" id="q5_C">
+                        <label for="q5_C">À gauche du cheval, décalé de façon à voir le mouvement</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="D" id="q5_D">
+                        <label for="q5_D">Légèrement fléchi, en équilibre dynamique</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback4">
+                    <strong>✅ Bonne réponse : B</strong>
+                    <p>Être directement derrière est mortel : coup de pied arrière = trauma grave. La position sûre est décalée à 45°, avec possibilité de sauter de côté en 0,5 sec.</p>
+                    <div class="source">Source : Bloc 3 — Position du maréchal (postérieurs)</div>
+                </div>
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question-block" data-question="5">
+                <div class="question-number">Question 6 / 8</div>
+                <div class="question-title">Inspection après déferrage</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Une fois le fer enlevé, qu'est-ce que vous devez ABSOLUMENT vérifier ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q6" value="A" id="q6_A">
+                        <label for="q6_A">Seulement si le cheval boite</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="B" id="q6_B">
+                        <label for="q6_B">État de la corne, traces de clous, sensibilité, odeur anormale</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="C" id="q6_C">
+                        <label for="q6_C">Seulement la quantité d'usure du fer</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="D" id="q6_D">
+                        <label for="q6_D">Rien, juste repaire l'animal</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback5">
+                    <strong>✅ Bonne réponse : B</strong>
+                    <p>C'est votre fenêtre d'inspection : corne cassée, enfoncement de clou, pourriture, saignement, sensibilité anormale. Ces signes doivent être notés et communiqués.</p>
+                    <div class="source">Source : Bloc 5, Étape 3 — Inspection du pied</div>
+                </div>
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question-block" data-question="6">
+                <div class="question-number">Question 7 / 8</div>
+                <div class="question-title">Fréquence de déferrage</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Combien de temps entre deux déferrages standard ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q7" value="A" id="q7_A">
+                        <label for="q7_A">Tous les 2-3 semaines</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="B" id="q7_B">
+                        <label for="q7_B">Tous les 4-6 semaines</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="C" id="q7_C">
+                        <label for="q7_C">Tous les 2-3 mois</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="D" id="q7_D">
+                        <label for="q7_D">Ça dépend uniquement de la saison</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback6">
+                    <strong>✅ Bonne réponse : B</strong>
+                    <p>Standard = 4-6 semaines selon usure du fer et croissance de la corne. Cette fréquence maintient protection et équilibre.</p>
+                    <div class="source">Source : Bloc 7 — Fréquence et calendrier</div>
+                </div>
+            </div>
+            
+            <!-- Question 8 -->
+            <div class="question-block" data-question="7">
+                <div class="question-number">Question 8 / 8</div>
+                <div class="question-title">Quand ne pas déferrer (cas critique)</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Lequel de ces signes vous oblige à ARRÊTER et appeler un professionnel ?</p>
+                
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q8" value="A" id="q8_A">
+                        <label for="q8_A">Le cheval est légèrement nerveux</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="B" id="q8_B">
+                        <label for="q8_B">Le pied semble normal mais un peu plus chaud que l'autre</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="C" id="q8_C">
+                        <label for="q8_C">Le cheval refuse catégoriquement de lever le pied, pied très gonflé et chaud</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="D" id="q8_D">
+                        <label for="q8_D">Le fer est légèrement usé</label>
+                    </div>
+                </div>
+                
+                <div class="feedback" id="feedback7">
+                    <strong>✅ Bonne réponse : C</strong>
+                    <p>Refus catégorique + gonflement + chaleur = signal de douleur ou de problème profond (abcès, fourbure, infection). C'est une urgence vétérinaire.</p>
+                    <div class="source">Source : Bloc 10 — Quand appeler un professionnel</div>
+                </div>
+            </div>
+            
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <div class="score-title">Quiz Terminé !</div>
+                <div class="score-display"><span id="scoreValue">0</span>/8</div>
+                <div class="score-message" id="scoreMessage"></div>
+                
+                <div class="result-detail">
+                    <h3>Vos résultats</h3>
+                    <div id="resultsList"></div>
+                </div>
+                
+                <button class="btn-restart" onclick="location.reload()">Recommencer le Quiz</button>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="navigation" id="navigation">
+                <button class="btn-previous" id="btnPrevious" onclick="previousQuestion()" disabled>← Précédent</button>
+                <button class="btn-next" id="btnNext" onclick="nextQuestion()">Suivant →</button>
+            </div>
+            
+            <div class="quiz-info">
+                Durée estimée : 5-7 minutes • Propriétaires & cavaliers
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const questions = 8;
+        let currentQuestion = 0;
+        const answers = {};
+        const correctAnswers = {
+            0: 'B',
+            1: 'C',
+            2: ['A', 'B'],
+            3: 'C',
+            4: 'B',
+            5: 'B',
+            6: 'B',
+            7: 'C'
+        };
+        
+        function showQuestion(index) {
+            document.querySelectorAll('.question-block').forEach(block => {
+                block.classList.remove('active');
+            });
+            document.querySelector(`[data-question="${index}"]`).classList.add('active');
+            
+            document.getElementById('btnPrevious').disabled = index === 0;
+            document.getElementById('btnNext').textContent = index === questions - 1 ? 'Voir Résultats →' : 'Suivant →';
+            document.getElementById('btnNext').classList.toggle('btn-submit', index === questions - 1);
+            
+            const progress = ((index + 1) / questions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // Add event listeners to radio buttons
+            document.querySelectorAll(`input[name="q${index + 1}"]`).forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    answers[index] = e.target.value;
+                    
+                    // Show feedback after selection
+                    setTimeout(() => {
+                        const feedback = document.getElementById(`feedback${index}`);
+                        const correct = Array.isArray(correctAnswers[index]) 
+                            ? correctAnswers[index].includes(e.target.value)
+                            : e.target.value === correctAnswers[index];
+                        
+                        feedback.classList.add('show');
+                        feedback.classList.remove('incorrect-answer');
+                        feedback.classList.remove('correct-answer');
+                        
+                        if (correct) {
+                            feedback.classList.add('correct-answer');
+                            feedback.innerHTML = feedback.innerHTML.replace('❌', '✅');
+                        } else {
+                            feedback.classList.add('incorrect-answer');
+                            feedback.innerHTML = feedback.innerHTML.replace('✅', '❌');
+                        }
+                    }, 100);
+                });
+            });
+            
+            if (answers[index]) {
+                document.querySelector(`input[name="q${index + 1}"][value="${answers[index]}"]`).checked = true;
+                const feedback = document.getElementById(`feedback${index}`);
+                if (feedback) {
+                    feedback.classList.add('show');
+                }
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < questions - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        function showResults() {
+            let score = 0;
+            let resultsList = '';
+            
+            for (let i = 0; i < questions; i++) {
+                const correct = Array.isArray(correctAnswers[i]) 
+                    ? correctAnswers[i].includes(answers[i])
+                    : answers[i] === correctAnswers[i];
+                
+                if (correct) score++;
+                
+                const icon = correct ? '✅' : '❌';
+                resultsList += `<div class="result-item">
+                    <span>Question ${i + 1}</span>
+                    <span class="result-icon ${correct ? 'correct' : 'incorrect'}">${icon}</span>
+                </div>`;
+            }
+            
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('resultsList').innerHTML = resultsList;
+            
+            let message = '';
+            if (score === 8) {
+                message = '🎉 Parfait ! Vous maîtrisez les fondamentaux. Prêt à observer/assister un déferrage en vrai.';
+            } else if (score >= 6) {
+                message = '✅ Très bien ! Les bases sont solides. Relisez les blocs 3-4 sur la sécurité pour progresser.';
+            } else if (score >= 4) {
+                message = '⚠️ Bonne compréhension générale. Relisez la fiche complète avant d\'observer un déferrage.';
+            } else {
+                message = '🛑 Priorité sécurité. Consultez un maréchal professionnel avant toute intervention.';
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+            
+            document.getElementById('navigation').style.display = 'none';
+            document.querySelector('.quiz-info').style.display = 'none';
+            document.getElementById('resultsScreen').classList.add('show');
+        }
+        
+        // Initialize
+        showQuestion(0);
+    </script>
+</body>
+</html>
