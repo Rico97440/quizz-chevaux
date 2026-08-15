@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz — Nutrition Cheval Senior | EquiCare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f1e8 0%, #e8e0d5 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #d4844f 0%, #c76c3f 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            width: 100%;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            transition: width 0.3s ease;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .question-block {
+            display: none;
+        }
+        
+        .question-block.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .question-number {
+            font-size: 12px;
+            color: #d4844f;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .question-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            border: 2px solid #e0d5c8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafaf8;
+        }
+        
+        .option:hover {
+            border-color: #d4844f;
+            background: #fff9f5;
+        }
+        
+        .option input[type="radio"] {
+            margin-top: 2px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #d4844f;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 15px;
+        }
+        
+        .feedback {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct-answer {
+            background: #f1f8f4;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        
+        .feedback.incorrect-answer {
+            background: #fef5f5;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+        }
+        
+        .feedback strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .source {
+            font-size: 13px;
+            color: #999;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        
+        .btn-previous {
+            background: #e0d5c8;
+            color: #333;
+        }
+        
+        .btn-previous:hover:not(:disabled) {
+            background: #d4c8ba;
+        }
+        
+        .btn-next, .btn-submit {
+            background: #d4844f;
+            color: white;
+        }
+        
+        .btn-next:hover:not(:disabled), .btn-submit:hover:not(:disabled) {
+            background: #c76c3f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 132, 79, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+        
+        .results-screen.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #d4844f;
+            margin: 20px 0;
+        }
+        
+        .score-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .score-message {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .result-detail {
+            background: #f5f1e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .result-detail h3 {
+            font-size: 14px;
+            color: #d4844f;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .result-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0d5c8;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-icon {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .result-icon.correct {
+            color: #4caf50;
+        }
+        
+        .result-icon.incorrect {
+            color: #f44336;
+        }
+        
+        .btn-restart {
+            background: #d4844f;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .btn-restart:hover {
+            background: #c76c3f;
+        }
+        
+        .quiz-info {
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐴 Nutrition Cheval Senior</h1>
+            <p>Quiz Formation EquiCare — 10 questions</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Q1 -->
+            <div class="question-block active" data-question="0">
+                <div class="question-number">Question 1 / 10</div>
+                <div class="question-title">Les 3 Profils Seniors</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Vous avez un cheval 22 ans, score corporel 3.5, dents usées, pelage terne. Quel profil ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q1" value="A" id="q1_A"><label for="q1_A">Profil A (Sain)</label></div>
+                    <div class="option"><input type="radio" name="q1" value="B" id="q1_B"><label for="q1_B">Profil B (Transition)</label></div>
+                    <div class="option"><input type="radio" name="q1" value="C" id="q1_C"><label for="q1_C">Profil C (Fragile)</label></div>
+                    <div class="option"><input type="radio" name="q1" value="D" id="q1_D"><label for="q1_D">Pas assez info</label></div>
+                </div>
+                <div class="feedback" id="feedback0"><strong>✅ Bonne réponse : B</strong><p>Score 3.5 + signes visibles (dents, pelage) = Profil B (Transition). Signaux clairs de relance nécessaire.</p><div class="source">Source : Module 1 — Les 3 Profils</div></div>
+            </div>
+            
+            <!-- Q2 -->
+            <div class="question-block" data-question="1">
+                <div class="question-number">Question 2 / 10</div>
+                <div class="question-title">Usure Dentaire & Foin</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Dents sévèrement usées + foin dur non-haché = quel problème principal ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q2" value="A" id="q2_A"><label for="q2_A">Mastication lente seulement</label></div>
+                    <div class="option"><input type="radio" name="q2" value="B" id="q2_B"><label for="q2_B">Malnutrition progressive inévitable</label></div>
+                    <div class="option"><input type="radio" name="q2" value="C" id="q2_C"><label for="q2_C">Diarrhée chronique</label></div>
+                    <div class="option"><input type="radio" name="q2" value="D" id="q2_D"><label for="q2_D">Refus complètement de manger</label></div>
+                </div>
+                <div class="feedback" id="feedback1"><strong>✅ Bonne réponse : B</strong><p>Foin dur + dents usées = impossible de mastiquer efficacement → sous-utilisation foin → malnutrition réelle.</p><div class="source">Source : Module 1 — Erreur #1</div></div>
+            </div>
+            
+            <!-- Q3 -->
+            <div class="question-block" data-question="2">
+                <div class="question-number">Question 3 / 10</div>
+                <div class="question-title">Budget Profil B (Transition)</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Budget mensuel recommandé pour Profil B (Transition) ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q3" value="A" id="q3_A"><label for="q3_A">80-120€/mois</label></div>
+                    <div class="option"><input type="radio" name="q3" value="B" id="q3_B"><label for="q3_B">270-350€/mois</label></div>
+                    <div class="option"><input type="radio" name="q3" value="C" id="q3_C"><label for="q3_C">500€+/mois</label></div>
+                    <div class="option"><input type="radio" name="q3" value="D" id="q3_D"><label for="q3_D">Gratuit (conseil seulement)</label></div>
+                </div>
+                <div class="feedback" id="feedback2"><strong>✅ Bonne réponse : B</strong><p>Profil B = Transition active. Budget 270-350€/mois couvre foin luzerne haché, concentré, levures, oméga-3, minéraux.</p><div class="source">Source : Module 3 — Plan Profil B</div></div>
+            </div>
+            
+            <!-- Q4 -->
+            <div class="question-block" data-question="3">
+                <div class="question-number">Question 4 / 10</div>
+                <div class="question-title">Cas Réel - Pierre</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Pierre, 22 ans, sabots cassants. Après optimisation nutrition, ferrure peut-elle être espacée ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q4" value="A" id="q4_A"><label for="q4_A">Non, ferrure fixe à 6 semaines</label></div>
+                    <div class="option"><input type="radio" name="q4" value="B" id="q4_B"><label for="q4_B">Oui, possible 7-8 semaines (voir cas)</label></div>
+                    <div class="option"><input type="radio" name="q4" value="C" id="q4_C"><label for="q4_C">Uniquement pieds nus</label></div>
+                    <div class="option"><input type="radio" name="q4" value="D" id="q4_D"><label for="q4_D">Dépend de l'éleveur</label></div>
+                </div>
+                <div class="feedback" id="feedback3"><strong>✅ Bonne réponse : B</strong><p>Cas Pierre : après 6 mois nutrition (biotite, luzerne, oméga-3), sabots solidifiés → ferrure espacée 7-8 sem → économies 500-600€/an.</p><div class="source">Source : Module 2 — Cas #1 Pierre</div></div>
+            </div>
+            
+            <!-- Q5 -->
+            <div class="question-block" data-question="4">
+                <div class="question-number">Question 5 / 10</div>
+                <div class="question-title">Biotite & Timeline</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Biotite 15mg/jour. Quand voit-on EFFETS VISIBLES sur sabots ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q5" value="A" id="q5_A"><label for="q5_A">2-3 semaines</label></div>
+                    <div class="option"><input type="radio" name="q5" value="B" id="q5_B"><label for="q5_B">6-8 semaines</label></div>
+                    <div class="option"><input type="radio" name="q5" value="C" id="q5_C"><label for="q5_C">12+ semaines (3 mois+)</label></div>
+                    <div class="option"><input type="radio" name="q5" value="D" id="q5_D"><label for="q5_D">Jamais (inefficace)</label></div>
+                </div>
+                <div class="feedback" id="feedback4"><strong>✅ Bonne réponse : C</strong><p>Biotite = supplément long terme. Résultats visibles 12+ semaines car croissance corne lente (~10mm/mois).</p><div class="source">Source : Module 2 — Cas réels (all timelines)</div></div>
+            </div>
+            
+            <!-- Q6 -->
+            <div class="question-block" data-question="5">
+                <div class="question-number">Question 6 / 10</div>
+                <div class="question-title">Cas Réel - Léon (Urgence)</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Léon 23 ans, score 3.5, foin dur non-haché. Intervention immédiate = ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q6" value="A" id="q6_A"><label for="q6_A">Augmenter concentré sucré</label></div>
+                    <div class="option"><input type="radio" name="q6" value="B" id="q6_B"><label for="q6_B">ARRÊTER foin dur → foin SOUFFLÉ</label></div>
+                    <div class="option"><input type="radio" name="q6" value="C" id="q6_C"><label for="q6_C">Attendre diagnostic VT avant agir</label></div>
+                    <div class="option"><input type="radio" name="q6" value="D" id="q6_D"><label for="q6_D">Réduire portions (budget)</label></div>
+                </div>
+                <div class="feedback" id="feedback5"><strong>✅ Bonne réponse : B</strong><p>Cas Léon : problème = FOIN dur + dents usées = impossible manger. Solution immédiate : foin soufflé → appétit explose → relance nutrition.</p><div class="source">Source : Module 2 — Cas #3 Léon</div></div>
+            </div>
+            
+            <!-- Q7 -->
+            <div class="question-block" data-question="6">
+                <div class="question-number">Question 7 / 10</div>
+                <div class="question-title">Profil C (Fragile) — Actions Jour 1</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Senior Profil C, score 3, amaigrissement visible. Actions jour 1-3 ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q7" value="A" id="q7_A"><label for="q7_A">Appel VT, foin soufflé, augmenter quantité</label></div>
+                    <div class="option"><input type="radio" name="q7" value="B" id="q7_B"><label for="q7_B">Attendre résultats labo</label></div>
+                    <div class="option"><input type="radio" name="q7" value="C" id="q7_C"><label for="q7_C">Réduire concentré (budget</label></div>
+                    <div class="option"><input type="radio" name="q7" value="D" id="q7_D"><label for="q7_D">Consultation lointaine</label></div>
+                </div>
+                <div class="feedback" id="feedback6"><strong>✅ Bonne réponse : A</strong><p>Profil C = URGENCE. Jour 1 : appel VT (pathologie ?), foin dur → soufflé, quantité ↑ 10→12-14kg. Résultats rapides.</p><div class="source">Source : Module 3 — Plan Profil C</div></div>
+            </div>
+            
+            <!-- Q8 -->
+            <div class="question-block" data-question="7">
+                <div class="question-number">Question 8 / 10</div>
+                <div class="question-title">Pieds Nus — Prérequis Strict</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Avant transition pieds nus, biotite doit être prise depuis... ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q8" value="A" id="q8_A"><label for="q8_A">2-4 semaines</label></div>
+                    <div class="option"><input type="radio" name="q8" value="B" id="q8_B"><label for="q8_B">6-8 semaines</label></div>
+                    <div class="option"><input type="radio" name="q8" value="C" id="q8_C"><label for="q8_C">12+ semaines (3 mois minimum)</label></div>
+                    <div class="option"><input type="radio" name="q8" value="D" id="q8_D"><label for="q8_D">Pas obligatoire</label></div>
+                </div>
+                <div class="feedback" id="feedback7"><strong>✅ Bonne réponse : C</strong><p>Pieds nus = nécessite sabots SOLIDES. Biotite 12+ semaines = effectif. Cas Zéphyr : 3 mois nutrition AVANT retrait ferrure.</p><div class="source">Source : Module 5 — Prérequis Pieds Nus</div></div>
+            </div>
+            
+            <!-- Q9 -->
+            <div class="question-block" data-question="8">
+                <div class="question-number">Question 9 / 10</div>
+                <div class="question-title">ROI Compléments vs Ferrure</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">Compléments nutrition 6 mois = 1500€. Économie ferrure/an possible = ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q9" value="A" id="q9_A"><label for="q9_A">Pas d'économies (ferrure = fixe)</label></div>
+                    <div class="option"><input type="radio" name="q9" value="B" id="q9_B"><label for="q9_B">50-100€/an</label></div>
+                    <div class="option"><input type="radio" name="q9" value="C" id="q9_C"><label for="q9_C">500-600€/an (ferrure espacée)</label></div>
+                    <div class="option"><input type="radio" name="q9" value="D" id="q9_D"><label for="q9_D">2000€+/an</label></div>
+                </div>
+                <div class="feedback" id="feedback8"><strong>✅ Bonne réponse : C</strong><p>Sabots solides → ferrure 7-8 sem (vs 6) = 1 ferrure en moins/an = 500-600€. ROI : 1500€ (6m) remboursé en 2-3 ans.</p><div class="source">Source : Module 2 — Cas #1 Pierre (ROI)</div></div>
+            </div>
+            
+            <!-- Q10 -->
+            <div class="question-block" data-question="9">
+                <div class="question-number">Question 10 / 10</div>
+                <div class="question-title">Suivi Carnet — Indicateurs Succès</div>
+                <p style="margin-bottom: 20px; font-size: 15px;">À 3 mois, quels indicateurs doivent être visibles ?</p>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q10" value="A" id="q10_A"><label for="q10_A">Score corporel atteint, sabots solides</label></div>
+                    <div class="option"><input type="radio" name="q10" value="B" id="q10_B"><label for="q10_B">Pelage meilleur, sabots premiers signes, énergie ↑</label></div>
+                    <div class="option"><input type="radio" name="q10" value="C" id="q10_C"><label for="q10_C">Rien visible (attendre 6 mois)</label></div>
+                    <div class="option"><input type="radio" name="q10" value="D" id="q10_D"><label for="q10_D">Biotite résultat complet</label></div>
+                </div>
+                <div class="feedback" id="feedback9"><strong>✅ Bonne réponse : B</strong><p>Mois 3 : pelage excellent (levures + oméga), sabots 30mm croissance, énergie visible. Résultats progressifs confirment nutrition efficace.</p><div class="source">Source : Module 4 — Indicateurs Succès</div></div>
+            </div>
+            
+            <!-- Results -->
+            <div class="results-screen" id="resultsScreen">
+                <div class="score-title">Quiz Terminé !</div>
+                <div class="score-display"><span id="scoreValue">0</span>/10</div>
+                <div class="score-message" id="scoreMessage"></div>
+                <div class="result-detail">
+                    <h3>Vos résultats</h3>
+                    <div id="resultsList"></div>
+                </div>
+                <button class="btn-restart" onclick="location.reload()">Recommencer le Quiz</button>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="navigation" id="navigation">
+                <button class="btn-previous" id="btnPrevious" onclick="previousQuestion()" disabled>← Précédent</button>
+                <button class="btn-next" id="btnNext" onclick="nextQuestion()">Suivant →</button>
+            </div>
+            
+            <div class="quiz-info">
+                Durée estimée : 8-12 minutes • Propriétaires & cavaliers
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const questions = 10;
+        let currentQuestion = 0;
+        const answers = {};
+        const correctAnswers = {
+            0: 'B', 1: 'B', 2: 'B', 3: 'B', 4: 'C', 5: 'B', 6: 'A', 7: 'C', 8: 'C', 9: 'B'
+        };
+        
+        function showQuestion(index) {
+            document.querySelectorAll('.question-block').forEach(block => {
+                block.classList.remove('active');
+            });
+            document.querySelector(`[data-question="${index}"]`).classList.add('active');
+            
+            document.getElementById('btnPrevious').disabled = index === 0;
+            document.getElementById('btnNext').textContent = index === questions - 1 ? 'Voir Résultats →' : 'Suivant →';
+            document.getElementById('btnNext').classList.toggle('btn-submit', index === questions - 1);
+            
+            const progress = ((index + 1) / questions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            document.querySelectorAll(`input[name="q${index + 1}"]`).forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    answers[index] = e.target.value;
+                    
+                    setTimeout(() => {
+                        const feedback = document.getElementById(`feedback${index}`);
+                        const correct = e.target.value === correctAnswers[index];
+                        
+                        feedback.classList.add('show');
+                        feedback.classList.remove('incorrect-answer', 'correct-answer');
+                        
+                        if (correct) {
+                            feedback.classList.add('correct-answer');
+                        } else {
+                            feedback.classList.add('incorrect-answer');
+                            feedback.innerHTML = feedback.innerHTML.replace('✅', '❌').replace('Bonne', 'Bonne réponse était');
+                        }
+                    }, 100);
+                });
+            });
+            
+            if (answers[index]) {
+                document.querySelector(`input[name="q${index + 1}"][value="${answers[index]}"]`).checked = true;
+                const feedback = document.getElementById(`feedback${index}`);
+                if (feedback) {
+                    feedback.classList.add('show');
+                }
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < questions - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        function showResults() {
+            let score = 0;
+            let resultsList = '';
+            
+            for (let i = 0; i < questions; i++) {
+                const correct = answers[i] === correctAnswers[i];
+                
+                if (correct) score++;
+                
+                const icon = correct ? '✅' : '❌';
+                resultsList += `<div class="result-item">
+                    <span>Question ${i + 1}</span>
+                    <span class="result-icon ${correct ? 'correct' : 'incorrect'}">${icon}</span>
+                </div>`;
+            }
+            
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('resultsList').innerHTML = resultsList;
+            
+            let message = '';
+            if (score === 10) {
+                message = '🎉 Parfait ! Vous maîtrisez la formation complète. Prêt à optimiser votre senior.';
+            } else if (score >= 8) {
+                message = '✅ Excellent ! Très bonne compréhension des modules. Quelques points à revoir.';
+            } else if (score >= 6) {
+                message = '⚠️ Bonne base. Relisez modules 2-3 (cas réels, plans d\'action) avant de commencer.';
+            } else if (score >= 4) {
+                message = '📖 Relisez la formation complète. Les concepts clés ne sont pas encore clairs.';
+            } else {
+                message = '🛑 Priorité : revoir Module 1 (diagnostic) et Module 3 (plans d\'action).';
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+            
+            document.getElementById('navigation').style.display = 'none';
+            document.querySelector('.quiz-info').style.display = 'none';
+            document.getElementById('resultsScreen').classList.add('show');
+        }
+        
+        showQuestion(0);
+    </script>
+</body>
+</html>
