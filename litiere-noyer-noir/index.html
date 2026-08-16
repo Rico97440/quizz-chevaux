@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="🌳 Quiz : La litière qui cause une fourbure">
+<meta property="og:description" content="8 questions · Reconnaître et prévenir la fourbure liée à une mauvaise litière. Basé sur cas réels.">
+<meta property="og:image" content="https://via.placeholder.com/1200x630?text=Litière+Noyer+Noir">
+<meta property="og:url" content="https://rico97440.github.io/quiz-litiere-fourbure/">
+<meta property="og:type" content="website">
+<title>Quiz — Litière et fourbure</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+.app {
+  background: #fdfaf5;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.header {
+  background: #1c1410;
+  padding: 20px 20px 16px;
+  text-align: center;
+}
+.header-brand { color: #d97a3a; font-size: 11px; font-weight: 800; letter-spacing: 3px; margin-bottom: 5px; }
+.header-lesson { color: #c9b89a; font-size: 13px; margin-bottom: 5px; }
+.header-title { color: #f5ede0; font-size: 17px; font-weight: 800; line-height: 1.3; }
+.progress-wrap { background: #1c1410; padding: 0 20px 16px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #8a7560; margin-bottom: 6px; font-weight: 600; }
+.progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+.progress-fill { height: 100%; background: linear-gradient(to right, #d97a3a, #e9a05a); border-radius: 3px; transition: width 0.4s ease; }
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* INTRO */
+.intro { padding: 24px 20px; }
+.intro-icon { font-size: 52px; text-align: center; margin-bottom: 14px; }
+.intro-title { font-size: 20px; font-weight: 800; color: #1c1410; text-align: center; margin-bottom: 10px; line-height: 1.3; }
+.intro-context { background: #fff3e0; border: 2px solid #d97a3a; border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: 13px; color: #4a3a2a; line-height: 1.6; }
+.intro-goals { background: #fff; border: 1px solid #e8d8c0; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+.intro-goals-title { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 8px; }
+.intro-goal { font-size: 13px; color: #2a1f17; margin-bottom: 6px; display: flex; gap: 8px; line-height: 1.4; }
+.btn-start { width: 100%; padding: 15px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-start:hover { background: #c96a2a; transform: translateY(-1px); }
+
+/* QUESTION */
+.q-wrap { padding: 20px; }
+.q-num { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 5px; }
+.q-theme { font-size: 11px; font-weight: 700; color: #8a7560; background: #f5ede0; display: inline-block; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+.q-text { font-size: 17px; font-weight: 700; color: #1c1410; line-height: 1.4; margin-bottom: 8px; }
+.q-context { font-size: 13px; color: #6b4a2b; font-style: italic; margin-bottom: 18px; background: #fdf4e8; border-left: 3px solid #d97a3a; padding: 10px 12px; border-radius: 0 8px 8px 0; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option {
+  background: #fff; border: 2px solid #e8d8c0; border-radius: 12px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.option:hover:not(.disabled) { border-color: #d97a3a; background: #fdf4e8; }
+.option.correct { border-color: #3a8a3a; background: #f0fff0; }
+.option.wrong { border-color: #b83030; background: #fff0f0; }
+.option.disabled { cursor: default; }
+.option-letter {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #e8d8c0; color: #6b4a2b;
+  font-size: 13px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option.correct .option-letter { background: #3a8a3a; color: white; }
+.option.wrong .option-letter { background: #b83030; color: white; }
+.option-text { font-size: 14px; font-weight: 600; color: #1c1410; flex: 1; line-height: 1.4; }
+.feedback { border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; font-size: 13px; line-height: 1.55; display: none; }
+.feedback.correct { background: #f0fff0; border: 2px solid #3a8a3a; color: #1a4a1a; }
+.feedback.wrong { background: #fff0f0; border: 2px solid #b83030; color: #4a1a1a; }
+.feedback.show { display: block; }
+.feedback-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.btn-next { width: 100%; padding: 14px; background: #1c1410; color: #f5ede0; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; }
+.btn-next.show { display: block; }
+.btn-next:hover { background: #2a1d14; }
+
+/* RÉSULTAT */
+.result-wrap { padding: 24px 20px; }
+.result-score-card { text-align: center; border-radius: 16px; padding: 28px 20px; margin-bottom: 20px; }
+.result-emoji { font-size: 56px; margin-bottom: 12px; }
+.result-score { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.result-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.result-msg { font-size: 13px; line-height: 1.55; }
+.score-excellent { background: linear-gradient(135deg, #f0fff0, #e0ffe0); border: 3px solid #3a8a3a; }
+.score-excellent .result-score { color: #3a8a3a; }
+.score-bien { background: linear-gradient(135deg, #fff8f0, #fff0e0); border: 3px solid #d97a3a; }
+.score-bien .result-score { color: #d97a3a; }
+.score-revoir { background: linear-gradient(135deg, #fff0f0, #ffe8e8); border: 3px solid #b83030; }
+.score-revoir .result-score { color: #b83030; }
+.recap { margin-bottom: 20px; }
+.recap-title { font-size: 12px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 10px; }
+.recap-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; padding: 10px 12px; background: #fff; border: 1px solid #e8d8c0; border-radius: 10px; }
+.recap-q { font-size: 12px; color: #4a3a2a; line-height: 1.4; flex: 1; }
+.urgence-box { background: #fff0f0; border: 2px solid #b83030; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.urgence-title { font-size: 13px; font-weight: 800; color: #b83030; margin-bottom: 8px; }
+.urgence-list { font-size: 13px; color: #2a1f17; line-height: 1.8; }
+.btn-restart { width: 100%; padding: 14px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-restart:hover { background: #c96a2a; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-brand">SOS MARÉCHAL-FERRANT · DIAGNOSTIC FOURBURE</div>
+    <div class="header-lesson">Année 2026 · La Réunion</div>
+    <div class="header-title">🌳 Quand la litière cause une fourbure :<br>reconnaître le noyer noir</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="prog-label">Question 0 / 8</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="s-intro" class="screen active">
+    <div class="intro">
+      <div class="intro-icon">🌳🐴💔</div>
+      <div class="intro-title">Une cause souvent oubliée de fourbure</div>
+
+      <div class="intro-context">
+        ⚠️ Un cheval change de litière et développe une fourbure brutale. On accuse l'herbe. Mais le problème peut être directement sous ses pieds. Le bois frais de noyer noir contient de la juglone, une toxine qui peut déclencher une fourbure aigüe en quelques jours.
+      </div>
+
+      <div class="intro-goals">
+        <div class="intro-goals-title">CE QUE VOUS ALLEZ VÉRIFIER</div>
+        <div class="intro-goal"><span>🌳</span><span>Identifier le noyer noir et comprendre le risque</span></div>
+        <div class="intro-goal"><span>💧</span><span>Comment la juglone agit (contact direct vs ingestion)</span></div>
+        <div class="intro-goal"><span>🔍</span><span>Reconstituer l'historique pour trouver la vraie cause</span></div>
+        <div class="intro-goal"><span>⏱️</span><span>Quand appeler le vétérinaire immédiatement</span></div>
+        <div class="intro-goal"><span>🔧</span><span>Rôle du maréchal-ferrant lors d'une fourbure</span></div>
+      </div>
+
+      <div style="font-size:13px;color:#8a7560;margin-bottom:14px;text-align:center;">8 questions · Basé sur cas réels et recherche scientifique</div>
+      <button class="btn-start" onclick="startQuiz()">Commencer le quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="s-quiz" class="screen">
+    <div class="q-wrap">
+      <div class="q-num" id="q-num">QUESTION 1 / 8</div>
+      <div class="q-theme" id="q-theme"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-context" id="q-context" style="display:none"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <div class="feedback-title" id="fb-title"></div>
+        <div id="fb-text"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">Question suivante →</button>
+    </div>
+  </div>
+
+  <!-- RÉSULTAT -->
+  <div id="s-result" class="screen">
+    <div class="result-wrap">
+      <div class="result-score-card" id="score-card">
+        <div class="result-emoji" id="res-emoji"></div>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-msg" id="res-msg"></div>
+      </div>
+
+      <div class="urgence-box">
+        <div class="urgence-title">🔴 Signes d'alerte : appelez le vétérinaire IMMÉDIATEMENT</div>
+        <div class="urgence-list">
+          • Plusieurs pieds rouges, chauds ou gonflés<br>
+          • Pouls digité augmenté et très marqué<br>
+          • Cheval qui se déplace différemment<br>
+          • Refus de tourner ou de se coucher<br>
+          • Changement récent de litière ou d'environnement
+        </div>
+      </div>
+
+      <div class="recap">
+        <div class="recap-title">RÉCAPITULATIF DE VOS RÉPONSES</div>
+        <div id="recap-list"></div>
+      </div>
+      <button class="btn-restart" onclick="restart()">🔄 Recommencer le quiz</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    theme: "🌳 IDENTIFICATION",
+    text: "Vous changez de fournisseur de copeaux. Quelques jours plus tard, votre cheval est raide des quatre pieds. Qu'est-ce qui pourrait être la cause directe si le problème est dans la litière ?",
+    context: "Tous les bois ne posent pas le même risque. Le noyer noir en particulier est toxique.",
+    options: [
+      { letter: "A", text: "L'humidité des copeaux mal séchés." },
+      { letter: "B", text: "Le noyer noir, qui contient de la juglone, une toxine qui peut déclencher une fourbure même par contact direct." },
+      { letter: "C", text: "Le prix bas du fournisseur — c'est forcément de mauvaise qualité." },
+      { letter: "D", text: "La paille mélangée aux copeaux provoque une allergie." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! Le noyer noir contient de la juglone. Le cheval n'a pas besoin d'ingérer les copeaux — le contact direct avec le bois frais peut suffire. C'est la raison pour laquelle une fourbure aigüe peut apparaître rapidement après un changement de litière.",
+    feedback_wrong: "Le coupable dans les cas documentés est le noyer noir et sa juglone. Pas besoin d'ingestion — le contact direct suffit. Les autres facteurs (humidité, qualité, mélange) sont secondaires face à ce risque toxique spécifique.",
+  },
+  {
+    theme: "🔬 BIOLOGIE",
+    text: "La juglone du noyer noir agit principalement par quel mécanisme pour déclencher une fourbure ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Elle élève la température corporelle générale du cheval." },
+      { letter: "B", text: "Elle provoque une réaction inflammatoire vasculaire au niveau des pieds, affectant la circulation et entraînant une vascularite et un gonflement." },
+      { letter: "C", text: "Elle paralyse les ligaments du pied." },
+      { letter: "D", text: "Elle désintègre directement la sole." },
+    ],
+    correct: 1,
+    feedback_correct: "Correct ! La juglone provoque une vascularite — une inflammation des vaisseaux sanguins au niveau du pied. Cela entraîne gonflement, accumulation de liquide, augmentation de la pression, et finalement fourbure. L'atteinte est vasculaire avant d'être mécanique.",
+    feedback_wrong: "La juglone agit en provoquant une vascularite — une inflammation vasculaire au niveau des pieds. Ce n'est pas une élévation générale de la température, ni une paralysie, ni une destruction tissulaire directe. C'est pourquoi le gonflement et le pouls digité augmenté sont parmi les premiers signes.",
+  },
+  {
+    theme: "🔍 DIAGNOSTIC",
+    text: "Face à une fourbure brutale, vous décidez de reconstituer l'historique. Laquelle de ces informations est la PLUS importante pour identifier une fourbure liée à la litière ?",
+    context: null,
+    options: [
+      { letter: "A", text: "La morphologie du cheval." },
+      { letter: "B", text: "Un changement récent d'alimentation, de pâture, de traitement, d'effort ou DE LITIÈRE." },
+      { letter: "C", text: "La race du cheval." },
+      { letter: "D", text: "Le niveau de travail du mois précédent." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! Le timing est révélateur. La fourbure apparaît quelques jours après un changement — c'est le fil d'Ariane du diagnostic. Si vous ne cherchez que l'herbe ou les concentrés, vous ratez le changement de litière qui est souvent la vraie cause.",
+    feedback_wrong: "Morphologie, race et travail sont des contextes, pas des indices directs. Le changement récent de LITIÈRE (comme tout changement environnemental d'ailleurs) dans les jours précédents est l'indice principal. C'est le timing qui trahit la cause.",
+  },
+  {
+    theme: "💧 CONTACT",
+    text: "Un propriétaire dit : « Mon cheval n'a pas mangé les copeaux, donc ce n'est pas la litière. » Est-ce un raisonnement correct ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Oui — si le cheval ne mange pas la litière, il ne peut pas être empoisonné." },
+      { letter: "B", text: "Non — le contact direct de la peau et des membres avec le bois frais contenant de la juglone peut suffire pour déclencher une réaction inflammatoire." },
+      { letter: "C", text: "Oui — seule l'ingestion cause une fourbure." },
+      { letter: "D", text: "Non — mais uniquement si le cheval a une allergie personnelle." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! C'est un piège courant. La juglone agit par CONTACT DIRECT, pas seulement par ingestion. Un cheval couché toute la nuit sur des copeaux de noyer noir subit une exposition continue de sa peau sensible. L'ingestion accélère le processus, mais n'est pas obligatoire.",
+    feedback_wrong: "Le contact direct suffit. La juglone peut traverser la barrière cutanée ou être absorbée par les muqueuses (bouche, naseaux). Ne pas manger la litière n'immunise pas contre la toxine. C'est une erreur diagnostique courante et dangereuse.",
+  },
+  {
+    theme: "📋 ENQUÊTE",
+    text: "Vous êtes appelé chez un propriétaire dont le cheval a une fourbure subite. Vous soupçonnez la litière. Quelle est votre première action professionnelle ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Examiner immédiatement les pieds et appliquer des ferrages de soutien." },
+      { letter: "B", text: "Retirer la litière suspecte et conserver un ÉCHANTILLON (avec étiquette du fournisseur si possible) pour analyse — puis appeler le vétérinaire." },
+      { letter: "C", text: "Accuser le propriétaire d'avoir mal nourri son cheval." },
+      { letter: "D", text: "Attendre les résultats du vétérinaire avant de rien faire." },
+    ],
+    correct: 1,
+    feedback_correct: "Parfait ! Retirer immédiatement la litière suspecte est la première intervention mécanique. Mais conserver un échantillon est crucial pour la traçabilité et pour aider le vétérinaire à identifier la cause toxique. C'est votre rôle de maréchal-ferrant dans cette enquête.",
+    feedback_wrong: "Retirer la litière et prélever un échantillon doit être immédiat. Les ferrages de soutien viennent après, avec l'avis du vétérinaire. Accuser le propriétaire ou attendre passivement n'aide personne. Vous êtes un maillon essentiel de la chaîne diagnostique.",
+  },
+  {
+    theme: "🔧 RÔLE DU MARÉCHAL",
+    text: "Pendant une fourbure aigüe, qu'est-ce qui est DANGEREUX pour le maréchal-ferrant de faire ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Appeler le vétérinaire avant d'intervenir sur les pieds." },
+      { letter: "B", text: "Examiner attentivement les pieds pour évaluer le gonflement et le pouls digité." },
+      { letter: "C", text: "Parer agressivement la sole ou modifier drastiquement les aplombs pendant la phase aigüe." },
+      { letter: "D", text: "Documenter l'historique et partager les observations avec le vétérinaire." },
+    ],
+    correct: 2,
+    feedback_correct: "Exactement ! Pendant une fourbure aigüe, la phase inflammatoire est en cours. Parer agressivement ou modifier les aplombs peut aggraver le processus de rotation ou de perte d'adhérence de la troisième phalange. Votre rôle est de soutenir (ferrage de soutien minimaliste si approuvé) et de surveiller, pas d'agresser les pieds.",
+    feedback_wrong: "En phase aigüe, la retenue est de mise. Les modifications agressives peuvent catastropher un pied instable. Le maréchal-ferrant doit examiner, documenter, communiquer avec le vétérinaire et soutenir mécaniquement avec douceur. C'est un travail d'équipe, pas d'intervention unilatérale.",
+  },
+  {
+    theme: "⚠️ FAUX DIAGNOSTIC",
+    text: "Beaucoup de propriétaires attribuent automatiquement une fourbure à l'herbe. Pourquoi cette hypothèse peut-elle être dangereuse dans le cas d'une litière toxique ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Parce que l'herbe est toujours la cause." },
+      { letter: "B", text: "Parce que cela détourne l'attention de la vraie cause (litière), permettant au cheval de rester exposé à la toxine pendant des jours de plus." },
+      { letter: "C", text: "Parce que l'herbe n'existe pas à La Réunion." },
+      { letter: "D", text: "Parce que le vétérinaire refusera d'intervenir si c'est l'herbe." },
+    ],
+    correct: 1,
+    feedback_correct: "Vrai ! Accuser l'herbe, c'est oublier de demander : qu'a-t-il changé d'autre ? Si on retire le cheval du pâturage mais pas de la litière toxique, le problème s'aggrave. Le cheval reste 24h/24 sur la source du problème. Le diagnostic erroné coûte des jours précieux.",
+    feedback_wrong: "Accuser automatiquement l'herbe est un reflex diagnostique, mais c'est un piège. Si la vraie cause est la litière, retirer le cheval du pâturage ne résout rien. Pire : il reste exposé à la toxine la nuit entière. Chaque jour sans changement de litière aggrave l'état.",
+  },
+  {
+    theme: "✅ SYNTHÈSE",
+    text: "Quelle phrase résume le mieux la conduite à tenir face à une fourbure brutale ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Blâmer le propriétaire pour l'alimentation et appliquer des ferrages de correction." },
+      { letter: "B", text: "Chercher systématiquement tout changement récent (litière, pâturage, traitement, effort), conserver des preuves physiques, isoler la cause toxique si elle existe, puis décider des interventions avec le vétérinaire." },
+      { letter: "C", text: "Attendre une semaine pour voir si ça s'arrange seul." },
+      { letter: "D", text: "Présumer que c'est l'herbe et cloîtrer le cheval dans un box." },
+    ],
+    correct: 1,
+    feedback_correct: "Parfait ! C'est exactement l'approche professionnelle : scepticisme structuré, collecte de preuves, élimination des causes une par une. Vous ne soignez pas la fourbure — vous trouvez la cause, la supprimez, puis vous aidez le vétérinaire et le propriétaire dans la récupération.",
+    feedback_wrong: "La fourbure est un symptôme, pas un diagnostic. Vos responsabilités : enquête rigoureuse, conservation de preuves, collaboration vétérinaire. Blâmer, attendre passivement ou supposer l'herbe sans vérification sont des impasses professionnelles et dangereuses pour le cheval.",
+  },
+];
+
+let current = 0, score = 0, answered = [], results = [];
+
+function startQuiz() {
+  document.getElementById('s-intro').classList.remove('active');
+  document.getElementById('s-quiz').classList.add('active');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const pct = Math.round((current / questions.length) * 100);
+  document.getElementById('prog-label').textContent = `Question ${current + 1} / ${questions.length}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `QUESTION ${current + 1} / ${questions.length}`;
+  document.getElementById('q-theme').textContent = q.theme;
+  document.getElementById('q-text').textContent = q.text;
+  const ctx = document.getElementById('q-context');
+  if (q.context) { ctx.textContent = '📋 ' + q.context; ctx.style.display = 'block'; }
+  else { ctx.style.display = 'none'; }
+  const wrap = document.getElementById('q-options');
+  wrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.onclick = () => selectAnswer(i);
+    div.innerHTML = `<div class="option-letter">${opt.letter}</div><div class="option-text">${opt.text}</div>`;
+    wrap.appendChild(div);
+  });
+  document.getElementById('q-feedback').className = 'feedback';
+  document.getElementById('btn-next').className = 'btn-next';
+  document.getElementById('btn-next').textContent = current === questions.length - 1 ? 'Voir mes résultats →' : 'Question suivante →';
+}
+
+function selectAnswer(i) {
+  if (answered.includes(current)) return;
+  answered.push(current);
+  const q = questions[current];
+  const isCorrect = i === q.correct;
+  if (isCorrect) score++;
+  results.push({ correct: isCorrect });
+  document.querySelectorAll('.option').forEach((el, idx) => {
+    el.classList.add('disabled');
+    if (idx === q.correct) el.classList.add('correct');
+    else if (idx === i && !isCorrect) el.classList.add('wrong');
+  });
+  const fb = document.getElementById('q-feedback');
+  document.getElementById('fb-title').textContent = isCorrect ? '✅ Bonne réponse !' : '❌ Pas tout à fait...';
+  document.getElementById('fb-text').textContent = isCorrect ? q.feedback_correct : q.feedback_wrong;
+  fb.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong') + ' show';
+  document.getElementById('btn-next').className = 'btn-next show';
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) showResult();
+  else renderQ();
+}
+
+function showResult() {
+  document.getElementById('s-quiz').classList.remove('active');
+  document.getElementById('s-result').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Terminé !';
+  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('prog-fill').style.width = '100%';
+  const card = document.getElementById('score-card');
+  let cls, emoji, label, msg;
+  if (score >= 7) {
+    cls = 'score-excellent'; emoji = '🔍'; label = 'Excellent !';
+    msg = 'Vous maîtrisez le diagnostic différentiel de la fourbure. Vous savez que le détail change tout. Ce savoir-faire peut sauver des pieds.';
+  } else if (score >= 5) {
+    cls = 'score-bien'; emoji = '👍'; label = 'Bien !';
+    msg = 'Vous avez les bases du diagnostic. Relisez attentivement les questions où vous avez hésité — en pratique, chaque erreur coûte des jours.';
+  } else {
+    cls = 'score-revoir'; emoji = '📖'; label = 'À retravailler';
+    msg = 'Le diagnostic de fourbure demande rigueur. Conservez ce quiz, relisez-le après une intervention clinique, et regardez l\'historique du cheval avec des yeux neufs.';
+  }
+  card.className = 'result-score-card ' + cls;
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-score').textContent = score + ' / ' + questions.length;
+  document.getElementById('res-label').textContent = label;
+  document.getElementById('res-msg').textContent = msg;
+  document.getElementById('recap-list').innerHTML = results.map((r, i) => `
+    <div class="recap-item">
+      <div>${r.correct ? '✅' : '❌'}</div>
+      <div class="recap-q"><strong>Q${i+1} ${questions[i].theme}</strong><br>${questions[i].text.substring(0, 65)}...</div>
+    </div>
+  `).join('');
+}
+
+function restart() {
+  current = 0; score = 0; answered = []; results = [];
+  document.getElementById('s-result').classList.remove('active');
+  document.getElementById('s-intro').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Question 0 / 8';
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('prog-fill').style.width = '0%';
+}
+</script>
+</body>
+</html>
