@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Sécurité du transport équin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+.app {
+  background: #fdfaf5;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.header {
+  background: #1c1410;
+  padding: 20px 20px 16px;
+  text-align: center;
+}
+.header-brand { color: #d97a3a; font-size: 11px; font-weight: 800; letter-spacing: 3px; margin-bottom: 5px; }
+.header-lesson { color: #c9b89a; font-size: 13px; margin-bottom: 5px; }
+.header-title { color: #f5ede0; font-size: 17px; font-weight: 800; line-height: 1.3; }
+.progress-wrap { background: #1c1410; padding: 0 20px 16px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #8a7560; margin-bottom: 6px; font-weight: 600; }
+.progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+.progress-fill { height: 100%; background: linear-gradient(to right, #d97a3a, #e9a05a); border-radius: 3px; transition: width 0.4s ease; }
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* INTRO */
+.intro { padding: 24px 20px; }
+.intro-icon { font-size: 52px; text-align: center; margin-bottom: 14px; }
+.intro-title { font-size: 20px; font-weight: 800; color: #1c1410; text-align: center; margin-bottom: 10px; line-height: 1.3; }
+.intro-context { background: #fff3e0; border: 2px solid #d97a3a; border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: 13px; color: #4a3a2a; line-height: 1.6; }
+.intro-goals { background: #fff; border: 1px solid #e8d8c0; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+.intro-goals-title { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 8px; }
+.intro-goal { font-size: 13px; color: #2a1f17; margin-bottom: 6px; display: flex; gap: 8px; line-height: 1.4; }
+.btn-start { width: 100%; padding: 15px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-start:hover { background: #c96a2a; transform: translateY(-1px); }
+
+/* QUESTION */
+.q-wrap { padding: 20px; }
+.q-num { font-size: 11px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 5px; }
+.q-theme { font-size: 11px; font-weight: 700; color: #8a7560; background: #f5ede0; display: inline-block; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+.q-text { font-size: 17px; font-weight: 700; color: #1c1410; line-height: 1.4; margin-bottom: 8px; }
+.q-context { font-size: 13px; color: #6b4a2b; font-style: italic; margin-bottom: 18px; background: #fdf4e8; border-left: 3px solid #d97a3a; padding: 10px 12px; border-radius: 0 8px 8px 0; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option {
+  background: #fff; border: 2px solid #e8d8c0; border-radius: 12px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.option:hover:not(.disabled) { border-color: #d97a3a; background: #fdf4e8; }
+.option.correct { border-color: #3a8a3a; background: #f0fff0; }
+.option.wrong { border-color: #b83030; background: #fff0f0; }
+.option.disabled { cursor: default; }
+.option-letter {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #e8d8c0; color: #6b4a2b;
+  font-size: 13px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option.correct .option-letter { background: #3a8a3a; color: white; }
+.option.wrong .option-letter { background: #b83030; color: white; }
+.option-text { font-size: 14px; font-weight: 600; color: #1c1410; flex: 1; line-height: 1.4; }
+.feedback { border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; font-size: 13px; line-height: 1.55; display: none; }
+.feedback.correct { background: #f0fff0; border: 2px solid #3a8a3a; color: #1a4a1a; }
+.feedback.wrong { background: #fff0f0; border: 2px solid #b83030; color: #4a1a1a; }
+.feedback.show { display: block; }
+.feedback-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.btn-next { width: 100%; padding: 14px; background: #1c1410; color: #f5ede0; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; }
+.btn-next.show { display: block; }
+.btn-next:hover { background: #2a1d14; }
+
+/* RÉSULTAT */
+.result-wrap { padding: 24px 20px; }
+.result-score-card { text-align: center; border-radius: 16px; padding: 28px 20px; margin-bottom: 20px; }
+.result-emoji { font-size: 56px; margin-bottom: 12px; }
+.result-score { font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.result-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.result-msg { font-size: 13px; line-height: 1.55; }
+.score-excellent { background: linear-gradient(135deg, #f0fff0, #e0ffe0); border: 3px solid #3a8a3a; }
+.score-excellent .result-score { color: #3a8a3a; }
+.score-bien { background: linear-gradient(135deg, #fff8f0, #fff0e0); border: 3px solid #d97a3a; }
+.score-bien .result-score { color: #d97a3a; }
+.score-revoir { background: linear-gradient(135deg, #fff0f0, #ffe8e8); border: 3px solid #b83030; }
+.score-revoir .result-score { color: #b83030; }
+.recap { margin-bottom: 20px; }
+.recap-title { font-size: 12px; font-weight: 800; color: #d97a3a; letter-spacing: 2px; margin-bottom: 10px; }
+.recap-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; padding: 10px 12px; background: #fff; border: 1px solid #e8d8c0; border-radius: 10px; }
+.recap-q { font-size: 12px; color: #4a3a2a; line-height: 1.4; flex: 1; }
+.urgence-box { background: #fff0f0; border: 2px solid #b83030; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.urgence-title { font-size: 13px; font-weight: 800; color: #b83030; margin-bottom: 8px; }
+.urgence-list { font-size: 13px; color: #2a1f17; line-height: 1.8; }
+.btn-restart { width: 100%; padding: 14px; background: #d97a3a; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #b8541e; transition: all 0.2s; }
+.btn-restart:hover { background: #c96a2a; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-brand">SOS MARÉCHAL-FERRANT · TRANSPORT SÉCURISÉ</div>
+    <div class="header-lesson">Année 2026 · La Réunion</div>
+    <div class="header-title">🚛 Avant d'embarquer :<br>Les vérifications essentielles</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="prog-label">Question 0 / 8</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="s-intro" class="screen active">
+    <div class="intro">
+      <div class="intro-icon">🚛🐴⚠️</div>
+      <div class="intro-title">Un plancher pourri peut coûter la vie</div>
+
+      <div class="intro-context">
+        ⚠️ Un Pur-sang a subi des blessures mortelles quand son membre postérieur a traversé le plancher d'un camion pendant le transport. Un tapis propre cachait une structure rongée par la corrosion. Cette tragédie était évitable avec les bons contrôles.
+      </div>
+
+      <div class="intro-goals">
+        <div class="intro-goals-title">CE QUE VOUS ALLEZ VÉRIFIER</div>
+        <div class="intro-goal"><span>🔍</span><span>Les trois zones critiques du plancher</span></div>
+        <div class="intro-goal"><span>🧡</span><span>Comment détecter la corrosion cachée</span></div>
+        <div class="intro-goal"><span>🔧</span><span>Vérification des fixations et de l'humidité</span></div>
+        <div class="intro-goal"><span>📋</span><span>Fréquence des contrôles recommandée</span></div>
+        <div class="intro-goal"><span>✅</span><span>Checklist avant chaque embarquement</span></div>
+      </div>
+
+      <div style="font-size:13px;color:#8a7560;margin-bottom:14px;text-align:center;">8 questions · Basé sur cas réel et recommandations de sécurité</div>
+      <button class="btn-start" onclick="startQuiz()">Commencer le quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="s-quiz" class="screen">
+    <div class="q-wrap">
+      <div class="q-num" id="q-num">QUESTION 1 / 8</div>
+      <div class="q-theme" id="q-theme"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-context" id="q-context" style="display:none"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <div class="feedback-title" id="fb-title"></div>
+        <div id="fb-text"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">Question suivante →</button>
+    </div>
+  </div>
+
+  <!-- RÉSULTAT -->
+  <div id="s-result" class="screen">
+    <div class="result-wrap">
+      <div class="result-score-card" id="score-card">
+        <div class="result-emoji" id="res-emoji"></div>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-msg" id="res-msg"></div>
+      </div>
+
+      <div class="urgence-box">
+        <div class="urgence-title">🔴 AVANT CHAQUE VOYAGE : vérifiez SANS EXCEPTION</div>
+        <div class="urgence-list">
+          • Retrait du tapis → inspection visuelle du plancher<br>
+          • Recherche active de zones molles, rouille, trous<br>
+          • Contrôle des fixations (rivets, vis, soudures)<br>
+          • État du châssis et de la structure sous le véhicule<br>
+          • Humidité excessive ou infiltrations d'eau<br>
+          • Tassement anormal du plancher<br>
+          • Odeur de pourriture ou de rouille avancée
+        </div>
+      </div>
+
+      <div class="recap">
+        <div class="recap-title">RÉCAPITULATIF DE VOS RÉPONSES</div>
+        <div id="recap-list"></div>
+      </div>
+      <button class="btn-restart" onclick="restart()">🔄 Recommencer le quiz</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    theme: "🧡 INSPECTION VISUELLE",
+    text: "Vous soulevez le tapis de votre camion de transport. Qu'est-ce qui doit absolument être vérifié en PREMIER sur la surface du plancher ?",
+    context: "C'est là que le cheval posera ses pieds — la sécurité dépend de la solidité de cette surface.",
+    options: [
+      { letter: "A", text: "La couleur et l'apparence générale." },
+      { letter: "B", text: "Les zones molles, rouges (rouille), les trous, les affaissements et les surfaces corrodées." },
+      { letter: "C", text: "Si le tapis est encore bien fixé." },
+      { letter: "D", text: "La propreté du plancher." },
+    ],
+    correct: 1,
+    feedback_correct: "Exact ! Les zones molles indiquent une pourriture structurelle. La rouille visible signale une corrosion avancée. Les trous = catastrophe garantie. Les affaissements = perte d'intégrité. C'est la première ligne de défense — ne jamais embarquer un cheval sur un plancher suspect.",
+    feedback_wrong: "La couleur seule ne dit rien. L'apparence du tapis cache la réalité. Vous devez chercher ACTIVEMENT les signes de dégradation : zones molles (pourries), rouille visible (corrosion), trous (penetration), affaissements (perte de rigidité). C'est votre inspection critique.",
+  },
+  {
+    theme: "🔍 LES TROIS ZONES",
+    text: "Par sécurité, le plancher doit être inspecté dans TROIS zones distinctes. Laquelle n'est PAS obligatoire ?",
+    context: null,
+    options: [
+      { letter: "A", text: "DESSUS : le tapis et sa surface d'appui visible du haut." },
+      { letter: "B", text: "DESSOUS : le châssis et la structure sous le véhicule (souvent la pire zone)." },
+      { letter: "C", text: "FIXATIONS : rivets, vis, soudures qui maintiennent le plancher au cadre." },
+      { letter: "D", text: "L'intérieur des parois latérales du camion." },
+    ],
+    correct: 3,
+    feedback_correct: "Correct ! Dessus, dessous, fixations — ces trois zones sont ESSENTIELLES. Les parois latérales, c'est secondaire. Mais beaucoup de gens oublient le DESSOUS — c'est là qu'on trouve souvent la rouille majeure et la corrosion cachée. Un tapis propre dessus masque une catastrophe en dessous.",
+    feedback_wrong: "Dessus, dessous et fixations sont les TROIS ZONES CRITIQUES. Ne pas inspecter le dessous est une erreur mortelle — c'est là que l'eau s'accumule, que la rouille progresse, que les rivets se desserrent. Le tapis cache tout. Vous DEVEZ voir la structure du châssis.",
+  },
+  {
+    theme: "⚡ CORROSION CACHÉE",
+    text: "Comment la corrosion progresse-t-elle généralement dans un plancher de camion sans inspection régulière ?",
+    context: null,
+    options: [
+      { letter: "A", text: "De l'intérieur vers l'extérieur — elle reste longtemps invisible de l'extérieur avant de percer." },
+      { letter: "B", text: "De manière uniforme — le plancher s'use partout à la même vitesse." },
+      { letter: "C", text: "Uniquement aux soudures." },
+      { letter: "D", text: "La corrosion n'a aucun impact sur la solidité du plancher." },
+    ],
+    correct: 0,
+    feedback_correct: "Exact ! La rouille se développe SOUS la surface. L'eau s'accumule entre le tapis et le métal. Vous ne voyez rien dessus, mais dessous le métal s'amincit, se perfore progressivement. Quand le trou apparaît, c'est souvent trop tard. C'est pourquoi l'inspection DESSOUS est critique.",
+    feedback_wrong: "La corrosion est insidieuse — elle progresse sous la surface invisible. L'eau qui s'accumule bajo el tapis ronge le métal de l'intérieur. Le dessus peut paraître bon pendant que le dessous se transforme en passoire. D'où l'importance de soulever le tapis régulièrement.",
+  },
+  {
+    theme: "🔧 FIXATIONS",
+    text: "Vous inspectez les rivets et soudures qui maintiennent le plancher au cadre du camion. Quel signe est DANGEREUX ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Un rivet légèrement terni par l'oxydation." },
+      { letter: "B", text: "Des rivets manquants, desserrés ou des soudures fissurées — la structure n'est pas rigide." },
+      { letter: "C", text: "Des rivets qui brillent un peu." },
+      { letter: "D", text: "Les fixations n'ont aucune importance pour la sécurité." },
+    ],
+    correct: 1,
+    feedback_correct: "Parfait ! Rivets manquants = le plancher peut se déformer. Soudures fissurées = risque de rupture. Rivets desserrés = le mouvement du camion aggrave les dégâts. La structure doit être RIGIDE. Un seul point faible et le plancher peut céder sous le poids du cheval.",
+    feedback_wrong: "Les fixations SONT la structure. Sans elles, le plancher flotte. Un cheval qui bouge dans un camion en route crée des forces dynamiques énormes. Des rivets manquants ou des soudures cassées = catastrophe. C'est une inspection non-négociable.",
+  },
+  {
+    theme: "💧 HUMIDITÉ",
+    text: "Vous trouvez de l'humidité, des infiltrations d'eau ou une odeur de moisi sous le tapis. Est-ce grave ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Non, c'est normal après une pluie." },
+      { letter: "B", text: "Oui — l'humidité piégée accélère la rouille et l'amincissement du métal. C'est un signe d'alerte pour un plancher qui se dégrade activement." },
+      { letter: "C", text: "Seulement si l'eau est stagnante." },
+      { letter: "D", text: "C'est juste un problème de confort, pas de sécurité." },
+    ],
+    correct: 1,
+    feedback_correct: "Vrai ! L'humidité est le MOTEUR de la corrosion. Si le plancher reste mouillé, la rouille accélère exponentiellement. Une odeur de moisi = décomposition active du métal. C'est un drapeau rouge : ne pas embarquer tant que le problème n'est pas résolu.",
+    feedback_wrong: "L'humidité n'est pas anodine. C'est le catalyseur de la rouille. Un plancher mouillé après une pluie doit être asséché. Si l'eau revient malgré l'asséchage, c'est une infiltration — la structure est compromise. Cela empire avec le temps.",
+  },
+  {
+    theme: "📋 FRÉQUENCE",
+    text: "À quelle fréquence minimale doit-on inspecter complètement le plancher d'un camion de transport ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Une fois par an, c'est suffisant." },
+      { letter: "B", text: "Avant CHAQUE voyage, au minimum. Plus souvent en climat humide ou si le camion est utilisé quotidiennement." },
+      { letter: "C", text: "Seulement si le cheval montre des signes de stress." },
+      { letter: "D", text: "Quand on remarque des problèmes évidents." },
+    ],
+    correct: 1,
+    feedback_correct: "Exactement ! Avant CHAQUE voyage. À La Réunion, l'humidité constante accélère la corrosion. Un camion utilisé régulièrement se dégrade rapidement. Une inspection annuelle est insuffisante — vous rateriez les problèmes émergents. Avant de charger, vous regardez.",
+    feedback_wrong: "Une fois par an = trop tard. La corrosion peut progresser en quelques semaines en climat humide. Attendre que le problème soit visible risque la catastrophe. Chaque voyage = inspection. C'est la norme professionnelle et c'est ce que votre assurance attend.",
+  },
+  {
+    theme: "✋ CAS LIMITE",
+    text: "Vous trouvez une zone du plancher légèrement molle mais pas de trou visible. Vous avez une course importante prévu dans 1 heure. Que faire ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Embarquer quand même — c'est juste une petite zone molle." },
+      { letter: "B", text: "ANNULER LE VOYAGE. Une zone molle = la structure est déjà compromise. Le poids du cheval en mouvement peut l'aggraver jusqu'à la perforation pendant le trajet." },
+      { letter: "C", text: "Mettre plus de tapis pour renforcer." },
+      { letter: "D", text: "Attendre et voir si ça s'améliore." },
+    ],
+    correct: 1,
+    feedback_correct: "Absolument. Une zone molle EST DÉJÀ UN TROU POTENTIEL. Vous ne voyez pas encore le trou, mais le métal est en cours de destruction. Embarquer risque une catastrophe : le pied du cheval peut passer à travers le plancher. Pas de compromis — pas de voyage.",
+    feedback_wrong: "C'est un piège professionnel courant. On pense « c'est juste une petite zone, ça va faire ». NON. Une zone molle = le métal s'amincit activement. Le poids et le mouvement du cheval vont créer la rupture. Annuler une course est dur, mais vivant le cheval aussi.",
+  },
+  {
+    theme: "🐴 POSTURE",
+    text: "Pendant le transport, le cheval trébuche ou change de posture anormalement. Parmi ces hypothèses, laquelle pourrait être liée à un problème de plancher ?",
+    context: null,
+    options: [
+      { letter: "A", text: "Le cheval a juste peur du camion." },
+      { letter: "B", text: "Un pied s'est enfonçé ou accroche dans une zone du plancher — sensation de vide, perte de stabilité, risque de chute." },
+      { letter: "C", text: "Le cheval est fatigué." },
+      { letter: "D", text: "Ça n'a aucun rapport avec le plancher." },
+    ],
+    correct: 1,
+    feedback_correct: "Oui. Un changement anormal de posture pendant le transport peut signaler qu'un pied accroche ou s'enfonce. Si vous entendiez un bruit sec, une perforation du plancher vient de se produire. C'est une alerte — arrêtez dès que possible et inspectez immédiatement.",
+    feedback_wrong: "Ne pas relier un comportement anormal du cheval à l'état du camion est une erreur. Un cheval qui trébuche ou change de posture de façon inattendue signale souvent une gêne physique — pied qui accroche, surface instable. Écoutez ce qu'il dit.",
+  },
+  {
+    theme: "✅ SYNTHÈSE",
+    text: "Résumez en une phrase votre checklist avant d'embarquer un cheval dans un camion de transport.",
+    context: null,
+    options: [
+      { letter: "A", text: "Vérifier que le cheval monte facilement." },
+      { letter: "B", text: "Soulever le tapis, inspecter le dessus et le dessous du plancher (corrosion, trous, zones molles), vérifier les fixations, s'assurer qu'il n'y a pas d'humidité ou d'infiltrations — puis et seulement PUIS embarquer." },
+      { letter: "C", text: "Faire confiance à l'apparence générale du camion." },
+      { letter: "D", text: "Une inspection visuelle rapide suffit." },
+    ],
+    correct: 1,
+    feedback_correct: "Parfait ! C'est LA checklist complète. Pas de raccourcis, pas de confiance basée sur l'apparence. Vous regardez, vous touchez, vous cherchez les zones molles. Et SEULEMENT si tout est bon, vous embarquez. Chaque cheval mérite cette diligence.",
+    feedback_wrong: "La vraie checklist : soulever le tapis, inspecter dessus ET dessous, chercher la corrosion, les trous, les zones molles, vérifier les fixations, contrôler l'humidité. Une inspection rapide est une fausse économie. Cela peut coûter la vie.",
+  },
+];
+
+let current = 0, score = 0, answered = [], results = [];
+
+function startQuiz() {
+  document.getElementById('s-intro').classList.remove('active');
+  document.getElementById('s-quiz').classList.add('active');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const pct = Math.round((current / questions.length) * 100);
+  document.getElementById('prog-label').textContent = `Question ${current + 1} / ${questions.length}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `QUESTION ${current + 1} / ${questions.length}`;
+  document.getElementById('q-theme').textContent = q.theme;
+  document.getElementById('q-text').textContent = q.text;
+  const ctx = document.getElementById('q-context');
+  if (q.context) { ctx.textContent = '📋 ' + q.context; ctx.style.display = 'block'; }
+  else { ctx.style.display = 'none'; }
+  const wrap = document.getElementById('q-options');
+  wrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.onclick = () => selectAnswer(i);
+    div.innerHTML = `<div class="option-letter">${opt.letter}</div><div class="option-text">${opt.text}</div>`;
+    wrap.appendChild(div);
+  });
+  document.getElementById('q-feedback').className = 'feedback';
+  document.getElementById('btn-next').className = 'btn-next';
+  document.getElementById('btn-next').textContent = current === questions.length - 1 ? 'Voir mes résultats →' : 'Question suivante →';
+}
+
+function selectAnswer(i) {
+  if (answered.includes(current)) return;
+  answered.push(current);
+  const q = questions[current];
+  const isCorrect = i === q.correct;
+  if (isCorrect) score++;
+  results.push({ correct: isCorrect });
+  document.querySelectorAll('.option').forEach((el, idx) => {
+    el.classList.add('disabled');
+    if (idx === q.correct) el.classList.add('correct');
+    else if (idx === i && !isCorrect) el.classList.add('wrong');
+  });
+  const fb = document.getElementById('q-feedback');
+  document.getElementById('fb-title').textContent = isCorrect ? '✅ Bonne réponse !' : '❌ Pas tout à fait...';
+  document.getElementById('fb-text').textContent = isCorrect ? q.feedback_correct : q.feedback_wrong;
+  fb.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong') + ' show';
+  document.getElementById('btn-next').className = 'btn-next show';
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) showResult();
+  else renderQ();
+}
+
+function showResult() {
+  document.getElementById('s-quiz').classList.remove('active');
+  document.getElementById('s-result').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Terminé !';
+  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('prog-fill').style.width = '100%';
+  const card = document.getElementById('score-card');
+  let cls, emoji, label, msg;
+  if (score >= 7) {
+    cls = 'score-excellent'; emoji = '✅'; label = 'Excellent !';
+    msg = 'Vous êtes devenu un expert de la sécurité du transport. Vous savez que chaque détail compte. Votre diligence peut sauver une vie.';
+  } else if (score >= 5) {
+    cls = 'score-bien'; emoji = '👍'; label = 'Bien !';
+    msg = 'Vous avez les bases de la sécurité. Approfondissez vos connaissances sur les zones molles et la corrosion cachée — c\'est là que les accidents arrivent.';
+  } else {
+    cls = 'score-revoir'; emoji = '📖'; label = 'À retravailler';
+    msg = 'La sécurité du transport n\'est pas une option. Relisez ce quiz attentivement, puis pratiquez une inspection réelle. La vie de vos chevaux en dépend.';
+  }
+  card.className = 'result-score-card ' + cls;
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-score').textContent = score + ' / ' + questions.length;
+  document.getElementById('res-label').textContent = label;
+  document.getElementById('res-msg').textContent = msg;
+  document.getElementById('recap-list').innerHTML = results.map((r, i) => `
+    <div class="recap-item">
+      <div>${r.correct ? '✅' : '❌'}</div>
+      <div class="recap-q"><strong>Q${i+1} ${questions[i].theme}</strong><br>${questions[i].text.substring(0, 65)}...</div>
+    </div>
+  `).join('');
+}
+
+function restart() {
+  current = 0; score = 0; answered = []; results = [];
+  document.getElementById('s-result').classList.remove('active');
+  document.getElementById('s-intro').classList.add('active');
+  document.getElementById('prog-label').textContent = 'Question 0 / 8';
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('prog-fill').style.width = '0%';
+}
+</script>
+</body>
+</html>
