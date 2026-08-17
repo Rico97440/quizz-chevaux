@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz EquiCare — Cheval Senior : Nutrition & Observation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4E78 0%, #0d2a4a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 8px;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #FFB84D 0%, #FF9F1C 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: #1F4E78;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #1F4E78;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #1F4E78;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .option.correct {
+            border-color: #70AD47;
+            background: #f0f8f0;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: #fff5f5;
+        }
+
+        .option.selected {
+            border-color: #1F4E78;
+            background: #e8f0f8;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-prev:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 78, 120, 0.3);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .results-screen.show {
+            display: block;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            font-weight: 700;
+            box-shadow: 0 15px 40px rgba(31, 78, 120, 0.3);
+        }
+
+        .score-message {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F4E78;
+            margin-bottom: 15px;
+        }
+
+        .score-details {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            color: #666;
+        }
+
+        .score-details p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE6CC 100%);
+            border-left: 4px solid #FFB84D;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .recommendation h3 {
+            color: #FF9F1C;
+            margin-bottom: 10px;
+        }
+
+        .recommendation p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 15px 40px;
+            margin-top: 30px;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 78, 120, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .quiz-container {
+            display: block;
+        }
+
+        .quiz-container.hidden {
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .btn, .buttons {
+                display: none;
+            }
+        }
+
+        .module-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- EN-TÊTE -->
+    <div class="header">
+        <h1>🐴 EquiCare — Quiz Senior</h1>
+        <p>Cheval Senior : Nutrition & Observation</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="content">
+        <div class="quiz-container" id="quizContainer">
+            <div class="question-container" id="questionContainer"></div>
+            <div class="buttons">
+                <button class="btn btn-prev" id="btnPrev" onclick="previousQuestion()">← Précédent</button>
+                <button class="btn btn-next" id="btnNext" onclick="nextQuestion()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- RÉSULTATS -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="score-circle" id="scoreCircle">0%</div>
+            <div class="score-message" id="scoreMessage">Excellent travail !</div>
+            
+            <div class="score-details">
+                <p><strong id="scoreText">0 / 20 bonnes réponses</strong></p>
+                <p id="scoreInterpretation">Vous maîtrisez bien les concepts clés</p>
+            </div>
+
+            <div class="recommendation" id="recommendation">
+                <h3>📚 Recommandation</h3>
+                <p id="recommendationText">Continuez vos apprentissages sur EquiCare !</p>
+            </div>
+
+            <button class="btn btn-restart" onclick="restartQuiz()">🔄 Recommencer le quiz</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        module: "Module 1",
+        question: "À quel âge débute généralement le vieillissement nutritionnel perceptible chez le cheval ?",
+        options: [
+            "Entre 8-10 ans",
+            "Entre 15-20 ans",
+            "Après 25 ans",
+            "Immédiatement à la naissance"
+        ],
+        correct: 1,
+        explanation: "Selon IFCE, les premiers changements détectables surviennent entre 15-20 ans, bien que la sévérité varie individuellement."
+    },
+    {
+        module: "Module 1",
+        question: "Vrai ou Faux : Un cheval de 16 ans qui maintient condition corporelle et mastication sans modification n'est pas nécessairement un senior nutritionnel.",
+        options: [
+            "Vrai",
+            "Faux"
+        ],
+        correct: 0,
+        explanation: "Exact. L'âge chronologique ≠ senior nutritionnel. Un diagnostic précis est nécessaire."
+    },
+    {
+        module: "Module 1",
+        question: "Quel indicateur clé révèle une possible malabsorption progressive chez un senior ?",
+        options: [
+            "Augmentation temps mastication (>35 min/2kg foin)",
+            "Crottin mou fréquent ou pâteux",
+            "Boiterie légère symétrique",
+            "Changement couleur crinière"
+        ],
+        correct: 1,
+        explanation: "Augmentation fréquence crottin mou = malabsorption progressive probable. À investiguer vétérinaire."
+    },
+    {
+        module: "Module 2",
+        question: "Vous remarquez perte de poids chez votre cheval senior malgré ration stable. Quel diagnostic investiguer EN PREMIER ?",
+        options: [
+            "Parasitisme intestinal",
+            "Examen dentaire vétérinaire",
+            "Modification radicale alimentation",
+            "Augmenter énergie fourrage"
+        ],
+        correct: 1,
+        explanation: "Examen dentaire = 45-50% des causes perte poids senior. OBLIGATOIRE avant modifier nutrition."
+    },
+    {
+        module: "Module 2",
+        question: "Votre cheval est 'fatigué' au travail. Quel signal différencierait surcharge travail de sous-nutrition ?",
+        options: [
+            "Énergie faible au repos",
+            "Récupération très rapide après repos",
+            "Perte musculature progressive",
+            "Poil terne généralisé"
+        ],
+        correct: 1,
+        explanation: "Récupération rapide = surcharge travail probable. Sous-nutrition = récupération lente même au repos."
+    },
+    {
+        module: "Module 2",
+        question: "Poil terne senior : ordre de probabilité diagnostic ?",
+        options: [
+            "Défaut minéral (Zn, Cu) > qualité foin > parasitisme",
+            "Parasitisme > malabsorption > âge",
+            "Qualité foin > aliment senior générique",
+            "Toujours défaut protéique"
+        ],
+        correct: 0,
+        explanation: "Défaut minéral 40-50%, qualité foin 20-25%, parasitisme 15-20%. Tester CMV AVANT aliment senior."
+    },
+    {
+        module: "Module 3",
+        question: "Formule INRA : besoin entretien cheval 500kg au repos = ?",
+        options: [
+            "3 UF/jour",
+            "4.5 UF/jour",
+            "6 UF/jour",
+            "7.5 UF/jour"
+        ],
+        correct: 1,
+        explanation: "Besoin entretien 500kg = 4.5 UF/jour selon INRA 2011. Référence officielle."
+    },
+    {
+        module: "Module 3",
+        question: "Ratio Ca/P optimal selon IFCE ?",
+        options: [
+            "1:1",
+            "2:1",
+            "1.5-2:1",
+            "3:1"
+        ],
+        correct: 2,
+        explanation: "Ca/P = 1.5-2:1 officiel IFCE. Excès Ca bloque Zn et Cu. Critique chez senior."
+    },
+    {
+        module: "Module 3",
+        question: "Cheval senior 20 ans, perte légère musculature. Besoin protéine (% MS) ?",
+        options: [
+            "8-8.5%",
+            "10-11% avec digestibilité prioritaire",
+            "14-15%",
+            "Sans importance, énergie suffit"
+        ],
+        correct: 1,
+        explanation: "Senior perte muscle = 10-11% protéine BUT priorité qualité (lysine, méthionine) > quantité brute."
+    },
+    {
+        module: "Module 3",
+        question: "Vrai/Faux : Tous les seniors ont besoin d'augmenter leur ration énergétique de 5%",
+        options: [
+            "Vrai",
+            "Faux"
+        ],
+        correct: 1,
+        explanation: "FAUX. Besoins varient individuellement selon historique. Ajustement basé condition corporelle réelle, pas coefficient automatique."
+    },
+    {
+        module: "Module 4",
+        question: "Durée minimale suivi carnet EquiCare pour résultats fiables ?",
+        options: [
+            "1 mois",
+            "3 mois",
+            "6 mois",
+            "12 mois"
+        ],
+        correct: 2,
+        explanation: "6 mois = 2-3 cycles complets. Changements nutritionnels nécessitent 8-12 semaines visibilité."
+    },
+    {
+        module: "Module 4",
+        question: "À quelle fréquence remplir le journal d'observation (mastication, crottin, comportement) ?",
+        options: [
+            "Quotidiennement",
+            "2x/semaine minimum",
+            "1x/mois",
+            "Seulement si changement remarqué"
+        ],
+        correct: 1,
+        explanation: "2x/semaine = équilibre données + praticité (3 min). Suffisant déterminer tendances."
+    },
+    {
+        module: "Module 5",
+        question: "Délai réponse biotie supplémentation (100-200 mg/jour) sur qualité corne ?",
+        options: [
+            "2-4 semaines",
+            "2-3 mois",
+            "9-12 mois",
+            "Résultat immédiat"
+        ],
+        correct: 2,
+        explanation: "Corne pousse lentement. Biotie = 9-12 mois minimum réponse. Patience requise."
+    },
+    {
+        module: "Module 5",
+        question: "Minéral CRITIQUE pour synthèse kératine (corne/sabots) ?",
+        options: [
+            "Magnésium",
+            "Zinc",
+            "Sélénium",
+            "Sodium"
+        ],
+        correct: 1,
+        explanation: "Zinc = synthèse kératine. Déficit = corne friable, onglons cassants. 300-500 mg/jour."
+    },
+    {
+        module: "Module 5",
+        question: "Quel signal indique défaut minéral CERTAIN vs usure naturelle pieds senior ?",
+        options: [
+            "Sole mince mais pas sensible",
+            "Corne très friable + cicatrisation lente parage + pieds sensibles",
+            "Usure asymétrique",
+            "Longueur onglons variable"
+        ],
+        correct: 1,
+        explanation: "Minéral-déficitaire = friabilité + sensibilité + cicatrisation lente. Pure usure = mécanique."
+    },
+    {
+        module: "Module 5",
+        question: "Conformité légale FRANCE : qui peut effectuer ferrure/parage pieds nus senior ?",
+        options: [
+            "Tout propriétaire qualifié",
+            "Seul vétérinaire équin",
+            "Maréchal-ferrant qualifié (enregistré métiers)",
+            "Éleveur expérimenté"
+        ],
+        correct: 2,
+        explanation: "Code rural L243-3 : ferrure/parage = compétence exclusive maréchal-ferrant qualifié. Cour de cassation 2025."
+    },
+    {
+        module: "Formation globale",
+        question: "Principal danger diagnostic senior : acheter aliment 'senior' générique sans ?",
+        options: [
+            "Consulter vétérinaire",
+            "Diagnostic précis du changement réel",
+            "Tester 2 mois avant ajustement",
+            "Demander avis propriétaire voisin"
+        ],
+        correct: 1,
+        explanation: "Piège courant : acheter aliment senior sans diagnostic. Cheval continue maigrir = problème mécanique ignoré."
+    },
+    {
+        module: "Formation globale",
+        question: "Quelle est la approche fondamentale EquiCare Senior ?",
+        options: [
+            "Systématiser nutrition senior standardisée",
+            "Diagnostiquer précisément AVANT modifier, observer objectivement 6 mois, ajuster individuellement",
+            "Appliquer solutions vétérinaire sans modification propriétaire",
+            "Tester aliments jusqu'à trouver le bon"
+        ],
+        correct: 1,
+        explanation: "EquiCare = diagnostic rigoureux > observation objective > ajustement individualisé. Pas de solution one-size-fits-all."
+    }
+];
+
+let currentQuestion = 0;
+let answers = new Array(questions.length).fill(null);
+let answered = new Array(questions.length).fill(false);
+
+function renderQuestion() {
+    const q = questions[currentQuestion];
+    const container = document.getElementById('questionContainer');
+    
+    const html = `
+        <div class="module-badge">${q.module}</div>
+        <div class="question-text">${q.question}</div>
+        <div class="options" id="optionsContainer">
+            ${q.options.map((option, idx) => `
+                <div class="option">
+                    <input type="radio" name="answer" id="opt_${idx}" value="${idx}" 
+                        ${answers[currentQuestion] === idx ? 'checked' : ''}
+                        onchange="selectAnswer(${idx})">
+                    <label for="opt_${idx}">${option}</label>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    updateProgressBar();
+    updateButtons();
+}
+
+function selectAnswer(idx) {
+    answers[currentQuestion] = idx;
+    answered[currentQuestion] = true;
+    updateButtons();
+}
+
+function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+        window.scrollTo(0, 0);
+    } else {
+        showResults();
+    }
+}
+
+function previousQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+        window.scrollTo(0, 0);
+    }
+}
+
+function updateButtons() {
+    document.getElementById('btnPrev').disabled = currentQuestion === 0;
+    document.getElementById('btnNext').innerHTML = currentQuestion === questions.length - 1 ? '✅ Voir résultats' : 'Suivant →';
+    document.getElementById('btnNext').disabled = answers[currentQuestion] === null;
+}
+
+function updateProgressBar() {
+    const progress = ((currentQuestion + 1) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+}
+
+function showResults() {
+    const score = answers.filter((ans, idx) => ans === questions[idx].correct).length;
+    const percentage = Math.round((score / questions.length) * 100);
+    
+    let message, interpretation, recommendation;
+    
+    if (percentage >= 90) {
+        message = "🏆 Excellent ! Maîtrise complète !";
+        interpretation = `${score}/${questions.length} bonnes réponses — Vous êtes prêt(e) à appliquer la formation sur terrain.`;
+        recommendation = "Vous pouvez maintenant créer des carnets EquiCare et suivre vos chevaux seniors avec confiance. Envisagez les formations complémentaires : Nutrition Senior, Prévention Sabots.";
+    } else if (percentage >= 75) {
+        message = "✅ Très bien ! Bonne compréhension";
+        interpretation = `${score}/${questions.length} bonnes réponses — Concepts solides, quelques points à clarifier.`;
+        recommendation = "Relisez rapidement les modules où vous avez hésité. Vous êtes prêt(e) pour débuter le suivi carnet EquiCare.";
+    } else if (percentage >= 60) {
+        message = "👍 Correct ! Progression encourageante";
+        interpretation = `${score}/${questions.length} bonnes réponses — Bases présentes, consolidation recommandée.`;
+        recommendation = "Revoyez les modules 2 et 3 (diagnostic et ration). Relisez avant de créer carnet. Utilisez la formation comme référence.";
+    } else {
+        message = "📚 À améliorer — Relire la formation";
+        interpretation = `${score}/${questions.length} bonnes réponses — Il y a des zones à clarifier.`;
+        recommendation = "Lisez attentivement les modules 1-3. Posez questions sur les concepts clés. Refaites quiz après révision.";
+    }
+    
+    document.getElementById('quizContainer').classList.add('hidden');
+    document.getElementById('resultsScreen').classList.add('show');
+    document.getElementById('scoreCircle').innerHTML = percentage + '%';
+    document.getElementById('scoreMessage').innerHTML = message;
+    document.getElementById('scoreText').innerHTML = `${score} / ${questions.length} bonnes réponses`;
+    document.getElementById('scoreInterpretation').innerHTML = interpretation;
+    document.getElementById('recommendationText').innerHTML = recommendation;
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    answers = new Array(questions.length).fill(null);
+    answered = new Array(questions.length).fill(false);
+    document.getElementById('quizContainer').classList.remove('hidden');
+    document.getElementById('resultsScreen').classList.remove('show');
+    renderQuestion();
+    window.scrollTo(0, 0);
+}
+
+// Initialiser
+renderQuestion();
+</script>
+
+</body>
+</html>
