@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Module 1 — EquiCare Senior</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4E78 0%, #0d2a4a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 8px;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #FFB84D 0%, #FF9F1C 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: #1F4E78;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #1F4E78;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #1F4E78;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .option.correct {
+            border-color: #70AD47;
+            background: #f0f8f0;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: #fff5f5;
+        }
+
+        .option.selected {
+            border-color: #1F4E78;
+            background: #e8f0f8;
+        }
+
+        .explanation {
+            background: #f0f8ff;
+            border-left: 4px solid #1F4E78;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-prev:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 78, 120, 0.3);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .results-screen.show {
+            display: block;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            font-weight: 700;
+            box-shadow: 0 15px 40px rgba(31, 78, 120, 0.3);
+        }
+
+        .score-message {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F4E78;
+            margin-bottom: 15px;
+        }
+
+        .score-details {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            color: #666;
+        }
+
+        .score-details p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE6CC 100%);
+            border-left: 4px solid #FFB84D;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .recommendation h3 {
+            color: #FF9F1C;
+            margin-bottom: 10px;
+        }
+
+        .recommendation p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 15px 40px;
+            margin-top: 30px;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 78, 120, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .quiz-container {
+            display: block;
+        }
+
+        .quiz-container.hidden {
+            display: none;
+        }
+
+        .module-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .btn, .buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- EN-TÊTE -->
+    <div class="header">
+        <h1>📚 Quiz Module 1</h1>
+        <p>Mon cheval est-il réellement devenu un senior nutritionnel ?</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="content">
+        <div class="quiz-container" id="quizContainer">
+            <div class="question-container" id="questionContainer"></div>
+            <div class="buttons">
+                <button class="btn btn-prev" id="btnPrev" onclick="previousQuestion()">← Précédent</button>
+                <button class="btn btn-next" id="btnNext" onclick="nextQuestion()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- RÉSULTATS -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="score-circle" id="scoreCircle">0%</div>
+            <div class="score-message" id="scoreMessage">Excellent travail !</div>
+            
+            <div class="score-details">
+                <p><strong id="scoreText">0 / 10 bonnes réponses</strong></p>
+                <p id="scoreInterpretation">Vous comprenez bien les bases du diagnostic senior.</p>
+            </div>
+
+            <div class="recommendation" id="recommendation">
+                <h3>📚 Recommandation</h3>
+                <p id="recommendationText">Continuez avec le Module 2 !</p>
+            </div>
+
+            <button class="btn btn-restart" onclick="restartQuiz()">🔄 Recommencer le quiz</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        module: "Module 1",
+        question: "Vrai ou Faux : Un cheval de 15 ans doit automatiquement recevoir un aliment « senior »",
+        options: [
+            "Vrai",
+            "Faux"
+        ],
+        correct: 1,
+        explanation: "Faux. L'âge seul ne justifie pas une modification. Il faut d'abord diagnostiquer les changements réels."
+    },
+    {
+        module: "Module 1",
+        question: "Quel est le bon réflexe en remarquant des changements chez un cheval vieillissant ?",
+        options: [
+            "Acheter immédiatement un aliment senior",
+            "Demander au vétérinaire s'il faut augmenter les rations",
+            "Observer précisément : « Qu'est-ce qui a réellement changé ? »",
+            "Attendre et voir si ça s'améliore tout seul"
+        ],
+        correct: 2,
+        explanation: "Le bon réflexe est l'observation objective. Diagnostiquer avant de modifier."
+    },
+    {
+        module: "Module 1",
+        question: "Qu'est-ce que la NEC (Note d'État Corporel) mesure ?",
+        options: [
+            "La hauteur du cheval",
+            "Les réserves graisseuses par observation et palpation",
+            "La vitesse de mastication",
+            "La qualité du poil"
+        ],
+        correct: 1,
+        explanation: "La NEC évalue les réserves graisseuses. La grille IFCE va de 0 à 5."
+    },
+    {
+        module: "Module 1",
+        question: "La NEC et la musculature doivent être observées séparément. Pourquoi ?",
+        options: [
+            "Parce que c'est trop difficile à combiner",
+            "Parce qu'un cheval peut avoir du gras mais peu de muscle, ou vice versa",
+            "Parce que le vétérinaire demande toujours les deux",
+            "Aucune bonne raison, c'est juste une habitude"
+        ],
+        correct: 1,
+        explanation: "Un cheval peut conserver réserves graisseuses mais perdre muscle. Observation séparée = diagnostic plus précis."
+    },
+    {
+        module: "Module 1",
+        question: "Quand mesurer le PT (Périmètre Thoracique), où le ruban doit-il être positionné ?",
+        options: [
+            "Derrière le coude, au passage de sangle, verticalement",
+            "Au-dessus de l'épaule",
+            "Au-dessus de la hanche",
+            "Partout, du moment qu'on enroule le cheval"
+        ],
+        correct: 0,
+        explanation: "PT = à la verticale du passage de sangle (derrière le coude), au point le plus volumineux."
+    },
+    {
+        module: "Module 1",
+        question: "Formule INRA pour estimer poids à partir PT et HG = ?",
+        options: [
+            "Poids = PT × HG",
+            "Poids = [PT² × HG] ÷ 11880",
+            "Poids = PT + HG",
+            "Poids = PT ÷ HG"
+        ],
+        correct: 1,
+        explanation: "Formule officielle INRA : Poids (kg) = [PT² × HG] ÷ 11880. PT et HG en cm."
+    },
+    {
+        module: "Module 1",
+        question: "Quel signal pendant les repas doit alerter le propriétaire sur possible problème dentaire ?",
+        options: [
+            "Cheval mange trop vite",
+            "Repas plus long qu'avant + boulettes rejetées + foin laissé",
+            "Cheval boit trop d'eau",
+            "Cheval refuse l'eau"
+        ],
+        correct: 1,
+        explanation: "Allongement temps repas, rejet boulettes, foin laissé = problème dentaire probable. Examen vétérinaire prioritaire."
+    },
+    {
+        module: "Module 1",
+        question: "Vrai ou Faux : Si une ration semble suffisante sur le papier, le cheval la consomme toujours entièrement",
+        options: [
+            "Vrai",
+            "Faux"
+        ],
+        correct: 1,
+        explanation: "Faux. Le cheval peut trier, gaspiller, être repoussé. Consommé réel ≠ distribué."
+    },
+    {
+        module: "Module 1",
+        question: "Avant d'envisager toute modification alimentaire, que doit-on établir au minimum ?",
+        options: [
+            "Juste la NEC et quelques observations",
+            "Un point de départ précis : photos, NEC, poids, observations, ration réelle, historique dentaire",
+            "Consulter 3 aliments différents",
+            "Attendre 3 mois pour voir la tendance"
+        ],
+        correct: 1,
+        explanation: "Bilan « Jour zéro » = photos, NEC, poids, observations détaillées, ration réelle. Essentiel pour suivi rigoureux."
+    },
+    {
+        module: "Module 1",
+        question: "Cette formation remplace-t-elle l'avis d'un vétérinaire en cas de changement inquiétant ?",
+        options: [
+            "Oui, elle est complète",
+            "Partiellement, c'est un complément",
+            "Non, elle aide à l'observation mais ne remplace pas le professionnel",
+            "Absolument pas, consultez toujours un vétérinaire"
+        ],
+        correct: 2,
+        explanation: "Cette formation apprend à observer et communiquer avec pros. Elle ne remplace pas vétérinaire, dentiste ou nutritionniste."
+    }
+];
+
+let currentQuestion = 0;
+let answers = new Array(questions.length).fill(null);
+
+function renderQuestion() {
+    const q = questions[currentQuestion];
+    const container = document.getElementById('questionContainer');
+    
+    const html = `
+        <div class="module-badge">${q.module}</div>
+        <div class="question-number">Question ${currentQuestion + 1} / ${questions.length}</div>
+        <div class="question-text">${q.question}</div>
+        <div class="options" id="optionsContainer">
+            ${q.options.map((option, idx) => `
+                <div class="option" id="option-${idx}">
+                    <input type="radio" name="answer" id="opt_${idx}" value="${idx}" 
+                        ${answers[currentQuestion] === idx ? 'checked' : ''}
+                        onchange="selectAnswer(${idx})">
+                    <label for="opt_${idx}">${option}</label>
+                </div>
+                <div class="explanation" id="explanation-${idx}">
+                    💡 ${q.explanation}
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    updateProgressBar();
+    updateButtons();
+    
+    // Afficher explication si réponse sélectionnée
+    if (answers[currentQuestion] !== null) {
+        document.getElementById(`explanation-${answers[currentQuestion]}`).classList.add('show');
+    }
+}
+
+function selectAnswer(idx) {
+    answers[currentQuestion] = idx;
+    updateButtons();
+    // Afficher l'explication
+    document.getElementById(`explanation-${idx}`).classList.add('show');
+}
+
+function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+        window.scrollTo(0, 0);
+    } else {
+        showResults();
+    }
+}
+
+function previousQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+        window.scrollTo(0, 0);
+    }
+}
+
+function updateButtons() {
+    document.getElementById('btnPrev').disabled = currentQuestion === 0;
+    document.getElementById('btnNext').innerHTML = currentQuestion === questions.length - 1 ? '✅ Voir résultats' : 'Suivant →';
+    document.getElementById('btnNext').disabled = answers[currentQuestion] === null;
+}
+
+function updateProgressBar() {
+    const progress = ((currentQuestion + 1) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+}
+
+function showResults() {
+    const score = answers.filter((ans, idx) => ans === questions[idx].correct).length;
+    const percentage = Math.round((score / questions.length) * 100);
+    
+    let message, interpretation, recommendation;
+    
+    if (percentage >= 90) {
+        message = "🏆 Excellent ! Maîtrise complète du Module 1";
+        interpretation = `${score}/${questions.length} bonnes réponses — Vous êtes prêt pour le Module 2 !`;
+        recommendation = "Vous comprenez les principes clés : observation, diagnostic avant modification, bilan Jour Zéro. Progressez vers le Module 2 !";
+    } else if (percentage >= 75) {
+        message = "✅ Très bien ! Bonne compréhension";
+        interpretation = `${score}/${questions.length} bonnes réponses — Concepts solides.`;
+        recommendation = "Quelques nuances à clarifier. Relisez les parties qui vous ont posé problème, puis Module 2.";
+    } else if (percentage >= 60) {
+        message = "👍 Correct ! Bases présentes";
+        interpretation = `${score}/${questions.length} bonnes réponses — Consolidation recommandée.`;
+        recommendation = "Revoyez les leçons 1.1-1.3 (diagnostic, NEC, PT/HG). Puis refaites le quiz pour valider.";
+    } else {
+        message = "📚 À améliorer — Relisez le Module 1";
+        interpretation = `${score}/${questions.length} bonnes réponses — Concepts à clarifier.`;
+        recommendation = "Relisez attentivement la formation Module 1. Les concepts de NEC, diagnostic, et observation sont clés.";
+    }
+    
+    document.getElementById('quizContainer').classList.add('hidden');
+    document.getElementById('resultsScreen').classList.add('show');
+    document.getElementById('scoreCircle').innerHTML = percentage + '%';
+    document.getElementById('scoreMessage').innerHTML = message;
+    document.getElementById('scoreText').innerHTML = `${score} / ${questions.length} bonnes réponses`;
+    document.getElementById('scoreInterpretation').innerHTML = interpretation;
+    document.getElementById('recommendationText').innerHTML = recommendation;
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    answers = new Array(questions.length).fill(null);
+    document.getElementById('quizContainer').classList.remove('hidden');
+    document.getElementById('resultsScreen').classList.remove('show');
+    renderQuestion();
+    window.scrollTo(0, 0);
+}
+
+// Initialiser
+renderQuestion();
+</script>
+
+</body>
+</html>
