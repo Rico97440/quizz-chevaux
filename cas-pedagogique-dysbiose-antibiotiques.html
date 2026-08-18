@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cas Pédagogique — Dysbiose Post-Antibiotiques | EquiCare</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4E78 0%, #0d2a4a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .content { padding: 40px; }
+        .section { margin-bottom: 40px; }
+        .section-title {
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-content {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #1F4E78;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #E8F5FF 0%, #F0F8FF 100%);
+            border-left: 4px solid #1F4E78;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE6CC 100%);
+            border-left: 4px solid #FFB84D;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .case-facts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .fact-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .fact-card h4 { color: #1F4E78; font-size: 14px; margin-bottom: 8px; }
+        .fact-card p { font-size: 14px; color: #666; }
+        .timeline-step {
+            background: white;
+            border-left: 4px solid #1F4E78;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .timeline-step h3 { color: #1F4E78; font-size: 16px; margin-bottom: 10px; }
+        .timeline-step p { font-size: 14px; color: #666; line-height: 1.6; }
+        .solution-box {
+            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8F6 100%);
+            border: 2px solid #70AD47;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+        td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        @media (max-width: 768px) {
+            .case-facts { grid-template-columns: 1fr; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📋 Cas Pédagogique Module 1</h1>
+        <p>Jument 17 ans : Dysbiose post-antibiotiques</p>
+        <div class="badge">MODULE 1 — Diagnostic nutritionnel senior</div>
+    </div>
+
+    <div class="content">
+        <!-- PRÉSENTATION -->
+        <div class="section">
+            <div class="section-title">
+                <span>🎯</span>
+                Présentation du cas
+            </div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Contexte :</strong> Propriétaire appelle vétérinaire équin car jument Senior 17 ans 
+                    a des crottins mous depuis 6 semaines (depuis fin de traitement antibiotiques).
+                </div>
+                <div class="case-facts">
+                    <div class="fact-card">
+                        <h4>🐴 Jument</h4>
+                        <p><strong>Âge :</strong> 17 ans<br>
+                        <strong>État :</strong> Apathique, pelage terne<br>
+                        <strong>Travail :</strong> Loisir léger</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🏥 Historique médical</h4>
+                        <p><strong>Antécédent :</strong> Infection respiratoire (4 semaines antibios)<br>
+                        <strong>Symptôme :</strong> Crottins mous depuis 6 sem<br>
+                        <strong>Véto dit :</strong> « Pas parasites, analyse OK »</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🌾 Ration actuelle</h4>
+                        <p><strong>Foin :</strong> 6 kg/jour<br>
+                        <strong>Grain :</strong> 3 kg/jour (mélange commerc)<br>
+                        <strong>Suppléments :</strong> Sel, eau libre</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>😰 Général</h4>
+                        <p><strong>Comportement :</strong> Normal<br>
+                        <strong>Digestion :</strong> Crottins mous (pas diarrhée)<br>
+                        <strong>Sabots :</strong> Un peu fragiles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 1 -->
+        <div class="section">
+            <div class="section-title">
+                <span>❓</span>
+                Étape 1 : Reconnaître la dysbiose
+            </div>
+            <div class="section-content">
+                <p style="margin-bottom: 15px;">
+                    <strong>Diagnostic différentiel :</strong> Pourquoi pas parasites/coliques/diarrhée vraie ?
+                </p>
+                <div class="info-box">
+                    <strong>✅ Éliminé :</strong><br>
+                    • Parasites : analysis fécale négative<br>
+                    • Infection : véto a contrôlé<br>
+                    • Diarrhée vraie : crottins mous mais pas liquides<br>
+                    • Alimentation : ration standard, pas excès sucre/amidon
+                </div>
+                <div class="highlight-box">
+                    <strong>🎯 Diagnostic restant :</strong> <br>
+                    <strong>DYSBIOSE POST-ANTIBIOTIQUES</strong><br>
+                    L'antibiotique a tué 80% de la flore (bonne ET mauvaise). 
+                    Microbiote est déséquilibré. Pas pathologie, juste déséquilibre.
+                </div>
+                <div class="info-box">
+                    <strong>💡 Signaux confirmant dysbiose :</strong><br>
+                    • Timing : exact après antibio (semaine 2-3 post-traitement)<br>
+                    • Crottins mous mais pas diarrhée = sous-digestion légère<br>
+                    • Pelage terne, apathie = malabsorption vitamines<br>
+                    • Sabots fragiles = carence minérale (absorption réduite)
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 2 -->
+        <div class="section">
+            <div class="section-title">
+                <span>🔍</span>
+                Étape 2 : Comprendre la flore compromise
+            </div>
+            <div class="section-content">
+                <div class="timeline-step">
+                    <h3>Avant antibiotiques (baseline)</h3>
+                    <p>Flore = 200+ espèces bactériques en équilibre. Digestion normale, 
+                    absorption vitamines/minéraux OK. Cheval énergique.</p>
+                </div>
+                <div class="timeline-step">
+                    <h3>Traitement antibio (4 semaines)</h3>
+                    <p>Antibio tue indiscriminément (bonne ET mauvaise flore). 
+                    Résultat : 80% de microbiote éliminé. Pendant traitement = pas de problème visible 
+                    (corps compense). Mais flore = anéantie.</p>
+                </div>
+                <div class="timeline-step">
+                    <h3>Post-antibio (semaine 1-2)</h3>
+                    <p>Flore sauvage (pathogène) se recolonise rapidement car aucun concurrent. 
+                    Dysbiose sévère s'installe. Résultat : crottins mous, malabsorption.</p>
+                </div>
+                <div class="timeline-step">
+                    <h3>Sans intervention (6 semaines +)</h3>
+                    <p>Dysbiose persiste. Flore ne se rééquilibre pas « naturellement ». 
+                    Cheval reste apathique, pelage terne, sabots fragiles.</p>
+                </div>
+                <div class="info-box">
+                    <strong>⚠️ Point critique :</strong> Dysbiose post-antibio n'est pas une « infection » 
+                    à traiter avec plus d'antibios. C'est un déséquilibre. Solution = reconstituer la bonne flore.
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 3 -->
+        <div class="section">
+            <div class="section-title">
+                <span>⚙️</span>
+                Étape 3 : Pourquoi l'aliment ne suffit pas
+            </div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Le réflexe courant :</strong> « Je vais changer d'aliment (senior, sensible, etc.) »<br>
+                    <strong>Le problème :</strong> Changer aliment ne reconstitue pas flore. 
+                    C'est comme repeindre maison avec murs pourris. Esthétique, pas fond.
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Résultat avec dysbiose</th>
+                                <th>Pourquoi ?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Aliment senior</strong></td>
+                                <td>Inefficace</td>
+                                <td>Aliment bon, mais flore mauvaise = pas digestion correcte</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Aliment sensible</strong></td>
+                                <td>Inefficace</td>
+                                <td>Texture douce, mais déséquilibre reste</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Probiotique seul</strong></td>
+                                <td>Partiellement efficace</td>
+                                <td>Bactéries arrivent, mais ration continue dysbiose</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Probiotique + ration adaptée</strong></td>
+                                <td>Très efficace ✅</td>
+                                <td>Reconstitue flore + l'alimente correctement</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="highlight-box">
+                    <strong>💡 Analogie :</strong> Dysbiose = maison abandonnée avec murs pourris. 
+                    Aliment seul = repeindre. Probiotique seul = apporter des ouvriers. 
+                    Probiotique + ration = ouvriers + fournitures.
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 4 -->
+        <div class="section">
+            <div class="section-title">
+                <span>🥗</span>
+                Étape 4 : Protocole EquiCare (dysbiose post-antibio)
+            </div>
+            <div class="section-content">
+                <div class="solution-box">
+                    <h4>✅ Protocole EquiCare post-antibiotiques</h4>
+                    <p style="margin-bottom: 15px;"><strong>Délai critique :</strong> Attendre 3 JOURS après dernière prise antibio 
+                    (sinon probiotique tué par antibio)</strong></p>
+                    
+                    <p style="margin-bottom: 15px;"><strong>Jour 0 → Jour 3 (post-antibio) :</strong></p>
+                    <div style="margin-left: 20px; margin-bottom: 15px;">
+                        • Attendre 3 jours<br>
+                        • Ration inchangée temporairement
+                    </div>
+                    
+                    <p style="margin-bottom: 15px;"><strong>Semaine 1 : Débuter probiotique + adapter ration</strong></p>
+                    <div style="margin-left: 20px; margin-bottom: 15px;">
+                        🦠 <strong>Probiotique :</strong> Sybiotic (probiotique + prébiotique), 5Mrd+ UFC/jour, quotidien<br>
+                        🌾 <strong>Foin :</strong> Augmenter à 7-8 kg/jour (70% ration)<br>
+                        🌾 <strong>Grain :</strong> Réduire à 2 kg/jour (30% max)<br>
+                        💧 <strong>Eau/sel :</strong> Libre accès
+                    </div>
+
+                    <p style="margin-bottom: 15px;"><strong>Apports nutritionnels résultants :</strong></p>
+                    <div style="margin-left: 20px; margin-bottom: 15px;">
+                        ✅ Protéine : 9-10% (senior, digestibilité optimale)<br>
+                        ✅ Sucre/amidon : &lt;12% (pas surcharge dysbiose)<br>
+                        ✅ Fibre : 60%+ (nourriture pour bonnes bactéries)<br>
+                        ✅ Minéraux : absorption facilitée quand flore rétablie
+                    </div>
+
+                    <p style="margin-bottom: 15px;"><strong>Semaines 2-8 : Suivi &amp; consolidation</strong></p>
+                    <table style="margin-bottom: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Semaine</th>
+                                <th>Observation</th>
+                                <th>Action si ✅</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>S1</strong></td>
+                                <td>Gaz transitoires (normal)</td>
+                                <td>Continuer, pas s'affoler</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S2-S3</strong></td>
+                                <td>Crottins commencent se normaliser</td>
+                                <td>Continuer, effet débute</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S4-S6</strong></td>
+                                <td>Pelage moins terne, plus d'énergie</td>
+                                <td>Continuer, amélioration progressive</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S8-S12</strong></td>
+                                <td>Flore rééquilibrée, sabots plus durs</td>
+                                <td>Continuer traitement complet (8-12 sem)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Après semaine 12 : Maintenance</strong></p>
+                    <div style="margin-left: 20px;">
+                        → Réduire probiotique à 3-4x/semaine (maintenance)<br>
+                        → Ration change peu (foin 70%, grain 30%)<br>
+                        → Continuer 6 mois au minimum (flore = fragile)
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>⚠️ Pièges à éviter :</strong><br>
+                    • Arrêter probiotique trop tôt (semaine 4) = rechute<br>
+                    • Changer probiotique chaque semaine = pas colonisation<br>
+                    • Probiotique + ration mauvaise (grain 50%) = inefficace<br>
+                    • Oublier la fibre (foin) = bactéries meurent de faim
+                </div>
+            </div>
+        </div>
+
+        <!-- RÉSULTATS ATTENDUS -->
+        <div class="section">
+            <div class="section-title">
+                <span>📊</span>
+                Résultats attendus
+            </div>
+            <div class="section-content">
+                <p style="margin-bottom: 15px;"><strong>Si protocole respecté :</strong></p>
+                <div class="timeline-step">
+                    <h3>Semaine 4 : Premiers changements visibles</h3>
+                    <p>✅ Crottins normalisés<br>
+                    ✅ Appétit amélioré<br>
+                    ✅ Moins d'apathie visible</p>
+                </div>
+                <div class="timeline-step">
+                    <h3>Semaine 8 : Amélioration évidente</h3>
+                    <p>✅ Pelage plus brillant<br>
+                    ✅ Énergie augmentée<br>
+                    ✅ Comportement plus stable<br>
+                    ✅ Sabots plus durs (corne régénère)</p>
+                </div>
+                <div class="timeline-step">
+                    <h3>Semaine 12 : Flore rétablie</h3>
+                    <p>✅ Digestion totalement normale<br>
+                    ✅ Absorption vitamines/minéraux OK<br>
+                    ✅ Cheval retrouve vitalité<br>
+                    ✅ Changements durables si maintenance</p>
+                </div>
+                <div class="info-box">
+                    <strong>💡 Coût réaliste :</strong> Probiotique sybiotic 25-40€/mois × 3 mois = 75-120€ total. 
+                    Moins cher que tester 3-4 aliments différents sans résultat.
+                </div>
+            </div>
+        </div>
+
+        <!-- LEÇONS PÉDAGOGIQUES -->
+        <div class="section">
+            <div class="section-title">
+                <span>📚</span>
+                Points pédagogiques clés (Module 1)
+            </div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>1️⃣ Flore n'est pas visible mais est le problème :</strong> 
+                    Même sans symptômes graves, dysbiose = cause racine. Diagnostic = éliminer autres causes d'abord.
+                </div>
+                <div class="info-box">
+                    <strong>2️⃣ Antibiotiques = double tranchant :</strong> 
+                    Sauvent du problème immédiat mais créent dysbiose. Toujours prévoir post-antibio probiotiques.
+                </div>
+                <div class="info-box">
+                    <strong>3️⃣ Aliment seul ne peut pas tout :</strong> 
+                    Si flore dysbiose, meilleur aliment = inefficace. Nutrition doit inclure flore.
+                </div>
+                <div class="info-box">
+                    <strong>4️⃣ Timing d'intervention critique :</strong> 
+                    Attendre 3 jours après antibio = essentiel (sinon antibio tue probiotiques).
+                </div>
+                <div class="info-box">
+                    <strong>5️⃣ Probiotique efficace = sybiotic + ration adaptée :</strong> 
+                    Pas probiotique seul. Pas ration adaptée seule. Les deux simultanément.
+                </div>
+                <div class="info-box">
+                    <strong>6️⃣ Timeline réaliste = 8-12 semaines :</strong> 
+                    Pas « miracle » en 1 semaine. Mais visibles en 4 semaines, transformations en 8-12.
+                </div>
+            </div>
+        </div>
+
+        <!-- EXERCICE -->
+        <div class="section">
+            <div class="section-title">
+                <span>🎯</span>
+                Exercice pour l'apprenant (15-20 min)
+            </div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>📝 Exercice :</strong><br><br>
+                    Vous êtes vétérinaire. Propriétaire appelle :<br>
+                    « Jument 17 ans a crottins mous depuis 6 sem. Pas parasites (test négatif). 
+                    Depuis elle a avait infection respiratoire (traitement antibiotiques). 
+                    Maintenant elle est apathique et pelage terne. Quel aliment recommandez-vous ? »<br><br>
+                    <strong>Votre mission :</strong><br>
+                    1. Écrire la réponse (reconnaître dysbiose, pas aliment)<br>
+                    2. Proposer diagnostic différentiel (pourquoi PAS parasites/coliques)<br>
+                    3. Expliquer lien antibiotiques ↔ dysbiose<br>
+                    4. Proposer protocole complet (probiotique, ration, timing, timeline)<br>
+                    5. Expliquer pourquoi aliment seul inefficace<br><br>
+                    <strong>Critères d'évaluation :</strong><br>
+                    ✅ Vous avez reconnu dysbiose post-antibio<br>
+                    ✅ Vous attendez 3 jours après antibio<br>
+                    ✅ Vous proposez sybiotic + ration adaptée<br>
+                    ✅ Vous expliquez flore en termes client (pas jargon)<br>
+                    ✅ Vous donnez timeline réaliste (8-12 sem)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>📌 Cas pédagogique EquiCare — Module 1</p>
+        <p>Formation Cheval Senior : Nutrition & Observation — Basé sur cas réel (France, 2026)</p>
+        <p>Dysbiose post-antibiotiques • Probiotiques sybiotic • Protocole 8-12 semaines</p>
+    </div>
+</div>
+
+</body>
+</html>
