@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche NEC IFCE 0-5 — Zones d'observation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4E78 0%, #0d2a4a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-content {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #1F4E78;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #E8F5FF 0%, #F0F8FF 100%);
+            border-left: 4px solid #1F4E78;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .info-box strong {
+            color: #1F4E78;
+        }
+
+        .zones-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .zone-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .zone-card:hover {
+            border-color: #1F4E78;
+            box-shadow: 0 5px 15px rgba(31, 78, 120, 0.1);
+        }
+
+        .zone-card h3 {
+            color: #1F4E78;
+            font-size: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .zone-icon {
+            font-size: 20px;
+        }
+
+        .zone-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .nec-scale {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .nec-level {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nec-level:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .nec-title {
+            font-weight: 700;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .nec-0 {
+            background: #ffcccc;
+            color: #cc0000;
+        }
+
+        .nec-1 {
+            background: #ffddaa;
+            color: #ff8800;
+        }
+
+        .nec-2 {
+            background: #ffffcc;
+            color: #cc8800;
+        }
+
+        .nec-3 {
+            background: #ccffcc;
+            color: #008800;
+        }
+
+        .nec-4 {
+            background: #ccffee;
+            color: #0088cc;
+        }
+
+        .nec-5 {
+            background: #ddddff;
+            color: #0000cc;
+        }
+
+        .zone-observation {
+            background: white;
+            border-left: 4px solid #1F4E78;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .zone-observation strong {
+            color: #1F4E78;
+        }
+
+        .photo-guide {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .photo-frame {
+            background: #f5f5f5;
+            border: 2px dashed #1F4E78;
+            border-radius: 8px;
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .checklist {
+            background: white;
+            border: 2px solid #1F4E78;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checklist h4 {
+            color: #1F4E78;
+            margin-bottom: 15px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #1F4E78;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE6CC 100%);
+            border-left: 4px solid #FFB84D;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .warning-box strong {
+            color: #FF9F1C;
+        }
+
+        .case-study {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e8f5ff 100%);
+            border: 2px solid #1F4E78;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .case-study h4 {
+            color: #1F4E78;
+            margin-bottom: 12px;
+        }
+
+        .case-study p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 78, 120, 0.3);
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .download-btn {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .zones-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .comparison-table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- EN-TÊTE -->
+    <div class="header">
+        <h1>📊 Grille NEC IFCE 0-5</h1>
+        <p>Guide d'évaluation de l'état corporel du cheval — 5 zones d'observation</p>
+    </div>
+
+    <div class="content">
+        <!-- INTRODUCTION -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">📌</span>
+                Qu'est-ce que la NEC ?
+            </div>
+
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>NEC = Note d'État Corporel</strong><br>
+                    Évaluation visuelle et tactile des réserves graisseuses du cheval sur une échelle de 0 à 5.
+                    C'est l'outil IFCE officiel pour suivre l'état nutritionnel.
+                </div>
+
+                <p style="margin-top: 15px;">
+                    <strong>Objectif :</strong> Savoir si votre cheval est <strong>trop maigre, équilibré, ou trop gras</strong>.
+                </p>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important :</strong> La NEC se mesure par <strong>observation ET palpation</strong> des 5 zones clés. 
+                    Ne pas confondre avec le poids (qui peut être stable mais avec répartition graisseuse anormale).
+                </div>
+            </div>
+        </div>
+
+        <!-- LES 5 ZONES D'OBSERVATION -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">🔍</span>
+                Les 5 zones d'observation IFCE
+            </div>
+
+            <div class="section-content">
+                <div class="zones-grid">
+                    <div class="zone-card">
+                        <h3><span class="zone-icon">🦴</span> Zone 1 : Les côtes</h3>
+                        <div class="zone-description">
+                            <strong>Où :</strong> Flancs du cheval (sous la selle)<br>
+                            <strong>Comment :</strong> Palper les côtes avec les doigts. Sont-elles saillantes ? Palpables ?<br>
+                            <strong>Normal (NEC 3) :</strong> Côtes légèrement palpables, pas visibles
+                        </div>
+                    </div>
+
+                    <div class="zone-card">
+                        <h3><span class="zone-icon">⛰️</span> Zone 2 : Crête du garrot</h3>
+                        <div class="zone-description">
+                            <strong>Où :</strong> Point le plus haut du garrot (sommet)<br>
+                            <strong>Comment :</strong> Toucher le garrot. Y a-t-il du gras autour ?<br>
+                            <strong>Normal (NEC 3) :</strong> Garrot osseux, légèrement recouvert
+                        </div>
+                    </div>
+
+                    <div class="zone-card">
+                        <h3><span class="zone-icon">🔙</span> Zone 3 : Région lombaire (dos/rein)</h3>
+                        <div class="zone-description">
+                            <strong>Où :</strong> Partie supérieure du dos, de la selle à la croupe<br>
+                            <strong>Comment :</strong> Palper le long de la colonne vertébrale. Dépression ou bombement ?<br>
+                            <strong>Normal (NEC 3) :</strong> Apophyses légèrement saillantes, sans dépression
+                        </div>
+                    </div>
+
+                    <div class="zone-card">
+                        <h3><span class="zone-icon">🔚</span> Zone 4 : Base de la queue</h3>
+                        <div class="zone-description">
+                            <strong>Où :</strong> Attache de la queue, au-dessus des fesses<br>
+                            <strong>Comment :</strong> Toucher avec la paume. Gras épais ou fin ?<br>
+                            <strong>Normal (NEC 3) :</strong> Couche graisseuse fine et régulière
+                        </div>
+                    </div>
+
+                    <div class="zone-card">
+                        <h3><span class="zone-icon">💪</span> Zone 5 : Épaule</h3>
+                        <div class="zone-description">
+                            <strong>Où :</strong> Région scapulaire (pointe de l'épaule)<br>
+                            <strong>Comment :</strong> Palper la pointe osseuse. Saillante ou recouverte ?<br>
+                            <strong>Normal (NEC 3) :</strong> Légèrement saillante, douce
+                        </div>
+                    </div>
+
+                    <div class="zone-card">
+                        <h3><span class="zone-icon">🎯</span> Zones supplémentaires</h3>
+                        <div class="zone-description">
+                            <strong>Observation additionnelle :</strong><br>
+                            • Côtes antérieures (près épaule)<br>
+                            • Coupure de flanc (pli visible)<br>
+                            • Crête pelvienne<br>
+                            • Profil général du cheval
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRILLE NEC 0-5 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">📏</span>
+                Grille d'évaluation NEC 0-5
+            </div>
+
+            <div class="section-content">
+                <div class="nec-scale">
+                    <!-- NEC 0 -->
+                    <div class="nec-level">
+                        <div class="nec-title nec-0">NEC 0 : Extrêmement maigre (Cachexie)</div>
+                        <div class="zone-observation">
+                            <strong>Signes visuels :</strong><br>
+                            • Côtes très saillantes, visibles à distance<br>
+                            • Garrot très prononcé et osseux<br>
+                            • Dépression marquée le long du dos<br>
+                            • Hanche très saillante<br>
+                            • Perte musculaire complète<br><br>
+                            <strong>Palpation :</strong> Aucune couche graisseuse, os apparent<br>
+                            <strong>Situation :</strong> Cas très grave (malnutrition extrême, maladie)
+                        </div>
+                    </div>
+
+                    <!-- NEC 1 -->
+                    <div class="nec-level">
+                        <div class="nec-title nec-1">NEC 1 : Très maigre</div>
+                        <div class="zone-observation">
+                            <strong>Signes visuels :</strong><br>
+                            • Côtes bien visibles<br>
+                            • Garrot très osseux et proéminent<br>
+                            • Crête pelvienne saillante<br>
+                            • Dépression le long du dos<br>
+                            • Définition musculaire très marquée<br><br>
+                            <strong>Palpation :</strong> Côtes palpables en effleurant, très peu de gras<br>
+                            <strong>Situation :</strong> Sous-nutrition, problème dentaire, maladie légère
+                        </div>
+                    </div>
+
+                    <!-- NEC 2 -->
+                    <div class="nec-level">
+                        <div class="nec-title nec-2">NEC 2 : Maigre</div>
+                        <div class="zone-observation">
+                            <strong>Signes visuels :</strong><br>
+                            • Côtes légèrement visibles<br>
+                            • Garrot proéminent<br>
+                            • Crête pelvienne visible<br>
+                            • Crête lombaire légèrement visible<br>
+                            • Musculature bien définie<br><br>
+                            <strong>Palpation :</strong> Côtes faciles à palper, mince couche graisseuse<br>
+                            <strong>Situation :</strong> Senior en perte de poids, modification alimentaire recommandée
+                        </div>
+                    </div>
+
+                    <!-- NEC 3 -->
+                    <div class="nec-level">
+                        <div class="nec-title nec-3">NEC 3 : Idéale (Référence)</div>
+                        <div class="zone-observation">
+                            <strong>Signes visuels :</strong><br>
+                            • Côtes non visibles mais légèrement palpables<br>
+                            • Garrot lisse et légèrement proéminent<br>
+                            • Crête pelvienne non visible, légèrement palpable<br>
+                            • Crête lombaire non visible, légèrement palpable<br>
+                            • Musculature tonique et symétrique<br><br>
+                            <strong>Palpation :</strong> Côtes palpables avec légère pression, couche graisseuse modérée<br>
+                            <strong>Situation :</strong> État corporel optimal pour cheval en bonne santé
+                        </div>
+                    </div>
+
+                    <!-- NEC 4 -->
+                    <div class="nec-level">
+                        <div class="nec-title nec-4">NEC 4 : Enrobé (Légèrement gras)</div>
+                        <div class="zone-observation">
+                            <strong>Signes visuels :</strong><br>
+                            • Côtes non visibles, difficiles à palper<br>
+                            • Garrot épais et arrondi<br>
+                            • Crête pelvienne couverte<br>
+                            • Crête lombaire couverte, légère dépression<br>
+                            • Gras visible à la base de la queue<br><br>
+                            <strong>Palpation :</strong> Côtes difficiles à sentir, couche graisseuse marquée<br>
+                            <strong>Situation :</strong> Surpoids modéré (fourbure, problème métabolique possible)
+                        </div>
+                    </div>
+
+                    <!-- NEC 5 -->
+                    <div class="nec-level">
+                        <div class="nec-title nec-5">NEC 5 : Obèse</div>
+                        <div class="zone-observation">
+                            <strong>Signes visuels :</strong><br>
+                            • Côtes invisibles et impalpables<br>
+                            • Garrot très épais, bouffi<br>
+                            • Crête pelvienne complètement couverte<br>
+                            • Crête lombaire complètement couverte<br>
+                            • Gras excessif à la base de la queue et partout<br>
+                            • Silhouette arrondie, volumineuse<br><br>
+                            <strong>Palpation :</strong> Impossible de palper côtes, très épaise couche graisseuse<br>
+                            <strong>Situation :</strong> Obésité grave (fourbure majeure, problèmes métaboliques, insulinorésistance)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Cible :</strong> NEC 3 est l'idéal. Pour senior en perte progressive, viser NEC 2.5-3.
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLEAU COMPARATIF -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">📋</span>
+                Tableau récapitulatif rapide
+            </div>
+
+            <div class="section-content">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>NEC</th>
+                            <th>Côtes visibles ?</th>
+                            <th>Côtes palpables ?</th>
+                            <th>Garrot</th>
+                            <th>Dos/Lombaire</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td>✅ Très visibles</td>
+                            <td>Osseux</td>
+                            <td>Très proéminent</td>
+                            <td>Dépression marquée</td>
+                            <td>🔴 Urgence</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>✅ Visibles</td>
+                            <td>Très facile</td>
+                            <td>Très osseux</td>
+                            <td>Crête visible</td>
+                            <td>🟠 Très maigre</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>⚠️ Légèrement visibles</td>
+                            <td>Facile</td>
+                            <td>Proéminent</td>
+                            <td>Crête légère</td>
+                            <td>🟡 Maigre</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>❌ Invisible</td>
+                            <td>Légèrement palpable</td>
+                            <td>Lisse</td>
+                            <td>Crête légère</td>
+                            <td>🟢 Idéal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>❌ Invisible</td>
+                            <td>Difficile</td>
+                            <td>Épais/arrondi</td>
+                            <td>Couvert</td>
+                            <td>🟠 Enrobé</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>❌ Invisible</td>
+                            <td>Impalpable</td>
+                            <td>Très épais</td>
+                            <td>Très couvert</td>
+                            <td>🔴 Obèse</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PHOTOS GUIDE -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">📸</span>
+                Guide visuel — Où regarder
+            </div>
+
+            <div class="section-content">
+                <div class="photo-guide">
+                    <h4>Vue de profil — Observez ces zones</h4>
+                    <div class="photo-frame">
+                        [Photo idéale : Cheval de profil]<br>
+                        Garrot (1), Crête lombaire (2), Base queue (3), Flanc/Côtes (4)
+                    </div>
+                </div>
+
+                <div class="photo-guide">
+                    <h4>Vue arrière — Zone 4 (base queue)</h4>
+                    <div class="photo-frame">
+                        [Photo idéale : Vue arrière cheval]<br>
+                        Espace entre les fesses, crête pelvienne, attache queue
+                    </div>
+                </div>
+
+                <div class="photo-guide">
+                    <h4>Vue latérale — Zones côtes & épaule</h4>
+                    <div class="photo-frame">
+                        [Photo idéale : Profil exagéré]<br>
+                        Flanc/côtes, épaule, finesse couche graisseuse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CAS PRATIQUES -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">📚</span>
+                Cas pratiques
+            </div>
+
+            <div class="section-content">
+                <div class="case-study">
+                    <h4>Cas 1 : Jument 18 ans — NEC 2</h4>
+                    <p>
+                        <strong>Observation :</strong> Côtes légèrement visibles, garrot proéminent, 
+                        perte progressive de muscle depuis 3 mois.<br>
+                        <strong>Diagnostic :</strong> Senior nutritionnel confirmé.<br>
+                        <strong>Action :</strong> Vérifier dents, augmenter protéine/énergie, suivi mensuel NEC.
+                    </p>
+                </div>
+
+                <div class="case-study">
+                    <h4>Cas 2 : Hongre 15 ans — NEC 3.5</h4>
+                    <p>
+                        <strong>Observation :</strong> Côtes palpables avec effort, garrot doux, gras visible base queue.<br>
+                        <strong>Diagnostic :</strong> Légère surcharge, pas encore critique.<br>
+                        <strong>Action :</strong> Réduire grain, augmenter mouvement, réévaluer dans 2 mois.
+                    </p>
+                </div>
+
+                <div class="case-study">
+                    <h4>Cas 3 : Jument 20 ans — NEC 1.5</h4>
+                    <p>
+                        <strong>Observation :</strong> Côtes bien visibles, garrot très osseux, perte musculaire arrière-main.<br>
+                        <strong>Diagnostic :</strong> Senior nutritionnel sévère + problème probable (dents, maladie).<br>
+                        <strong>Action :</strong> URGENCE vétérinaire (examen dentaire + bilan), ration d'urgence.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHECKLIST PRATIQUE -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">✅</span>
+                Checklist : Évaluer la NEC
+            </div>
+
+            <div class="checklist">
+                <h4>Avant l'évaluation</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">Cheval au repos au moins 30 min (pas juste après travail)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check2">
+                    <label for="check2">Cheval propre ou au moins sans trop de boue (voir vraies formes)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check3">
+                    <label for="check3">Lumière naturelle (pas en contre-jour)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check4">
+                    <label for="check4">Cheval posé horizontalement (pas penché avant/arrière)</label>
+                </div>
+            </div>
+
+            <div class="checklist" style="margin-top: 20px;">
+                <h4>Pendant l'évaluation</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check5">
+                    <label for="check5">Observer d'abord de profil (forme générale)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check6">
+                    <label for="check6">Palper les 5 zones : côtes, garrot, dos, base queue, épaule</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check7">
+                    <label for="check7">Observer arrière pour base queue (gras épais ?)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check8">
+                    <label for="check8">Évaluer symétrie musculaire (perte unilatérale ?)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check9">
+                    <label for="check9">Comparer avec photos antérieures si possible</label>
+                </div>
+            </div>
+
+            <div class="checklist" style="margin-top: 20px;">
+                <h4>Après l'évaluation</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check10">
+                    <label for="check10">Noter NEC et date immédiatement</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check11">
+                    <label for="check11">Prendre photos (même angle, même éclairage) pour suivi</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check12">
+                    <label for="check12">Comparer avec NEC du mois dernier (tendance ?)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check13">
+                    <label for="check13">Décider action si NEC <2 ou >4 (consulter vétérinaire)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONSEILS PRATIQUES -->
+        <div class="section">
+            <div class="section-title">
+                <span class="zone-icon">💡</span>
+                Conseils pratiques
+            </div>
+
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>🎯 Palpation efficace :</strong><br>
+                    Utilisez la paume de la main pour sentir la couche graisseuse, pas juste les doigts. 
+                    La différence entre NEC 2.5 et 3 se sent mieux à la palpation qu'à la vision.
+                </div>
+
+                <div class="info-box">
+                    <strong>📸 Photographie standardisée :</strong><br>
+                    Prendre photo même profil, même distance, même heure du jour (avant repas). 
+                    Permet suivi objectif sur 6 mois.
+                </div>
+
+                <div class="info-box">
+                    <strong>⚠️ Pièges courants :</strong><br>
+                    • Musculature bien définie ≠ NEC basse (peut être muscle, pas manque gras)<br>
+                    • Garrot fin ≠ maigre (certaines races ont garrot naturellement fin)<br>
+                    • Gras localisé à la base queue ≠ bonne condition (peut être surpoids caché)
+                </div>
+
+                <div class="info-box">
+                    <strong>📊 Suivi mensuel :</strong><br>
+                    Évolution attendue : ±0.5 NEC/mois normal. >1 point/mois = modification importante ⚠️
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTION -->
+        <div class="section">
+            <button class="download-btn" onclick="window.print()">🖨️ Imprimer cette fiche</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>📌 Fiche EquiCare — Module 1 — Formation Cheval Senior : Nutrition & Observation</p>
+        <p>Basée sur la grille NEC IFCE officielle | Source : Institut Français du Cheval et de l'Équitation</p>
+        <p>Consultation vétérinaire recommandée en cas de NEC <1.5 ou >4</p>
+    </div>
+</div>
+
+</body>
+</html>
