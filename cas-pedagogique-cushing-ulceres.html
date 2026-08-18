@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cas Pédagogique Module 2 — EquiCare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4E78 0%, #0d2a4a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #FFB84D 0%, #FF9F1C 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-content {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #1F4E78;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #E8F5FF 0%, #F0F8FF 100%);
+            border-left: 4px solid #1F4E78;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .info-box strong {
+            color: #1F4E78;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE6CC 100%);
+            border-left: 4px solid #FFB84D;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .warning-box strong {
+            color: #FF9F1C;
+        }
+
+        .case-facts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .fact-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .fact-card h4 {
+            color: #1F4E78;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .fact-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .analysis-step {
+            background: white;
+            border-left: 4px solid #1F4E78;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .analysis-step h3 {
+            color: #1F4E78;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .analysis-step p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .decision-tree {
+            background: white;
+            border: 2px solid #1F4E78;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .decision-tree h4 {
+            color: #1F4E78;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .tree-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f9f9f9;
+            border-left: 4px solid #FFB84D;
+            border-radius: 4px;
+        }
+
+        .tree-item strong {
+            color: #1F4E78;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8F6 100%);
+            border: 2px solid #70AD47;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .solution-box h4 {
+            color: #2d5fa3;
+            margin-bottom: 12px;
+        }
+
+        .solution-box p {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .icon {
+            font-size: 24px;
+        }
+
+        .checklist-action {
+            background: white;
+            border: 2px solid #1F4E78;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checklist-action h4 {
+            color: #1F4E78;
+            margin-bottom: 15px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .action-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-icon {
+            margin-right: 12px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .action-text {
+            color: #333;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .case-facts {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(31, 78, 120, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- EN-TÊTE -->
+    <div class="header">
+        <h1>📋 Cas Pédagogique Module 2</h1>
+        <p>Hongre senior 20 ans : Cushing + Ulcères + Problème comportemental</p>
+        <div class="badge">MODULE 2 — Diagnostic avant modification</div>
+    </div>
+
+    <div class="content">
+        <!-- PRÉSENTATION DU CAS -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🎯</span>
+                Présentation du cas
+            </div>
+
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Contexte :</strong> Propriétaire en Belgique (Brabant Wallon) cherche nutritionniste pour hongre 20 ans 
+                    avec historique complexe (Cushing, ulcères) et comportement problématique après séparation du troupeau.
+                </div>
+
+                <div class="case-facts">
+                    <div class="fact-card">
+                        <h4>🐴 Cheval</h4>
+                        <p><strong>Hongre, 20 ans</strong><br>
+                        Acheté à 16 ans (4 ans dans le troupeau)</p>
+                    </div>
+
+                    <div class="fact-card">
+                        <h4>🏥 Pathologies connues</h4>
+                        <p><strong>Cushing :</strong> Nov 2025<br>
+                        <strong>Ulcères :</strong> Juin 2024<br>Traitement pergoqine OK</p>
+                    </div>
+
+                    <div class="fact-card">
+                        <h4>🌾 Ration actuelle</h4>
+                        <p><strong>Alternance mash/grains</strong><br>
+                        Peu de sucre/amidons<br>Compléments : refus odeur forte</p>
+                    </div>
+
+                    <div class="fact-card">
+                        <h4>😰 Comportement</h4>
+                        <p><strong>Nerveux/angoissé</strong><br>
+                        Séparation troupeau = crise<br>Drapeautage possible en prairie</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Alerte diagnostique :</strong> Ce cas cumule 3 facteurs critiques 
+                    (pathologie endocrinienne + digestive + comportementale). C'est un cas 
+                    <strong>multi-problème</strong> nécessitant approche structurée.
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 1: QU'ON NE SAIT PAS ENCORE -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">❓</span>
+                Étape 1 : Ce qu'on ne sait PAS encore
+            </div>
+
+            <div class="section-content">
+                <p style="margin-bottom: 15px;">
+                    Avant de proposer une ration, il faut <strong>diagnostiquer précisément</strong>. 
+                    Voici ce qui manque :
+                </p>
+
+                <div class="analysis-step">
+                    <h3>1️⃣ État dentaire — PRIORITÉ CRITIQUE</h3>
+                    <p>
+                        <strong>Pourquoi c'est crucial :</strong> À 20 ans + Cushing (fragilise les dents) + ulcères 
+                        (trouble digestif = sous-mastication probable) = risque très élevé d'usure dentaire.<br><br>
+                        <strong>La question :</strong> Peut-il vraiment bien mâcher ? Ou faut-il adapter la texture ?<br><br>
+                        <strong>L'alternance mash/grains actuelle :</strong> Intuition excellente, mais masque peut-être un problème dentaire.
+                    </p>
+                </div>
+
+                <div class="analysis-step">
+                    <h3>2️⃣ État corporel réel (NEC + photos)</h3>
+                    <p>
+                        <strong>Manque :</strong> Aucune description visuelle de l'état du cheval.<br><br>
+                        <strong>La question :</strong> NEC actuelle ? Perte progressive ? Prise musculaire ?<br><br>
+                        <strong>Pourquoi :</strong> Le Cushing favorise accumulation gras crête/base queue = NEC peut être trompeuse. 
+                        Photos standardisées (profil, arrière, flanc) = diagnostic précis.
+                    </p>
+                </div>
+
+                <div class="analysis-step">
+                    <h3>3️⃣ Poids estimé (PT + HG)</h3>
+                    <p>
+                        <strong>Manque :</strong> Aucune donnée de poids (pesée ou estimation).<br><br>
+                        <strong>La question :</strong> Poids stabil ? Perte ? Prise ?<br><br>
+                        <strong>Calcul :</strong> PT (périmètre thoracique) + HG (hauteur garrot) = formule INRA = poids estimé. 
+                        Base obligatoire pour ration.
+                    </p>
+                </div>
+
+                <div class="analysis-step">
+                    <h3>4️⃣ Ration actuelle — chiffres réels</h3>
+                    <p>
+                        <strong>Manque :</strong> Quantités pesées (fourrage, mash, grains, compléments).<br><br>
+                        <strong>La question :</strong> Apporte-t-elle vraiment 10-11% protéine ? Minéraux suffisants (Zn, Cu, biotine) ?<br><br>
+                        <strong>Pourquoi :</strong> « Alternance mash/grains » = vague. Besoin détail : combien kg foin/jour, composition mash, type/quantité grains.
+                    </p>
+                </div>
+
+                <div class="analysis-step">
+                    <h3>5️⃣ Comportement = douleur chronique ?</h3>
+                    <p>
+                        <strong>Signal à explorer :</strong> Nervosité + angoisse séparation = peut être douleur chronique (arthrose, raideur Cushing) 
+                        plutôt que pur stress.<br><br>
+                        <strong>La question :</strong> Rigidité après repos ? Douleur à la palpation rachis/membres ? Boiterie légère ?<br><br>
+                        <strong>Implication nutrition :</strong> Si douleur = adapter minéraux (anti-inflammatoire) + acides gras oméga3.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 2: ARBRE DE DÉCISION -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🌳</span>
+                Étape 2 : Arbre de diagnostic avant modification
+            </div>
+
+            <div class="section-content">
+                <div class="decision-tree">
+                    <h4>Ordre d'investigation obligatoire :</h4>
+                    
+                    <div class="tree-item">
+                        <strong>🔴 ÉTAPE 1 (URGENT) : Examen dentaire complet</strong><br>
+                        Si problème → Adapter texture (mash fin, grains aplatis)<br>
+                        Si OK → Continuer diagnostic
+                    </div>
+
+                    <div class="tree-item">
+                        <strong>🟠 ÉTAPE 2 : Photos + NEC 0-5</strong><br>
+                        Profil, arrière, flanc. Établir NEC baseline.<br>
+                        Attention Cushing = gras localisé peut masquer maigreur
+                    </div>
+
+                    <div class="tree-item">
+                        <strong>🟠 ÉTAPE 3 : PT + HG</strong><br>
+                        Calcul poids estimé (formule INRA)<br>
+                        = Base pour dosage ration protéine/énergie
+                    </div>
+
+                    <div class="tree-item">
+                        <strong>🟡 ÉTAPE 4 : Ration détaillée actuelle</strong><br>
+                        Pesées (foin, concentré, compléments)<br>
+                        Composition mash (si marque connue, ficher technique)
+                    </div>
+
+                    <div class="tree-item">
+                        <strong>🟡 ÉTAPE 5 : Examen comportement/douleur</strong><br>
+                        Palpation rachis, rigidité après repos<br>
+                        Si douleur chronique probable → ajouter anti-inflammatoire naturel
+                    </div>
+
+                    <div class="tree-item">
+                        <strong>🟢 ÉTAPE 6 : ALORS construire ration senior Cushing+ulcères</strong><br>
+                        Avec tous les éléments diagnostic
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Piège pédagogique :</strong> Beaucoup de propriétaires (et praticiens) sautent les étapes 1-5 
+                    et proposent directement un aliment « Cushing » ou « senior ». 
+                    <strong>C'est une erreur grave.</strong> Le cas demande diagnostic spécifique.
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 3: ANALYSE PAR CAS -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🔍</span>
+                Étape 3 : Analyse spécifique Cushing + Ulcères
+            </div>
+
+            <div class="section-content">
+                <div class="analysis-step">
+                    <h3>💊 Cushing (PPID) — impact nutritionnel</h3>
+                    <p>
+                        <strong>Traitement actuel :</strong> Pergolide (OK, bonne compliance)<br><br>
+                        <strong>Implications nutrition :</strong><br>
+                        • Cushing provoque insulinorésistance → sucre/amidon à <strong>10-12% max</strong> (le mash actuel bon)<br>
+                        • Fragilise tendons/articulations → minéraux (Zn, Cu, sélénium) CRITIQUES<br>
+                        • Stress chronique → acides gras oméga3 prioritaires<br>
+                        • Fragilise dents → suivi dentaire examen 2x/an<br><br>
+                        <strong>Ration Cushing cible :</strong> 10-11% protéine, sucre/amidon <12%, Zn 400-500 mg/j, Cu 100-120 mg/j
+                    </p>
+                </div>
+
+                <div class="analysis-step">
+                    <h3>🛑 Ulcères gastriques — impact nutritionnel</h3>
+                    <p>
+                        <strong>Traitement passé :</strong> Juin 2024 (traité, apparemment guéri)<br><br>
+                        <strong>Implications nutrition :</strong><br>
+                        • Estomac restera fragile même guéri → <strong>ration « gastrique-friendly »</strong><br>
+                        • Éviter repas gros/rares → <strong>petits repas fréquents</strong><br>
+                        • Fibre fermentescible (foin de qualité) + probiotiques<br>
+                        • Éviter amidon cru/sucre rapide (bon = ils alternent mash/grains)<br>
+                        • Protéine de qualité (Zn + Cu favorisent cicatrisation)<br><br>
+                        <strong>Risque :</strong> Si stress comportemental élevé (angoisse séparation) → risque récidive ulcères ⚠️
+                    </p>
+                </div>
+
+                <div class="analysis-step">
+                    <h3>😰 Comportement nerveux — signal à décoder</h3>
+                    <p>
+                        <strong>Observation :</strong> Nerveux + angoisse séparation troupeau + peut « drapeauter » (lâcher paniqué en prairie)<br><br>
+                        <strong>Hypothèses :</strong><br>
+                        • Pur stress comportemental (malheureusement classique Hong Kong syndrom post-séparation)<br>
+                        • <strong>OU</strong> douleur chronique (arthrose progressive à 20 ans, ou raideur Cushing) manifestant comme angoisse<br><br>
+                        <strong>Différenciation :</strong> Examen vétérinaire palpation rachis/membres = incontournable<br><br>
+                        <strong>Implications nutrition :</strong><br>
+                        • Si douleur : minéraux anti-inflammatoire (Zn, sélénium, oméga3)<br>
+                        • Si stress : tryptophane + vitamines B (soutien nerveux)<br>
+                        • Si ulcères + stress = combo néfaste (acidité + susceptibilité) → protéine/minéraux DOUBLES
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 4: CONSTRUCTION RATION -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🥗</span>
+                Étape 4 : Construction ration après diagnostic
+            </div>
+
+            <div class="section-content">
+                <div class="solution-box">
+                    <h4>✅ Ration senior Cushing + Ulcères + Comportement</h4>
+                    
+                    <p><strong>Hypothèse poids : 450 kg | NEC 3 | Loisir léger</strong></p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Composante</th>
+                                <th>Quantité</th>
+                                <th>Critère</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Foin de qualité</strong></td>
+                                <td>7-8 kg/jour</td>
+                                <td>Bonne digestibilité, faible nitrates</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mash équilibré</strong></td>
+                                <td>2 kg (matin)</td>
+                                <td>Protéine 10-11%, sucre <8%, pré/probiotiques</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grains (orge/avoine)</strong></td>
+                                <td>1.5-2 kg (soir)</td>
+                                <td>Aplatis, sucre/amidon <12% ration</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CMV spécifique</strong></td>
+                                <td>150 g/jour</td>
+                                <td>Zn 400-500, Cu 100-120, Bio 100-150 mg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Oméga3 (lin/algues)</strong></td>
+                                <td>100 g/jour</td>
+                                <td>Anti-inflammatoire, articulations</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Probiotiques</strong></td>
+                                <td>Quotidien</td>
+                                <td>Microbiote estomac fragile</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sel iodé</strong></td>
+                                <td>40-50 g/jour</td>
+                                <td>Libre accès + compense sudation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 15px;">
+                        <strong>Apports résultants :</strong><br>
+                        • Protéine : 10.5% MS (optimale senior fragile)<br>
+                        • Sucre/amidon : 11% (sécurité Cushing)<br>
+                        • Zn : 480 mg/j (limite haute, arthrose + cicatrisation)<br>
+                        • Cu : 110 mg/j<br>
+                        • Oméga3 : anti-inflammatoire spécifique
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Point clé comportement :</strong> L'angoisse peut être liée à douleur sous-jacente. 
+                    Une ration riche en minéraux anti-inflammatoires (Zn, sélénium, oméga3) + tryptophane 
+                    peut AUSSI améliorer stabilité émotionnelle. À réévaluer après 6-8 semaines.
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 5: SUIVI -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📊</span>
+                Étape 5 : Suivi 6 mois
+            </div>
+
+            <div class="section-content">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Période</th>
+                                <th>À mesurer</th>
+                                <th>Objectif</th>
+                                <th>Pivot si ❌</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>M0 (baseline)</strong></td>
+                                <td>NEC, photos, PT/HG, comportement</td>
+                                <td>Point de référence</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M1-M2</strong></td>
+                                <td>Tolérance digestive, refus, comportement</td>
+                                <td>Acceptation ration, aucune colique</td>
+                                <td>Adapter odeur/texture CMV</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M2-M3</strong></td>
+                                <td>NEC, définition musculaire dorso-lombaire</td>
+                                <td>Stabilité ou légère prise (NEC +0.5)</td>
+                                <td>Augmenter grains si perte >0.5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M4-M5</strong></td>
+                                <td>Photos profil/arrière, pieds (corne ?)</td>
+                                <td>Amélioration qualité corne, musculature</td>
+                                <td>Augmenter biotine si pas changement</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M6 (bilan)</strong></td>
+                                <td>NEC finale, PT/HG, comportement émotionnel</td>
+                                <td>Stabilité + amélioration comportement</td>
+                                <td>Ajuster CMV ou consulter vétérinaire</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Signaux d'alerte — reconsuler vétérinaire :</strong><br>
+                    • Angoisse qui s'aggrave (peut indiquer douleur progressive)<br>
+                    • Comportement auto-trauma (léchage excessive, grattage)<br>
+                    • Refus soudain mash/grains (peut cacher rechute ulcères)<br>
+                    • Perte poids >1 NEC en 4 semaines
+                </div>
+            </div>
+        </div>
+
+        <!-- POINTS PÉDAGOGIQUES CLÉ -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📚</span>
+                Points pédagogiques clés (Module 2)
+            </div>
+
+            <div class="section-content">
+                <div class="checklist-action">
+                    <h4>Ce que ce cas enseigne :</h4>
+
+                    <div class="action-item">
+                        <div class="action-icon">✅</div>
+                        <div class="action-text">
+                            <strong>Diagnostic avant modification :</strong> Même si ration actuelle (alternance mash/grains) 
+                            semble bonne, on DOIT vérifier dents, NEC, poids avant de la modifier.
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">✅</div>
+                        <div class="action-text">
+                            <strong>Pathologies multiples = approche intégrée :</strong> Cushing + ulcères + comportement 
+                            ne se traitent pas séparément. C'est <strong>une</strong> ration pour <strong>trois</strong> problèmes.
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">✅</div>
+                        <div class="action-text">
+                            <strong>Comportement = symptôme, pas diagnostic :</strong> Nervosité peut être stress 
+                            OU douleur chronique. À différencier = obligatoire avant ration spécifique.
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">✅</div>
+                        <div class="action-text">
+                            <strong>Sucre/amidon contrôlé, minéraux élevés :</strong> Cushing + ulcères = deux raisons 
+                            différentes pour la même solution (protéine qualité + minéraux).
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">✅</div>
+                        <div class="action-text">
+                            <strong>Refus compléments « odeur forte » = info utile :</strong> Peut indiquer hypersensibilité olfactive 
+                            (classique Cushing) → adapter CMV avec arôme appétent, ou en poudre fine.
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">✅</div>
+                        <div class="action-text">
+                            <strong>Suivi 6 mois est clé, pas "un aliment = résolu" :</strong> Senior multi-pathologies 
+                            nécessite ajustements progressifs. Pas de solution "one-size-fits-all".
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTION PÉDAGOGIQUE -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🎯</span>
+                Exercice pour l'apprenant
+            </div>
+
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>📝 Exercice (15-20 min) :</strong><br><br>
+                    Vous êtes nutritionniste équin. Le propriétaire vous envoie CE cas avec demande : 
+                    « Quel aliment me recommandez-vous ? »<br><br>
+                    <strong>Votre mission :</strong><br>
+                    1. Écrire l'email de réponse (diagnostic avant modification)<br>
+                    2. Lister les 5 informations manquantes PRIORITAIRES<br>
+                    3. Proposer calendrier d'investigation (1 semaine)<br>
+                    4. Proposer ration « à titre provisoire » en attendant diagnostic complet<br><br>
+                    <strong>Critères d'évaluation :</strong><br>
+                    ✅ Vous n'avez PAS proposé d'aliment « tout fait »<br>
+                    ✅ Vous avez demandé examen dentaire = priorité 1<br>
+                    ✅ Vous avez reconnu les 3 pathologies (Cushing + ulcères + comportement)<br>
+                    ✅ Votre ration tient compte des trois simultanément
+                </div>
+
+                <button class="print-btn" onclick="window.print()">🖨️ Imprimer ce cas</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>📌 Cas pédagogique EquiCare — Module 2</p>
+        <p>Formation Cheval Senior : Nutrition & Observation — Basé sur cas réel (Belgique, 2026)</p>
+        <p>À utiliser comme support discussion en groupe ou exercice auto-évaluation</p>
+    </div>
+</div>
+
+</body>
+</html>
