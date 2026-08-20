@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche d'Urgence Vétérinaire | EquiCare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-banner {
+            background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0;
+        }
+
+        .alert-banner h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .alert-banner p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            background: linear-gradient(90deg, #1F4E78 0%, #2d5fa3 100%);
+            color: white;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .contact-box {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+        }
+
+        .contact-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1F4E78;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .contact-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            word-break: break-word;
+        }
+
+        .contact-empty {
+            color: #999;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1F4E78;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #333;
+            word-break: break-word;
+        }
+
+        .alert-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE6CC 100%);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .alert-box h3 {
+            color: #c0392b;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .alert-box p {
+            color: #333;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .checkbox-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checkbox-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .checkbox-list li:before {
+            content: "☐ ";
+            font-weight: bold;
+            margin-right: 8px;
+            color: #1F4E78;
+        }
+
+        .checkbox-list li:last-child {
+            border-bottom: none;
+        }
+
+        .gps-box {
+            background: linear-gradient(135deg, #E8F5FF 0%, #F0F8FF 100%);
+            border: 2px solid #1F4E78;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .gps-box h4 {
+            color: #1F4E78;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .gps-coords {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F4E78;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .gps-directions {
+            font-size: 12px;
+            color: #333;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 30px;
+        }
+
+        .print-note {
+            text-align: center;
+            padding: 15px;
+            background: #f0f0f0;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .print-note {
+                display: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .alert-banner {
+                border-radius: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contacts-grid,
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .alert-banner h1 {
+                font-size: 22px;
+            }
+        }
+
+        .divider {
+            border: 2px dashed #e0e0e0;
+            margin: 30px 0;
+            page-break-after: avoid;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- BANNEAU ALERTE -->
+    <div class="alert-banner">
+        <h1>🚨 FICHE D'URGENCE VÉTÉRINAIRE</h1>
+        <p>À AFFICHER PRÈS DE LA TROUSSE DE SOINS — IMPRIMER EN 2 EXEMPLAIRES</p>
+    </div>
+
+    <div class="content">
+        <div class="print-note">
+            ✏️ <strong>À remplir lisiblement à l'encre noire ou au feutre épais.</strong> Laminer si possible.
+        </div>
+
+        <!-- SECTION 1: CONTACTS D'URGENCE -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📞</span>
+                CONTACTS D'URGENCE
+            </div>
+
+            <div class="contacts-grid">
+                <div class="contact-box">
+                    <div class="contact-label">🏥 Vétérinaire Traitant</div>
+                    <div class="contact-value">________________________</div>
+                    <div class="contact-label" style="margin-top: 8px;">Tél :</div>
+                    <div class="contact-value">________________________</div>
+                </div>
+
+                <div class="contact-box">
+                    <div class="contact-label">🚑 Clinique / Service de Garde</div>
+                    <div class="contact-value">________________________</div>
+                    <div class="contact-label" style="margin-top: 8px;">Tél :</div>
+                    <div class="contact-value">________________________</div>
+                </div>
+
+                <div class="contact-box">
+                    <div class="contact-label">🔨 Maréchal-Ferrant</div>
+                    <div class="contact-value">________________________</div>
+                    <div class="contact-label" style="margin-top: 8px;">Tél :</div>
+                    <div class="contact-value">________________________</div>
+                </div>
+
+                <div class="contact-box">
+                    <div class="contact-label">👤 Aide Transport/Manipulation</div>
+                    <div class="contact-value">________________________</div>
+                    <div class="contact-label" style="margin-top: 8px;">Tél :</div>
+                    <div class="contact-value">________________________</div>
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <h3>⚠️ EN CAS D'URGENCE GRAVE (colique, chute, traumatisme)</h3>
+                <p>
+                    <strong>1. Appelez immédiatement le vétérinaire traitant OU la clinique de garde.</strong><br>
+                    <strong>2. Préparez le van/transporteur.</strong><br>
+                    <strong>3. Préparez cette fiche + passeport cheval.</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- SECTION 2: LOCALISATION & ACCÈS -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📍</span>
+                LOCALISATION & ACCÈS
+            </div>
+
+            <div class="two-column">
+                <div class="info-box">
+                    <div class="info-label">Adresse exacte écurie</div>
+                    <div class="info-value" style="min-height: 40px;">________________________<br>________________________</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Commune / Région</div>
+                    <div class="info-value">________________________</div>
+                </div>
+            </div>
+
+            <div class="gps-box">
+                <h4>📡 COORDONNÉES GPS (copier-coller dans Google Maps)</h4>
+                <div class="gps-coords">
+                    ________________________
+                </div>
+                <div class="gps-directions" style="min-height: 50px;">
+                    <strong>Indications d'accès :</strong><br>
+                    ________________________________________________<br>
+                    ________________________________________________
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="info-box">
+                    <div class="info-label">Emplacement clés portail</div>
+                    <div class="info-value" style="min-height: 30px;">________________________</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Emplacement éclairage</div>
+                    <div class="info-value" style="min-height: 30px;">________________________</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Van / Transporteur disponible ?</div>
+                <div class="info-value">
+                    ☐ Van sur place<br>
+                    ☐ Van à récupérer : ________________________<br>
+                    ☐ Transporteur à appeler : ________________________
+                </div>
+            </div>
+        </div>
+
+        <!-- DIVIDER PAGE 1/2 -->
+        <div class="divider"></div>
+
+        <!-- SECTION 3: IDENTITÉ CHEVAL -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🐴</span>
+                IDENTITÉ & DONNÉES CHEVAL
+            </div>
+
+            <div class="two-column">
+                <div class="info-box">
+                    <div class="info-label">Nom du cheval</div>
+                    <div class="info-value">________________________</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Âge / Sexe</div>
+                    <div class="info-value">________________________</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Numéro d'identification (SIRE)</div>
+                    <div class="info-value">________________________</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Robe / Signes particuliers</div>
+                    <div class="info-value">________________________</div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 15px;">
+                <div class="info-label">Coordonnées propriétaire</div>
+                <div class="info-value" style="min-height: 40px;">
+                    Nom : ____________________<br>
+                    Tél : ____________________ Email : __________________
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: SANTÉ & VACCINS -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">💊</span>
+                ANTÉCÉDENTS & SANTÉ
+            </div>
+
+            <div class="alert-box">
+                <h3>⚠️ ALLERGIES CONNUES</h3>
+                <div class="info-value" style="min-height: 30px;">________________________</div>
+            </div>
+
+            <div class="two-column">
+                <div class="info-box">
+                    <div class="info-label">Dernier vaccin tétanos</div>
+                    <div class="info-value">Date : ____________</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Dernier vaccin grippe</div>
+                    <div class="info-value">Date : ____________</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Antécédents importants</div>
+                <div class="info-value" style="min-height: 50px;">
+                    ________________________<br>
+                    ________________________
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Traitements en cours</div>
+                <div class="info-value" style="min-height: 50px;">
+                    ________________________<br>
+                    ________________________
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: CONSTANTES -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📊</span>
+                CONSTANTES AU REPOS (Jour normal)
+            </div>
+
+            <div class="two-column">
+                <div class="info-box">
+                    <div class="info-label">Fréquence cardiaque</div>
+                    <div class="info-value">__________ bpm</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Fréquence respiratoire</div>
+                    <div class="info-value">__________ cycles/min</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Température rectale</div>
+                    <div class="info-value">__________ °C</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-label">Poids estimé</div>
+                    <div class="info-value">__________ kg</div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 15px;">
+                <div class="info-label">Notes comportement normal</div>
+                <div class="info-value" style="min-height: 30px;">
+                    ________________________
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: TRANSPORT & CLINIQUE -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🚐</span>
+                TRANSPORT & CLINIQUE AUTORISÉE
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Clinique autorisée pour intervention</div>
+                <div class="info-value">________________________</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Organisation transport</div>
+                <div class="info-value" style="min-height: 50px;">
+                    ________________________<br>
+                    ________________________
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <h3>🐴 COMMENT MANIPULER CE CHEVAL EN URGENCE ?</h3>
+                <div class="info-value" style="min-height: 50px;">
+                    ________________________<br>
+                    ________________________<br>
+                    (ex: sensible aux bruits, difficile à charger, nerveux, handicapé, etc.)
+                </div>
+            </div>
+        </div>
+
+        <!-- CHECKLIST PRÉ-APPEL -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">✅</span>
+                AVANT D'APPELER LE VÉTÉRINAIRE
+            </div>
+
+            <ul class="checkbox-list">
+                <li>Vérifier signes vitaux (FC, FR, temp)</li>
+                <li>Observer comportement et blessures visibles</li>
+                <li>Noter dernière eau/aliment consommé</li>
+                <li>Préparer cette fiche + passeport</li>
+                <li>Avoir n° carte bancaire prêt (frais d'urgence)</li>
+                <li>Préparer van / arrangeur transport</li>
+                <li>Déverrouiller portail et éclairage</li>
+                <li>Préparer copies vaccins/SIRE</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>📌 Fiche d'Urgence EquiCare — Module 1 Formation Propriétaires</p>
+        <p><strong>IMPRIMER EN 2 EXEMPLAIRES</strong> : Un dans la trousse de soins, un à l'écurie visible</p>
+        <p>Dernière mise à jour : ___________ | Signataire : ___________________</p>
+    </div>
+</div>
+
+<script>
+function printFiche() {
+    window.print();
+}
+
+// Permettre impression via Ctrl+P ou bouton
+console.log("Fiche prête à imprimer. Utilisez Ctrl+P ou le menu du navigateur.");
+</script>
+
+</body>
+</html>
