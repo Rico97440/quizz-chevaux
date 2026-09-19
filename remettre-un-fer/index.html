@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Quiz · Remettre un fer de dépannage en toute sécurité">
+<meta property="og:description" content="10 questions interactives. Vérifiez que vous avez compris les conditions, les gestes et les limites du dépannage de ferrure.">
+<meta property="og:type" content="website">
+<title>Quiz — Remettre un fer de dépannage</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app {
+  background: #fdfaf5;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  margin-top: 20px;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1c1410 0%, #2a1f14 100%);
+  padding: 28px 24px 20px;
+  text-align: center;
+  border-bottom: 3px solid #d97a3a;
+}
+
+.header-brand {
+  color: #d97a3a;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.header-title {
+  color: #f5ede0;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.header-subtitle {
+  color: #c9b89a;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* PROGRESS */
+.progress-section {
+  background: #fdfaf5;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e8d8c0;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #8a7560;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e8d8c0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d97a3a 0%, #e9a05a 100%);
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* SCREENS */
+.screen {
+  display: none;
+  animation: slideIn 0.3s ease-out;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* INTRO SCREEN */
+.intro-wrap {
+  padding: 32px 24px;
+}
+
+.intro-icon {
+  font-size: 56px;
+  text-align: center;
+  margin-bottom: 16px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.intro-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1c1410;
+  text-align: center;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.intro-context {
+  background: linear-gradient(135deg, #fff3e0 0%, #fff8e8 100%);
+  border: 2px solid #d97a3a;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 18px 0;
+  font-size: 13px;
+  color: #4a3a2a;
+  line-height: 1.7;
+}
+
+.intro-goals {
+  background: #fff;
+  border: 2px solid #e8d8c0;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 24px;
+}
+
+.intro-goals-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: #d97a3a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.intro-goal {
+  font-size: 13px;
+  color: #1c1410;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.intro-goal-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.intro-footer {
+  font-size: 12px;
+  color: #8a7560;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.btn-start {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #d97a3a 0%, #e9a05a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 0 rgba(185, 84, 30, 0.4);
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(185, 84, 30, 0.4);
+}
+
+.btn-start:active {
+  transform: translateY(0);
+}
+
+/* QUIZ SCREEN */
+.quiz-wrap {
+  padding: 28px 24px;
+}
+
+.quiz-number {
+  font-size: 11px;
+  font-weight: 900;
+  color: #d97a3a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.quiz-question {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1c1410;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.option-btn {
+  background: white;
+  border: 2.5px solid #e8d8c0;
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: #d97a3a;
+  background: #fdf4e8;
+  transform: translateX(4px);
+}
+
+.option-btn:disabled {
+  cursor: default;
+}
+
+.option-btn.correct {
+  background: #f0fff0;
+  border-color: #3a8a3a;
+}
+
+.option-btn.wrong {
+  background: #fff0f0;
+  border-color: #b83030;
+}
+
+.option-letter {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e8d8c0;
+  color: #6b4a2b;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 32px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.option-btn.correct .option-letter {
+  background: #3a8a3a;
+  color: white;
+}
+
+.option-btn.wrong .option-letter {
+  background: #b83030;
+  color: white;
+}
+
+.option-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1410;
+  line-height: 1.5;
+  display: inline;
+}
+
+.feedback {
+  display: none;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  border: 2px solid;
+}
+
+.feedback.show {
+  display: block;
+  animation: slideIn 0.3s ease-out;
+}
+
+.feedback.correct {
+  background: #f0fff0;
+  border-color: #3a8a3a;
+  color: #1a4a1a;
+}
+
+.feedback.wrong {
+  background: #fff0f0;
+  border-color: #b83030;
+  color: #4a1a1a;
+}
+
+.feedback-title {
+  font-size: 14px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.feedback-text {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.btn-next {
+  width: 100%;
+  padding: 14px;
+  background: #1c1410;
+  color: #f5ede0;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: none;
+}
+
+.btn-next.show {
+  display: block;
+}
+
+.btn-next:hover {
+  background: #2a1f14;
+}
+
+/* RESULT SCREEN */
+.result-wrap {
+  padding: 32px 24px;
+}
+
+.result-card {
+  text-align: center;
+  border-radius: 16px;
+  padding: 32px 24px;
+  margin-bottom: 28px;
+  border: 3px solid;
+}
+
+.result-emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.result-score {
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.result-label {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.result-message {
+  font-size: 13px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.card-success {
+  background: linear-gradient(135deg, #f0fff0 0%, #e0ffe0 100%);
+  border-color: #3a8a3a;
+}
+
+.card-success .result-score {
+  color: #3a8a3a;
+}
+
+.card-success .result-label {
+  color: #3a8a3a;
+}
+
+.card-success .result-message {
+  color: #1a4a1a;
+}
+
+.card-retry {
+  background: linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%);
+  border-color: #b83030;
+}
+
+.card-retry .result-score {
+  color: #b83030;
+}
+
+.card-retry .result-label {
+  color: #b83030;
+}
+
+.card-retry .result-message {
+  color: #4a1a1a;
+}
+
+.warning-box {
+  background: #fff0f0;
+  border: 2px solid #b83030;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.warning-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: #b83030;
+  margin-bottom: 10px;
+}
+
+.warning-text {
+  font-size: 12px;
+  color: #4a1a1a;
+  line-height: 1.8;
+}
+
+.recap-section {
+  margin-bottom: 24px;
+}
+
+.recap-title {
+  font-size: 12px;
+  font-weight: 900;
+  color: #d97a3a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.recap-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #e8d8c0;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.recap-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.recap-text {
+  color: #4a3a2a;
+  flex: 1;
+}
+
+.btn-restart {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #d97a3a 0%, #e9a05a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(185, 84, 30, 0.4);
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.btn-restart:hover {
+  transform: translateY(-2px);
+}
+
+.btn-return {
+  width: 100%;
+  padding: 16px;
+  background: #1c1410;
+  color: #f5ede0;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-return:hover {
+  background: #2a1f14;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-brand">🐴 SOS Maréchal-Ferrant</div>
+    <div class="header-title">Remettre un fer de dépannage</div>
+    <div class="header-subtitle">en toute sécurité</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-section">
+    <div class="progress-info">
+      <span id="prog-text">Question 1 / 10</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- INTRO SCREEN -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-wrap">
+      <div class="intro-icon">🔧</div>
+      <div class="intro-title">Quiz final<br>Remettre un fer de dépannage</div>
+
+      <div class="intro-context">
+        Ce quiz vérifie que vous avez compris les conditions, les gestes essentiels et surtout les limites de ce dépannage.<br><br>
+        <strong>Remettre un fer ne remplace jamais l'intervention d'un maréchal-ferrant.</strong>
+      </div>
+
+      <div class="intro-goals">
+        <div class="intro-goals-title">Ce que vous allez maîtriser :</div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">🔍</div>
+          <div>Identifier les situations où ce dépannage est possible</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">⚠️</div>
+          <div>Reconnaître les arrêts immédiatement nécessaires</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">⚒️</div>
+          <div>Maîtriser les gestes de sécurité</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">✅</div>
+          <div>Effectuer les contrôles finaux</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">📋</div>
+          <div>Comprendre les limites du dépannage</div>
+        </div>
+      </div>
+
+      <div class="intro-footer">
+        10 questions · Durée : environ 5 minutes<br>
+        Réussi à partir de 8/10
+      </div>
+
+      <button class="btn-start" onclick="startQuiz()">Commencer le quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-wrap">
+      <div class="quiz-number" id="q-num">Question 1 / 10</div>
+      <div class="quiz-question" id="q-text"></div>
+      <div class="quiz-options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <div class="feedback-title" id="fb-title"></div>
+        <div class="feedback-text" id="fb-text"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Question suivante →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="screen">
+    <div class="result-wrap">
+      <div class="result-card" id="result-card">
+        <span class="result-emoji" id="res-emoji"></span>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-message" id="res-msg"></div>
+      </div>
+
+      <div class="warning-box">
+        <div class="warning-title">⚠️ IMPORTANT</div>
+        <div class="warning-text">
+          Cette formation apprend un geste de dépannage limité. Elle ne forme pas au métier de maréchal-ferrant et ne remplace ni un parage professionnel, ni une ferrure complète, ni l'intervention d'un vétérinaire en cas de douleur, de blessure ou de forte boiterie.
+        </div>
+      </div>
+
+      <div class="recap-section">
+        <div class="recap-title">Votre progression :</div>
+        <div id="recap-list"></div>
+      </div>
+
+      <div id="result-buttons">
+        <button class="btn-restart" id="btn-restart" onclick="restart()">🔄 Recommencer</button>
+        <button class="btn-return" id="btn-return" onclick="returnToFormation()" style="display:none;">← Retourner à la formation</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ========================================
+// CONFIGURATION
+// ========================================
+const SYSTEME_IO_RETURN_URL = "https://mes-formations.systeme.io/equicare";
+
+const questions = [
+  {
+    text: "Dans quel cas peut-on envisager de remettre temporairement un fer ?",
+    options: [
+      "Avec n'importe quel fer ayant approximativement la même taille.",
+      "Avec le même fer, sur une ferrure récente, un pied intact et lorsque les anciens passages sont clairement identifiables.",
+      "Même si la paroi est cassée ou si le pied a beaucoup poussé."
+    ],
+    correct: 1,
+    feedback: "Ce dépannage est uniquement envisageable avec le même fer, sur un pied en bon état et sans avoir besoin de réaliser un véritable parage ou de créer de nouveaux passages de clous."
+  },
+  {
+    text: "Que faut-il faire avant de commencer ?",
+    options: [
+      "Commencer rapidement avant que le cheval ne bouge.",
+      "Poser les outils autour des pieds du cheval pour les avoir à portée de main.",
+      "Installer le cheval dans un endroit calme, stable et dégagé, l'attacher en sécurité et préparer les outils sans gêner ses mouvements."
+    ],
+    correct: 2,
+    feedback: "La sécurité du cheval et de la personne passe avant le geste technique. Le sol doit être stable et la zone de travail dégagée."
+  },
+  {
+    text: "Dans quelle situation faut-il immédiatement arrêter ?",
+    options: [
+      "Le pied est très chaud, douloureux, saigne, présente une paroi fortement cassée ou un objet planté.",
+      "Le fer est légèrement sale.",
+      "Le cheval lève normalement son pied."
+    ],
+    correct: 0,
+    feedback: "Chaleur importante, douleur, saignement, forte boiterie, objet planté ou paroi endommagée nécessitent l'avis d'un professionnel. Il ne faut pas tenter de remettre le fer."
+  },
+  {
+    text: "Que faut-il vérifier avant de réutiliser le fer ?",
+    options: [
+      "Seulement sa couleur.",
+      "Qu'il s'agit bien du fer provenant de ce pied, qu'il n'est pas déformé ou dangereux et qu'il se replace correctement.",
+      "Qu'il est encore brillant."
+    ],
+    correct: 1,
+    feedback: "Un fer déformé, trop usé, mal ajusté ou provenant d'un autre pied ne doit pas être reposé dans le cadre de ce dépannage."
+  },
+  {
+    text: "Que faire si un clou ne retrouve pas immédiatement son ancien passage ?",
+    options: [
+      "Modifier son angle et frapper plus fort.",
+      "Essayer une nouvelle direction dans la paroi.",
+      "Arrêter, retirer le clou sans insister et contacter le maréchal-ferrant."
+    ],
+    correct: 2,
+    feedback: "Il ne faut jamais chercher un nouveau trajet. Un clou mal dirigé peut pénétrer dans une zone sensible du pied et blesser le cheval."
+  },
+  {
+    text: "Pourquoi place-t-on ensuite un clou du côté opposé ?",
+    options: [
+      "Pour stabiliser le fer et éviter qu'il se déplace pendant la pose des autres clous.",
+      "Pour modifier l'équilibre du pied.",
+      "Pour serrer le pied entre les deux clous."
+    ],
+    correct: 0,
+    feedback: "Le second clou opposé permet de maintenir le fer dans sa position sans le laisser pivoter ou glisser."
+  },
+  {
+    text: "Comment faut-il tenir le pied pendant l'intervention ?",
+    options: [
+      "En tirant fortement le membre vers l'extérieur.",
+      "Dans une position stable, proche du cheval, sans forcer l'articulation et en restant prêt à relâcher si le cheval bouge.",
+      "En s'agenouillant directement sous le cheval."
+    ],
+    correct: 1,
+    feedback: "Il faut conserver une position équilibrée, ne jamais se placer sous le cheval et ne pas bloquer brutalement le membre s'il cherche à le reprendre."
+  },
+  {
+    text: "À quoi sert le léger passage de râpe sous la sortie du clou ?",
+    options: [
+      "À retirer une grande quantité de paroi.",
+      "À modifier la forme générale du sabot.",
+      "À créer seulement une petite assise superficielle permettant de coucher correctement le rivet."
+    ],
+    correct: 2,
+    feedback: "Le passage de râpe doit rester très léger et localisé. Il ne s'agit pas d'amincir la paroi ni de réaliser un parage."
+  },
+  {
+    text: "Comment doit être un rivet correctement terminé ?",
+    options: [
+      "Replié contre la paroi, régulier, lisse et sans partie coupante ou saillante.",
+      "Long et éloigné de la paroi.",
+      "Enfoncé profondément dans le sabot."
+    ],
+    correct: 0,
+    feedback: "Le rivet maintient le clou tout en laissant une finition lisse. Aucune pointe ne doit pouvoir accrocher ou blesser."
+  },
+  {
+    text: "Que faut-il contrôler à la fin ?",
+    options: [
+      "Uniquement que tous les outils ont été rangés.",
+      "Que le fer est stable, correctement positionné, sans partie coupante, et que le cheval repose son pied et se déplace sans gêne nouvelle.",
+      "Que le cheval peut immédiatement reprendre un travail intense."
+    ],
+    correct: 1,
+    feedback: "Le contrôle final est indispensable. Cette remise de fer reste un dépannage temporaire en attendant le passage du maréchal-ferrant."
+  }
+];
+
+// ========================================
+// STATE
+// ========================================
+let currentQuestion = 0;
+let score = 0;
+let answered = [];
+let results = [];
+
+// ========================================
+// FUNCTIONS
+// ========================================
+
+function startQuiz() {
+  document.getElementById("screen-intro").classList.remove("active");
+  document.getElementById("screen-quiz").classList.add("active");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const progress = Math.round(((currentQuestion) / questions.length) * 100);
+  
+  document.getElementById("prog-text").textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+  document.getElementById("prog-pct").textContent = progress + "%";
+  document.getElementById("prog-fill").style.width = progress + "%";
+  
+  document.getElementById("q-num").textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+  document.getElementById("q-text").textContent = q.text;
+  
+  const optionsContainer = document.getElementById("q-options");
+  optionsContainer.innerHTML = "";
+  
+  q.options.forEach((option, index) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span><span class="option-text">${option}</span>`;
+    btn.onclick = () => selectAnswer(index);
+    optionsContainer.appendChild(btn);
+  });
+  
+  document.getElementById("q-feedback").className = "feedback";
+  document.getElementById("btn-next").className = "btn-next";
+  document.getElementById("btn-next").textContent = currentQuestion === questions.length - 1 ? "Voir mes résultats →" : "Question suivante →";
+}
+
+function selectAnswer(index) {
+  if (answered.includes(currentQuestion)) return;
+  
+  answered.push(currentQuestion);
+  const q = questions[currentQuestion];
+  const isCorrect = index === q.correct;
+  
+  if (isCorrect) score++;
+  results.push({ correct: isCorrect, question: q.text });
+  
+  const optionBtns = document.querySelectorAll(".option-btn");
+  optionBtns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) {
+      btn.classList.add("correct");
+    } else if (i === index && !isCorrect) {
+      btn.classList.add("wrong");
+    }
+  });
+  
+  const feedback = document.getElementById("q-feedback");
+  document.getElementById("fb-title").textContent = isCorrect ? "✅ Bonne réponse !" : "❌ Incorrect";
+  document.getElementById("fb-text").textContent = q.feedback;
+  feedback.className = `feedback ${isCorrect ? "correct" : "wrong"} show`;
+  
+  document.getElementById("btn-next").classList.add("show");
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById("screen-quiz").classList.remove("active");
+  document.getElementById("screen-result").classList.add("active");
+  
+  const progress = 100;
+  document.getElementById("prog-text").textContent = "Quiz terminé !";
+  document.getElementById("prog-pct").textContent = "100%";
+  document.getElementById("prog-fill").style.width = "100%";
+  
+  const card = document.getElementById("result-card");
+  let emoji, label, message, cardClass;
+  
+  if (score >= 8) {
+    emoji = "🎯";
+    label = "Quiz réussi !";
+    message = "Vous avez compris les principales conditions permettant d'envisager ce dépannage ainsi que les situations dans lesquelles il faut arrêter.\n\nRemettre un fer reste une solution temporaire. Le maréchal-ferrant doit être informé et contrôler le pied dès que possible.";
+    cardClass = "card-success";
+    document.getElementById("btn-return").style.display = "block";
+    document.getElementById("btn-restart").style.display = "none";
+  } else {
+    emoji = "📖";
+    label = "À retravailler";
+    message = "Le score minimum n'est pas encore atteint.\n\nReprenez la leçon et recommencez le quiz. Les règles de sécurité, l'utilisation exclusive des anciens passages et les situations nécessitant l'arrêt doivent être parfaitement comprises avant d'envisager ce dépannage.";
+    cardClass = "card-retry";
+    document.getElementById("btn-restart").style.display = "block";
+    document.getElementById("btn-return").style.display = "none";
+  }
+  
+  card.className = `result-card ${cardClass}`;
+  document.getElementById("res-emoji").textContent = emoji;
+  document.getElementById("res-score").textContent = `${score} / 10`;
+  document.getElementById("res-label").textContent = label;
+  document.getElementById("res-msg").textContent = message;
+  
+  const recapList = document.getElementById("recap-list");
+  recapList.innerHTML = results.map((r, i) => `
+    <div class="recap-item">
+      <div class="recap-icon">${r.correct ? "✅" : "❌"}</div>
+      <div class="recap-text"><strong>Q${i + 1}</strong> ${r.question.substring(0, 50)}...</div>
+    </div>
+  `).join("");
+}
+
+function restart() {
+  currentQuestion = 0;
+  score = 0;
+  answered = [];
+  results = [];
+  
+  document.getElementById("screen-result").classList.remove("active");
+  document.getElementById("screen-intro").classList.add("active");
+  
+  document.getElementById("prog-text").textContent = "Question 1 / 10";
+  document.getElementById("prog-pct").textContent = "0%";
+  document.getElementById("prog-fill").style.width = "0%";
+}
+
+function returnToFormation() {
+  window.location.href = SYSTEME_IO_RETURN_URL;
+}
+</script>
+
+</body>
+</html>
