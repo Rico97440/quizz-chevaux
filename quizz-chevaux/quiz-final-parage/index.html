@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Quiz Final — Parage équin : Les fondamentaux">
+<meta property="og:description" content="8 questions pour valider votre compréhension du parage sécurisé et professionnel.">
+<meta property="og:type" content="website">
+<title>Quiz Final — Parage équin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+  background: #1c1410;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app {
+  background: #fdfaf5;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  margin-top: 20px;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1c1410 0%, #2a1f14 100%);
+  padding: 28px 24px 20px;
+  text-align: center;
+  border-bottom: 3px solid #d97a3a;
+}
+
+.header-brand {
+  color: #d97a3a;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.header-title {
+  color: #f5ede0;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.header-subtitle {
+  color: #c9b89a;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* PROGRESS */
+.progress-section {
+  background: #fdfaf5;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e8d8c0;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #8a7560;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e8d8c0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d97a3a 0%, #e9a05a 100%);
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* SCREENS */
+.screen {
+  display: none;
+  animation: slideIn 0.3s ease-out;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* INTRO SCREEN */
+.intro-wrap {
+  padding: 32px 24px;
+}
+
+.intro-icon {
+  font-size: 56px;
+  text-align: center;
+  margin-bottom: 16px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.intro-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1c1410;
+  text-align: center;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.intro-context {
+  background: linear-gradient(135deg, #fff3e0 0%, #fff8e8 100%);
+  border: 2px solid #d97a3a;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 18px 0;
+  font-size: 13px;
+  color: #4a3a2a;
+  line-height: 1.7;
+}
+
+.intro-goals {
+  background: #fff;
+  border: 2px solid #e8d8c0;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 24px;
+}
+
+.intro-goals-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: #d97a3a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.intro-goal {
+  font-size: 13px;
+  color: #1c1410;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.intro-goal-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.intro-footer {
+  font-size: 12px;
+  color: #8a7560;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.btn-start {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #d97a3a 0%, #e9a05a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 0 rgba(185, 84, 30, 0.4);
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(185, 84, 30, 0.4);
+}
+
+.btn-start:active {
+  transform: translateY(0);
+}
+
+/* QUIZ SCREEN */
+.quiz-wrap {
+  padding: 28px 24px;
+}
+
+.quiz-number {
+  font-size: 11px;
+  font-weight: 900;
+  color: #d97a3a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.quiz-question {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1c1410;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.option-btn {
+  background: white;
+  border: 2.5px solid #e8d8c0;
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: #d97a3a;
+  background: #fdf4e8;
+  transform: translateX(4px);
+}
+
+.option-btn:disabled {
+  cursor: default;
+}
+
+.option-btn.correct {
+  background: #f0fff0;
+  border-color: #3a8a3a;
+}
+
+.option-btn.wrong {
+  background: #fff0f0;
+  border-color: #b83030;
+}
+
+.option-letter {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e8d8c0;
+  color: #6b4a2b;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 32px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.option-btn.correct .option-letter {
+  background: #3a8a3a;
+  color: white;
+}
+
+.option-btn.wrong .option-letter {
+  background: #b83030;
+  color: white;
+}
+
+.option-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1410;
+  line-height: 1.5;
+  display: inline;
+}
+
+.feedback {
+  display: none;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  border: 2px solid;
+}
+
+.feedback.show {
+  display: block;
+  animation: slideIn 0.3s ease-out;
+}
+
+.feedback.correct {
+  background: #f0fff0;
+  border-color: #3a8a3a;
+  color: #1a4a1a;
+}
+
+.feedback.wrong {
+  background: #fff0f0;
+  border-color: #b83030;
+  color: #4a1a1a;
+}
+
+.feedback.danger {
+  background: #fff0f0;
+  border-color: #b83030;
+  color: #4a1a1a;
+}
+
+.feedback-title {
+  font-size: 14px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.feedback-text {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.btn-next {
+  width: 100%;
+  padding: 14px;
+  background: #1c1410;
+  color: #f5ede0;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: none;
+}
+
+.btn-next.show {
+  display: block;
+}
+
+.btn-next:hover {
+  background: #2a1f14;
+}
+
+/* RESULT SCREEN */
+.result-wrap {
+  padding: 32px 24px;
+}
+
+.result-card {
+  text-align: center;
+  border-radius: 16px;
+  padding: 32px 24px;
+  margin-bottom: 28px;
+  border: 3px solid;
+}
+
+.result-emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.result-score {
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.result-label {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.result-message {
+  font-size: 13px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.card-success {
+  background: linear-gradient(135deg, #f0fff0 0%, #e0ffe0 100%);
+  border-color: #3a8a3a;
+}
+
+.card-success .result-score {
+  color: #3a8a3a;
+}
+
+.card-success .result-label {
+  color: #3a8a3a;
+}
+
+.card-success .result-message {
+  color: #1a4a1a;
+}
+
+.card-blocked {
+  background: linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%);
+  border-color: #b83030;
+}
+
+.card-blocked .result-score {
+  color: #b83030;
+}
+
+.card-blocked .result-label {
+  color: #b83030;
+}
+
+.card-blocked .result-message {
+  color: #4a1a1a;
+}
+
+.warning-box {
+  background: #fff0f0;
+  border: 2px solid #b83030;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.warning-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: #b83030;
+  margin-bottom: 10px;
+}
+
+.warning-text {
+  font-size: 12px;
+  color: #4a1a1a;
+  line-height: 1.8;
+}
+
+.recap-section {
+  margin-bottom: 24px;
+}
+
+.recap-title {
+  font-size: 12px;
+  font-weight: 900;
+  color: #d97a3a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.recap-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #e8d8c0;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.recap-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.recap-text {
+  color: #4a3a2a;
+  flex: 1;
+}
+
+.btn-restart {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #d97a3a 0%, #e9a05a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(185, 84, 30, 0.4);
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.btn-restart:hover {
+  transform: translateY(-2px);
+}
+
+.btn-validate {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #3a8a3a 0%, #4a9a4a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(58, 138, 58, 0.4);
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.btn-validate:hover {
+  transform: translateY(-2px);
+}
+
+.btn-validate:disabled {
+  background: #a0a0a0;
+  box-shadow: 0 6px 0 rgba(160, 160, 160, 0.4);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-brand">🐴 SOS Maréchal-Ferrant</div>
+    <div class="header-title">Quiz final</div>
+    <div class="header-subtitle">Parage équin : les fondamentaux</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-section">
+    <div class="progress-info">
+      <span id="prog-text">Question 1 / 8</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- INTRO SCREEN -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-wrap">
+      <div class="intro-icon">⚒️</div>
+      <div class="intro-title">Quiz final<br>Parage équin</div>
+
+      <div class="intro-context">
+        Ce quiz valide votre compréhension des fondamentaux du parage professionnel et sécurisé.<br><br>
+        <strong>Attention : certaines réponses peuvent bloquer votre validation.</strong>
+      </div>
+
+      <div class="intro-goals">
+        <div class="intro-goals-title">Vous serez évalué sur :</div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">🔍</div>
+          <div>Dépannage vs parage professionnel</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">⚖️</div>
+          <div>Observation de l'aplomb</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">⚠️</div>
+          <div>Signes imposant l'arrêt</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">🔧</div>
+          <div>Utilisation des outils (rénette, pince)</div>
+        </div>
+        <div class="intro-goal">
+          <div class="intro-goal-icon">🛡️</div>
+          <div>Protection des structures sensibles</div>
+        </div>
+      </div>
+
+      <div class="intro-footer">
+        8 questions · Durée : environ 4 minutes<br>
+        Validation obligatoire pour accéder à la suite
+      </div>
+
+      <button class="btn-start" onclick="startQuiz()">Commencer le quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-wrap">
+      <div class="quiz-number" id="q-num">Question 1 / 8</div>
+      <div class="quiz-question" id="q-text"></div>
+      <div class="quiz-options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <div class="feedback-title" id="fb-title"></div>
+        <div class="feedback-text" id="fb-text"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Question suivante →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="screen">
+    <div class="result-wrap">
+      <div class="result-card" id="result-card">
+        <span class="result-emoji" id="res-emoji"></span>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-label" id="res-label"></div>
+        <div class="result-message" id="res-msg"></div>
+      </div>
+
+      <div class="warning-box">
+        <div class="warning-title">⚠️ SÉCURITÉ</div>
+        <div class="warning-text">
+          Le parage professionnel demande des années de pratique et une compréhension anatomique pointue. Seul un maréchal-ferrant formé et expérimenté peut réaliser un parage complet et sécurisé.
+        </div>
+      </div>
+
+      <div class="recap-section">
+        <div class="recap-title">Votre progression :</div>
+        <div id="recap-list"></div>
+      </div>
+
+      <div id="result-buttons">
+        <button class="btn-restart" id="btn-restart" onclick="restart()">🔄 Recommencer</button>
+        <button class="btn-validate" id="btn-validate" onclick="validateModule()" disabled>✅ Valider la formation</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ========================================
+// CONFIGURATION
+// ========================================
+const SYSTEME_IO_RETURN_URL = "https://mes-formations.systeme.io/equicare";
+
+const questions = [
+  {
+    text: "Quelle est la différence fondamentale entre un dépannage et un parage professionnel ?",
+    options: [
+      "Un dépannage est une intervention mineure sans risque ; un parage professionnel est une intervention complète d'un maréchal-ferrant.",
+      "Un dépannage est limité à la correction urgente d'un problème spécifique ; un parage professionnel remet en ordre l'ensemble du sabot sur la durée.",
+      "Il n'y a pas de différence significative, c'est juste une question de durée."
+    ],
+    correct: 1,
+    feedback: "Correct. Le dépannage répond à une urgence précise (fer tombé, clou mal assis). Le parage professionnel est une réévaluation complète de la géométrie du pied, réalisée tous les 6-8 semaines par un maréchal-ferrant expérimenté. Ce sont deux univers différents.",
+    isSafetyQuestion: false
+  },
+  {
+    text: "En observant l'aplomb (vue de profil), vous constatez que la pince du pied n'est pas alignée sur le canon. Que faire ?",
+    options: [
+      "Corriger l'aplomb seul pendant le parage pour remettre le pied d'aplomb.",
+      "Observer et documenter le problème, puis en discuter avec le propriétaire et, si besoin, consulter un vétérinaire. Ne jamais « corriger » un aplomb en une seule intervention.",
+      "Mettre une ferrure spéciale qui rectifiera automatiquement l'aplomb."
+    ],
+    correct: 1,
+    feedback: "Exact. Un défaut d'aplomb s'est construit sur des mois ou des années. Le corriger en une seule séance serait agressif et potentiellement douloureux pour le cheval. Il faut une progression graduelle avec le vétérinaire et le maréchal-ferrant, souvent sur plusieurs cycles de parage.",
+    isSafetyQuestion: true,
+    dangerousAnswers: [0]
+  },
+  {
+    text: "Vous repérez une enflure chude au pourtour de la couronne, avec légère boiterie. Que faire ?",
+    options: [
+      "Continuer le parage normalement, c'est probablement un coup sans importance.",
+      "Arrêter le parage, laisser le pied au repos et conseiller une visite vétérinaire avant toute intervention.",
+      "Faire un parage très réduit pour ne pas aggraver la boiterie."
+    ],
+    correct: 1,
+    feedback: "Correct. Chaleur, enflure et boiterie = risque de fourbure, kéatite, abcès ou inflammation. L'arrêt immédiat est impératif. Aucun parage tant que la cause n'a pas été éclaircie par un vétérinaire.",
+    isSafetyQuestion: true,
+    dangerousAnswers: [0, 2]
+  },
+  {
+    text: "Lors du parage, vous utilisez la rénette pour retirer la sole morte. Comment doit-on procéder ?",
+    options: [
+      "Creuser profondément pour enlever toute la sole morte possible et obtenir un pied propre.",
+      "Retirer délicatement les feuilles superficielles de sole morte, sans creuser en profondeur. La sole s'exfolie progressivement sur les cycles de parage.",
+      "Utiliser la rénette seulement sur les talons, jamais ailleurs."
+    ],
+    correct: 1,
+    feedback: "Exact. La rénette est un outil délicat. On retire les couches mortes superficielles, sans creuser. La sole se renouvelle progressivement. Un creusement profond affaiblit la structure du pied et risque d'exposer les tissus sensibles.",
+    isSafetyQuestion: false
+  },
+  {
+    text: "Vous réalisez un parage et constatez un petit point noir dans la sole (signe d'infection). Que faire ?",
+    options: [
+      "Enlever complètement cette zone pour éradiquer l'infection.",
+      "Nettoyer légèrement et documentez. Une infection de la sole demande une prise en charge vétérinaire adaptée, pas une ablation brutale.",
+      "Ignorer, car c'est normal sur tous les pieds."
+    ],
+    correct: 1,
+    feedback: "Correct. Un point noir peut indiquer une infection (abcès, thrush). Nettoyer oui, mais explorer brutalement risque de contaminer davantage. Le vétérinaire diagnostiquera et prescrira le traitement approprié (parage adapté, cataplasme, traitement topique).",
+    isSafetyQuestion: false
+  },
+  {
+    text: "Après le parage, vous appliquez un coup de râpe. Quel est l'objectif ?",
+    options: [
+      "Faire un pied parfaitement plat et symétrique pour une finition nette.",
+      "Lisser les bords coupants et régulariser les transitions, sans modifier la géométrie du pied établie par le parage.",
+      "Retirer une grande quantité de paroi pour préparer la ferrure."
+    ],
+    correct: 1,
+    feedback: "Exact. La râpe finit et lisse ; elle n'est pas un outil de parage. L'objectif est une transition régulière et sans arête, pas de remodeler le pied. Un coup de râpe excessif affaiblit la paroi et compromet la ferrure.",
+    isSafetyQuestion: true,
+    dangerousAnswers: [0]
+  },
+  {
+    text: "Vous terminez le parage. Le cheval a soudain une forte boiterie. Que faire ?",
+    options: [
+      "Appliquer une ferrure rapidement pour immobiliser le pied.",
+      "Arrêter, laisser le pied au repos et consulter un vétérinaire. Une boiterie post-parage peut indiquer une douleur, un abcès ou une inflammation.",
+      "Continuer le parage de l'autre pied, le problème se réglera tout seul."
+    ],
+    correct: 1,
+    feedback: "Correct. Une boiterie post-parage est un signal d'alarme. Elle indique possiblement une surcharge, une sensibilité accrue, un abcès ou une inflammation. Il faut évaluer et pas continuer.",
+    isSafetyQuestion: true,
+    dangerousAnswers: [0, 2]
+  },
+  {
+    text: "La ligne blanche est épaisse et friable. C'est un signe…",
+    options: [
+      "…que le pied est sain et très résistant.",
+      "…de mauvaise qualité de corne, possiblement liée à l'alimentation ou une infection. Une vigilance accrue est nécessaire et une réévaluation alimentaire est justifiée.",
+      "…qu'il faut enlever tous les débris de la ligne blanche pendant le parage."
+    ],
+    correct: 1,
+    feedback: "Exact. Une ligne blanche épaisse et friable = défaillance de corne, souvent nutritionnelle, infectieuse ou liée à l'humidité. Le parage doit être délicat, mais c'est l'alimentation et les conditions d'hygiène qui doivent être revues.",
+    isSafetyQuestion: false
+  }
+];
+
+// ========================================
+// STATE
+// ========================================
+let currentQuestion = 0;
+let score = 0;
+let answered = [];
+let results = [];
+let validationBlocked = false;
+
+// ========================================
+// FUNCTIONS
+// ========================================
+
+function startQuiz() {
+  document.getElementById("screen-intro").classList.remove("active");
+  document.getElementById("screen-quiz").classList.add("active");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const progress = Math.round(((currentQuestion) / questions.length) * 100);
+  
+  document.getElementById("prog-text").textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+  document.getElementById("prog-pct").textContent = progress + "%";
+  document.getElementById("prog-fill").style.width = progress + "%";
+  
+  document.getElementById("q-num").textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+  document.getElementById("q-text").textContent = q.text;
+  
+  const optionsContainer = document.getElementById("q-options");
+  optionsContainer.innerHTML = "";
+  
+  q.options.forEach((option, index) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span><span class="option-text">${option}</span>`;
+    btn.onclick = () => selectAnswer(index);
+    optionsContainer.appendChild(btn);
+  });
+  
+  document.getElementById("q-feedback").className = "feedback";
+  document.getElementById("btn-next").className = "btn-next";
+  document.getElementById("btn-next").textContent = currentQuestion === questions.length - 1 ? "Voir mes résultats →" : "Question suivante →";
+}
+
+function selectAnswer(index) {
+  if (answered.includes(currentQuestion)) return;
+  
+  answered.push(currentQuestion);
+  const q = questions[currentQuestion];
+  const isCorrect = index === q.correct;
+  
+  // Check if answer is dangerous (blocks validation)
+  if (q.dangerousAnswers && q.dangerousAnswers.includes(index)) {
+    validationBlocked = true;
+  }
+  
+  if (isCorrect) score++;
+  results.push({ correct: isCorrect, question: q.text });
+  
+  const optionBtns = document.querySelectorAll(".option-btn");
+  optionBtns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) {
+      btn.classList.add("correct");
+    } else if (i === index && !isCorrect) {
+      btn.classList.add("wrong");
+    }
+  });
+  
+  const feedback = document.getElementById("q-feedback");
+  document.getElementById("fb-title").textContent = isCorrect ? "✅ Correct !" : "❌ Pas tout à fait...";
+  document.getElementById("fb-text").textContent = q.feedback;
+  feedback.className = `feedback ${isCorrect ? "correct" : "wrong"} show`;
+  
+  document.getElementById("btn-next").classList.add("show");
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById("screen-quiz").classList.remove("active");
+  document.getElementById("screen-result").classList.add("active");
+  
+  document.getElementById("prog-text").textContent = "Quiz terminé !";
+  document.getElementById("prog-pct").textContent = "100%";
+  document.getElementById("prog-fill").style.width = "100%";
+  
+  const card = document.getElementById("result-card");
+  let emoji, label, message, cardClass;
+  const validateBtn = document.getElementById("btn-validate");
+  
+  if (validationBlocked) {
+    emoji = "⚠️";
+    label = "Validation bloquée";
+    message = "Vous avez choisi une réponse qui compromet la sécurité du cheval.\n\nCette formation ne peut pas être validée tant que vous reconnaissez pas les principes critiques de sécurité.\n\nLisez attentivement les explications et recommencez.";
+    cardClass = "card-blocked";
+    validateBtn.disabled = true;
+    validateBtn.textContent = "Validation impossible";
+  } else if (score >= 7) {
+    emoji = "🎯";
+    label = "Succès !";
+    message = "Vous avez compris les fondamentaux du parage professionnel et les principes de sécurité essentiels.\n\nVous pouvez avancer vers les modules suivants.";
+    cardClass = "card-success";
+    validateBtn.disabled = false;
+    validateBtn.textContent = "✅ Valider et continuer";
+  } else {
+    emoji = "📖";
+    label = "À retravailler";
+    message = "Vous n'avez pas encore atteint le niveau requis.\n\nRecommencez le quiz et relisez attentivement les explications. La maîtrise de ces fondamentaux est essentielle.";
+    cardClass = "card-blocked";
+    validateBtn.disabled = true;
+    validateBtn.textContent = "Score insuffisant";
+  }
+  
+  card.className = `result-card ${cardClass}`;
+  document.getElementById("res-emoji").textContent = emoji;
+  document.getElementById("res-score").textContent = `${score} / 8`;
+  document.getElementById("res-label").textContent = label;
+  document.getElementById("res-msg").textContent = message;
+  
+  const recapList = document.getElementById("recap-list");
+  recapList.innerHTML = results.map((r, i) => `
+    <div class="recap-item">
+      <div class="recap-icon">${r.correct ? "✅" : "❌"}</div>
+      <div class="recap-text"><strong>Q${i + 1}</strong> ${r.question.substring(0, 50)}...</div>
+    </div>
+  `).join("");
+}
+
+function restart() {
+  currentQuestion = 0;
+  score = 0;
+  answered = [];
+  results = [];
+  validationBlocked = false;
+  
+  document.getElementById("screen-result").classList.remove("active");
+  document.getElementById("screen-intro").classList.add("active");
+  
+  document.getElementById("prog-text").textContent = "Question 1 / 8";
+  document.getElementById("prog-pct").textContent = "0%";
+  document.getElementById("prog-fill").style.width = "0%";
+}
+
+function validateModule() {
+  if (validationBlocked || score < 7) {
+    alert("Validation impossible. Vous devez obtenir au minimum 7/8 et répondre correctement aux questions de sécurité.");
+    return;
+  }
+  window.location.href = SYSTEME_IO_RETURN_URL;
+}
+</script>
+
+</body>
+</html>
